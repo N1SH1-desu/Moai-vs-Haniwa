@@ -215,9 +215,6 @@
     <ClCompile Include="Source\PrimitiveRenderer.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\BasicShader.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="External\ImGuizmo\ImCurveEdit.cpp">
       <Filter>External\ImGuizmo</Filter>
     </ClCompile>
@@ -256,6 +253,9 @@
     </ClCompile>
     <ClCompile Include="Source\Scene\LandWalkScene.cpp">
       <Filter>Source\02_地上歩行</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\BasicShader.cpp">
+      <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
