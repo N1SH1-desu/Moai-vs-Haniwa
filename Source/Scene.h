@@ -7,6 +7,11 @@ public:
 	Scene() = default;
 	virtual ~Scene() = default;
 
+	// ‰Šú‰»
+	virtual void Initialize() {};
+
+	// I—¹‰»
+	virtual void Finalize() {};
 	// XVˆ—
 	virtual void Update(float elapsedTime) {}
 
