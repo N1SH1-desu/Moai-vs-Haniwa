@@ -135,17 +135,12 @@
     <ClInclude Include="Source\LambertShader.h" />
     <ClInclude Include="Source\ModelResource.h" />
     <ClInclude Include="Source\ResourceManager.h" />
-    <ClInclude Include="Source\Scene\AnimationScene.h" />
-    <ClInclude Include="Source\Scene\AttachWeaponScene.h" />
+    <ClInclude Include="Source\SceneGame.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="Source\Scene\HitStopScene.h" />
-    <ClInclude Include="Source\Scene\SlideMoveScene.h" />
-    <ClInclude Include="Source\Scene\MoveFloorScene.h" />
-    <ClInclude Include="Source\Scene\RayCastScene.h" />
-    <ClInclude Include="Source\Scene\ResourceManagementScene.h" />
     <ClInclude Include="Source\Scene\LandWalkScene.h" />
-    <ClInclude Include="Source\Scene\TerrainAlignScene.h" />
-    <ClInclude Include="Source\Scene\ProjectScreenScene.h" />
-    <ClInclude Include="Source\Scene\UIAnimScene.h" />
     <ClInclude Include="Source\ShapeRenderer.h" />
     <ClInclude Include="Source\GpuResourceUtils.h" />
     <ClInclude Include="Source\Graphics.h" />
@@ -183,17 +178,12 @@
     <ClCompile Include="Source\LambertShader.cpp" />
     <ClCompile Include="Source\ModelResource.cpp" />
     <ClCompile Include="Source\ResourceManager.cpp" />
-    <ClCompile Include="Source\Scene\AnimationScene.cpp" />
-    <ClCompile Include="Source\Scene\AttachWeaponScene.cpp" />
+    <ClCompile Include="Source\SceneGame.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="Source\Scene\HitStopScene.cpp" />
-    <ClCompile Include="Source\Scene\SlideMoveScene.cpp" />
-    <ClCompile Include="Source\Scene\MoveFloorScene.cpp" />
-    <ClCompile Include="Source\Scene\RayCastScene.cpp" />
-    <ClCompile Include="Source\Scene\ResourceManagementScene.cpp" />
     <ClCompile Include="Source\Scene\LandWalkScene.cpp" />
-    <ClCompile Include="Source\Scene\TerrainAlignScene.cpp" />
-    <ClCompile Include="Source\Scene\ProjectScreenScene.cpp" />
-    <ClCompile Include="Source\Scene\UIAnimScene.cpp" />
     <ClCompile Include="Source\ShapeRenderer.cpp" />
     <ClCompile Include="Source\GpuResourceUtils.cpp" />
     <ClCompile Include="Source\Graphics.cpp" />

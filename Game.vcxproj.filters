@@ -22,38 +22,11 @@
     <Filter Include="External\SphereCast">
       <UniqueIdentifier>{abff1748-b50f-4e2e-b82c-9beee41e0b48}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\11_リソース管理">
-      <UniqueIdentifier>{85dbf046-705d-4ae6-a48e-21dcd7537511}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\10_地形に沿う姿勢制御">
-      <UniqueIdentifier>{09e8eab2-9fdb-4759-8bb8-f6b773564d28}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\09_移動床">
-      <UniqueIdentifier>{d03ee832-6dd8-446b-a457-9a5dd31f7f06}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\07_ヒットストップ">
       <UniqueIdentifier>{dbc5131a-4742-4901-a1fc-5613aabcadbc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\06_アタッチメント">
-      <UniqueIdentifier>{b034a89d-348b-48cb-b06b-f93ebb2abac6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\05_スクリーン座標変換">
-      <UniqueIdentifier>{1516a6b5-4626-4f8a-8789-334db1edcb9f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\04_アニメーション">
-      <UniqueIdentifier>{8565d43b-5df1-4905-ac0f-7204d1ee4c40}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\03_壁ずり移動">
-      <UniqueIdentifier>{6ef3f08f-c694-4021-87b1-3f90ef292bbd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\02_地上歩行">
       <UniqueIdentifier>{5aa72adc-7d83-4b85-8bbe-58e2b60bdbb1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\01_レイキャスト">
-      <UniqueIdentifier>{69434365-302b-42dd-85f0-6d882227527e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\08_UI演出">
-      <UniqueIdentifier>{e6e03555-d04a-4588-b021-29b31e28b278}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -165,38 +138,11 @@
     <ClInclude Include="Source\ModelResource.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Scene\RayCastScene.h">
-      <Filter>Source\01_レイキャスト</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Collision.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Scene\SlideMoveScene.h">
-      <Filter>Source\03_壁ずり移動</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scene\MoveFloorScene.h">
-      <Filter>Source\09_移動床</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scene\TerrainAlignScene.h">
-      <Filter>Source\10_地形に沿う姿勢制御</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scene\AnimationScene.h">
-      <Filter>Source\04_アニメーション</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scene\AttachWeaponScene.h">
-      <Filter>Source\06_アタッチメント</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scene\ProjectScreenScene.h">
-      <Filter>Source\05_スクリーン座標変換</Filter>
-    </ClInclude>
     <ClInclude Include="Source\ResourceManager.h">
       <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scene\ResourceManagementScene.h">
-      <Filter>Source\11_リソース管理</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scene\UIAnimScene.h">
-      <Filter>Source\08_UI演出</Filter>
     </ClInclude>
     <ClInclude Include="Source\Scene\HitStopScene.h">
       <Filter>Source\07_ヒットストップ</Filter>
@@ -206,6 +152,9 @@
     </ClInclude>
     <ClInclude Include="Source\Scene\LandWalkScene.h">
       <Filter>Source\02_地上歩行</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneGame.h">
+      <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -296,38 +245,11 @@
     <ClCompile Include="Source\ModelResource.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Scene\RayCastScene.cpp">
-      <Filter>Source\01_レイキャスト</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Collision.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Scene\SlideMoveScene.cpp">
-      <Filter>Source\03_壁ずり移動</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Scene\MoveFloorScene.cpp">
-      <Filter>Source\09_移動床</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Scene\TerrainAlignScene.cpp">
-      <Filter>Source\10_地形に沿う姿勢制御</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Scene\AnimationScene.cpp">
-      <Filter>Source\04_アニメーション</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Scene\AttachWeaponScene.cpp">
-      <Filter>Source\06_アタッチメント</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Scene\ProjectScreenScene.cpp">
-      <Filter>Source\05_スクリーン座標変換</Filter>
-    </ClCompile>
     <ClCompile Include="Source\ResourceManager.cpp">
       <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Scene\ResourceManagementScene.cpp">
-      <Filter>Source\11_リソース管理</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Scene\UIAnimScene.cpp">
-      <Filter>Source\08_UI演出</Filter>
     </ClCompile>
     <ClCompile Include="Source\Scene\HitStopScene.cpp">
       <Filter>Source\07_ヒットストップ</Filter>
@@ -337,6 +259,9 @@
     </ClCompile>
     <ClCompile Include="Source\Scene\LandWalkScene.cpp">
       <Filter>Source\02_地上歩行</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneGame.cpp">
+      <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
