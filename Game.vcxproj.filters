@@ -22,35 +22,11 @@
     <Filter Include="External\SphereCast">
       <UniqueIdentifier>{abff1748-b50f-4e2e-b82c-9beee41e0b48}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\11_リソース管理">
-      <UniqueIdentifier>{85dbf046-705d-4ae6-a48e-21dcd7537511}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\10_地形に沿う姿勢制御">
-      <UniqueIdentifier>{09e8eab2-9fdb-4759-8bb8-f6b773564d28}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\09_移動床">
-      <UniqueIdentifier>{d03ee832-6dd8-446b-a457-9a5dd31f7f06}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\07_ヒットストップ">
       <UniqueIdentifier>{dbc5131a-4742-4901-a1fc-5613aabcadbc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\06_アタッチメント">
-      <UniqueIdentifier>{b034a89d-348b-48cb-b06b-f93ebb2abac6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\05_スクリーン座標変換">
-      <UniqueIdentifier>{1516a6b5-4626-4f8a-8789-334db1edcb9f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\04_アニメーション">
-      <UniqueIdentifier>{8565d43b-5df1-4905-ac0f-7204d1ee4c40}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\02_地上歩行">
       <UniqueIdentifier>{5aa72adc-7d83-4b85-8bbe-58e2b60bdbb1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\01_レイキャスト">
-      <UniqueIdentifier>{69434365-302b-42dd-85f0-6d882227527e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\08_UI演出">
-      <UniqueIdentifier>{e6e03555-d04a-4588-b021-29b31e28b278}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
