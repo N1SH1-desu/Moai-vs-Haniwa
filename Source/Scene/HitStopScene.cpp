@@ -18,7 +18,7 @@ HitStopScene::HitStopScene()
 		{ 0, 1, 0 }			// è„ÉxÉNÉgÉã
 	);
 	cameraHaniwa.SetLookAt(
-		{ 4, 2, -2 },
+		{ -4, 2, -2 },
 		{ 0, 1.5f, 1 },
 		{ 0, 1, 0 }
 	);
