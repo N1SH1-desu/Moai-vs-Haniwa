@@ -38,8 +38,10 @@ private:
 		std::unique_ptr<Model>	model;
 	};
 
-	Camera								camera;
-	FreeCameraController				cameraController;
+	Camera								cameraMoai;  // モアイ用カメラ
+	Camera								cameraHaniwa; // ハニワ用カメラ
+	FreeCameraController				cameraMoaiController;
+	FreeCameraController				cameraHaniwaController;
 	Object								character;
 	Object								weapon;
 	float								characterHitOffset = 1.0f;

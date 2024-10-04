@@ -30,7 +30,7 @@ public:
 	void Clear(float r, float g, float b, float a);
 
 	// レンダーターゲット設定
-	void SetRenderTargets();
+	void SetRenderTargets(UINT viewportIndex = 0);
 
 	// 画面表示
 	void Present(UINT syncInterval);
@@ -69,7 +69,8 @@ private:
 	Microsoft::WRL::ComPtr<IDXGISwapChain>			swapchain;
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView>	renderTargetView;
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilView>	depthStencilView;
-	D3D11_VIEWPORT									viewport;
+	D3D11_VIEWPORT									viewportLeft;
+	D3D11_VIEWPORT									viewportRight;
 
 	float	screenWidth = 0;
 	float	screenHeight = 0;
