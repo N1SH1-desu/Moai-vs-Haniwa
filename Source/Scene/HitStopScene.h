@@ -2,8 +2,7 @@
 
 #include <memory>
 #include "Scene.h"
-#include "Camera.h"
-#include "FreeCameraController.h"
+#include "DoubleCameraController.h"
 #include "Model.h"
 
 class HitStopScene : public Scene
@@ -38,10 +37,7 @@ private:
 		std::unique_ptr<Model>	model;
 	};
 
-	Camera								cameraMoai;  // モアイ用カメラ
-	Camera								cameraHaniwa; // ハニワ用カメラ
-	FreeCameraController				cameraMoaiController;
-	FreeCameraController				cameraHaniwaController;
+	DoubleCameraController				cameraController;
 	Object								character;
 	Object								weapon;
 	float								characterHitOffset = 1.0f;

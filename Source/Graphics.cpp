@@ -114,18 +114,18 @@ void Graphics::Initialize(HWND hWnd)
 
 	// ビューポート
 	{
-		viewportLeft.Width = static_cast<float>(screenWidth / 2);
+		viewportLeft.Width = static_cast<float>(screenWidth) / 2.0f;
 		viewportLeft.Height = static_cast<float>(screenHeight);
 		viewportLeft.MinDepth = 0.0f;
 		viewportLeft.MaxDepth = 1.0f;
 		viewportLeft.TopLeftX = 0.0f;
 		viewportLeft.TopLeftY = 0.0f;
 
-		viewportRight.Width = static_cast<float>(screenWidth / 2);
+		viewportRight.Width = static_cast<float>(screenWidth) / 2.0f;
 		viewportRight.Height = static_cast<float>(screenHeight);
 		viewportRight.MinDepth = 0.0f;
 		viewportRight.MaxDepth = 1.0f;
-		viewportRight.TopLeftX = static_cast<float>(screenWidth / 2);
+		viewportRight.TopLeftX = static_cast<float>(screenWidth) / 2.0f;
 		viewportRight.TopLeftY = 0.0f;
 	}
 

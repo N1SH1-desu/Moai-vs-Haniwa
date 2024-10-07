@@ -12,19 +12,6 @@ HitStopScene::HitStopScene()
 	float screenWidth = Graphics::Instance().GetScreenWidth();
 	float screenHeight = Graphics::Instance().GetScreenHeight();
 
-	cameraMoai.SetLookAt(
-		{ 4, 2, 2 },		// 視点
-		{ 0, 1.5f, 1 },		// 注視点
-		{ 0, 1, 0 }			// 上ベクトル
-	);
-	cameraHaniwa.SetLookAt(
-		{ -4, 2, -2 },
-		{ 0, 1.5f, 1 },
-		{ 0, 1, 0 }
-	);
-	cameraMoaiController.SyncCameraToController(cameraMoai);
-	cameraHaniwaController.SyncCameraToController(cameraHaniwa);
-
 	character.position = { 0, 0, 0 };
 	character.scale = { 0.01f, 0.01f, 0.01f };
 	character.model = std::make_unique<Model>("Data/Model/Mr.Incredible/Mr.Incredible.mdl");
@@ -38,12 +25,7 @@ HitStopScene::HitStopScene()
 // 更新処理
 void HitStopScene::Update(float elapsedTime)
 {
-	// カメラ更新処理
-	cameraMoaiController.Update();
-	cameraMoaiController.SyncControllerToCamera(cameraMoai);
-	cameraHaniwaController.Update();
-	cameraHaniwaController.SyncControllerToCamera(cameraHaniwa);
-
+	cameraController.Update();
 
 	float timeScale = 1.0f;
 
@@ -75,6 +57,8 @@ void HitStopScene::Update(float elapsedTime)
 // 描画処理
 void HitStopScene::Render(float elapsedTime)
 {
+	using CAMERA_NAME = DoubleCameraController::CAMERA_IDENTIFIER;
+
 	ID3D11DeviceContext* dc = Graphics::Instance().GetDeviceContext();
 	RenderState* renderState = Graphics::Instance().GetRenderState();
 	PrimitiveRenderer* primitiveRenderer = Graphics::Instance().GetPrimitiveRenderer();
@@ -86,7 +70,7 @@ void HitStopScene::Render(float elapsedTime)
 	RenderContext rc;
 	rc.deviceContext = dc;
 	rc.renderState = renderState;
-	rc.camera = &cameraMoai;
+	rc.camera = &cameraController.GetCamera(CAMERA_NAME::MOAI);
 	modelRenderer->Render(rc, character.transform, character.model.get(), ShaderId::Lambert);
 	modelRenderer->Render(rc, weapon.transform, weapon.model.get(), ShaderId::Lambert);
 
@@ -100,44 +84,44 @@ void HitStopScene::Render(float elapsedTime)
 	p.y = character.position.y + characterHitOffset;
 	p.z = character.position.z;
 	shapeRenderer->DrawSphere(p, characterHitRadius, { 1,1,1,1 });
-	shapeRenderer->Render(dc, cameraMoai.GetView(), cameraMoai.GetProjection());
+	shapeRenderer->Render(dc, cameraController.GetCamera(CAMERA_NAME::MOAI).GetView(), cameraController.GetCamera(CAMERA_NAME::MOAI).GetProjection());
 
 	// 軸描画
 	dc->OMSetBlendState(renderState->GetBlendState(BlendState::Opaque), nullptr, 0xFFFFFFFF);
 	dc->OMSetDepthStencilState(renderState->GetDepthStencilState(DepthState::NoTestNoWrite), 0);
 	dc->RSSetState(renderState->GetRasterizerState(RasterizerState::SolidCullNone));
 	primitiveRenderer->DrawAxis(weapon.transform, { 1,1,1,1 });
-	primitiveRenderer->Render(dc, cameraMoai.GetView(), cameraMoai.GetProjection(), D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+	primitiveRenderer->Render(dc, cameraController.GetCamera(CAMERA_NAME::MOAI).GetView(), cameraController.GetCamera(CAMERA_NAME::MOAI).GetProjection(), D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 
 	// グリッド描画
 	dc->OMSetBlendState(renderState->GetBlendState(BlendState::Opaque), nullptr, 0xFFFFFFFF);
 	dc->OMSetDepthStencilState(renderState->GetDepthStencilState(DepthState::TestAndWrite), 0);
 	dc->RSSetState(renderState->GetRasterizerState(RasterizerState::SolidCullNone));
 	primitiveRenderer->DrawGrid(20, 1);
-	primitiveRenderer->Render(dc, cameraMoai.GetView(), cameraMoai.GetProjection(), D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+	primitiveRenderer->Render(dc, cameraController.GetCamera(CAMERA_NAME::MOAI).GetView(), cameraController.GetCamera(CAMERA_NAME::MOAI).GetProjection(), D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 
 
 
 	Graphics::Instance().SetRenderTargets(1);
-	rc.camera = &cameraHaniwa;
+	rc.camera = &cameraController.GetCamera(CAMERA_NAME::HANIWA);
 	modelRenderer->Render(rc, character.transform, character.model.get(), ShaderId::Lambert);
 	modelRenderer->Render(rc, weapon.transform, weapon.model.get(), ShaderId::Lambert);
 
-	shapeRenderer->Render(dc, cameraMoai.GetView(), cameraMoai.GetProjection());
+	shapeRenderer->Render(dc, cameraController.GetCamera(CAMERA_NAME::HANIWA).GetView(), cameraController.GetCamera(CAMERA_NAME::HANIWA).GetProjection());
 
 	// 軸描画
 	dc->OMSetBlendState(renderState->GetBlendState(BlendState::Opaque), nullptr, 0xFFFFFFFF);
 	dc->OMSetDepthStencilState(renderState->GetDepthStencilState(DepthState::NoTestNoWrite), 0);
 	dc->RSSetState(renderState->GetRasterizerState(RasterizerState::SolidCullNone));
 	primitiveRenderer->DrawAxis(weapon.transform, { 1,1,1,1 });
-	primitiveRenderer->Render(dc, cameraMoai.GetView(), cameraMoai.GetProjection(), D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+	primitiveRenderer->Render(dc, cameraController.GetCamera(CAMERA_NAME::HANIWA).GetView(), cameraController.GetCamera(CAMERA_NAME::HANIWA).GetProjection(), D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 
 	// グリッド描画
 	dc->OMSetBlendState(renderState->GetBlendState(BlendState::Opaque), nullptr, 0xFFFFFFFF);
 	dc->OMSetDepthStencilState(renderState->GetDepthStencilState(DepthState::TestAndWrite), 0);
 	dc->RSSetState(renderState->GetRasterizerState(RasterizerState::SolidCullNone));
 	primitiveRenderer->DrawGrid(20, 1);
-	primitiveRenderer->Render(dc, cameraMoai.GetView(), cameraMoai.GetProjection(), D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+	primitiveRenderer->Render(dc, cameraController.GetCamera(CAMERA_NAME::HANIWA).GetView(), cameraController.GetCamera(CAMERA_NAME::HANIWA).GetProjection(), D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 }
 
 // GUI描画処理

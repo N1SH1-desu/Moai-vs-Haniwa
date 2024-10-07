@@ -153,6 +153,9 @@
     <ClInclude Include="Source\Scene\LandWalkScene.h">
       <Filter>Source\02_地上歩行</Filter>
     </ClInclude>
+    <ClInclude Include="Source\DoubleCameraController.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Framework.cpp">
@@ -255,6 +258,9 @@
       <Filter>Source\02_地上歩行</Filter>
     </ClCompile>
     <ClCompile Include="Source\BasicShader.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\DoubleCameraController.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
