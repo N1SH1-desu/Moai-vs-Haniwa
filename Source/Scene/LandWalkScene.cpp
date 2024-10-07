@@ -26,7 +26,7 @@ LandWalkScene::LandWalkScene()
 	cameraController.SyncCameraToController(camera);
 
 	// ƒ‚ƒfƒ‹
-	stage.model = std::make_unique<Model>("Data/Model/Greybox/Greybox.mdl");
+	stage.model = std::make_unique<Model>("Data/Model/Stage/ExampleStage.mdl");
 
 	player.position = { 13, 5, 16 };
 	player.scale = { 0.01f, 0.01f, 0.01f };

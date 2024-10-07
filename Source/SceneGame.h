@@ -11,14 +11,13 @@
 class SceneGame : public Scene
 {
 public:
-	SceneGame() {}
-	~SceneGame()override {}
+	SceneGame();
+	~SceneGame()override = default;
 
 	// ‰Šú‰»
-	void Initialize() override;
-
+	
 	// I—¹‰»
-	void Finalize() override;
+	//void Finalize() override;
 
 	// XVˆ—
 	void Update(float elapsedTime) override;
@@ -51,11 +50,9 @@ private:
 	Object								player;
 	Object								player2;
 	Object								stage;
-	float								gravity = 10.0f;
 	float								acceleration = 30.0f;
 	float								deceleration = 20.0f;
 	float								moveSpeed = 5.0f;
 	float								turnSpeed = DirectX::XMConvertToRadians(720);
-	float								jumpSpeed = 5.0f;
 	float								downhillOffset = 43.0f;
 };

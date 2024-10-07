@@ -7,6 +7,7 @@
 #include "Scene/LandWalkScene.h"
 #include "Scene/SlideMoveScene.h"
 #include "Scene/HitStopScene.h"
+#include "SceneGame.h"
 // 垂直同期間隔設定
 static const int syncInterval = 1;
 
@@ -20,18 +21,11 @@ Framework::Framework(HWND hWnd)
 	// IMGUI初期化
 	ImGuiRenderer::Initialize(hWnd, Graphics::Instance().GetDevice(), Graphics::Instance().GetDeviceContext());
 
+
 	// シーン初期化
-	/*scene = std::make_unique<RayCastScene>();*/
-	scene = std::make_unique<LandWalkScene>();
-	//scene = std::make_unique<SlideMoveScene>();
-	//scene = std::make_unique<MoveFloorScene>();
-	//scene = std::make_unique<TerrainAlignScene>();
-	//scene = std::make_unique<AnimationScene>();
-	//scene = std::make_unique<AttachWeaponScene>();
-	//scene = std::make_unique<ProjectScreenScene>();
-	//scene = std::make_unique<ResourceManagementScene>();
-	//scene = std::make_unique<UIAnimScene>();
-	//scene = std::make_unique<HitStopScene>();
+	scene = std::make_unique<SceneGame>();
+	//scene = std::make_unique<LandWalkScene>();
+	
 }
 
 // デストラクタ

@@ -1,16 +1,17 @@
 #include <imgui.h>
+#include <ImGuizmo.h>
 #include "Graphics.h"
-#include "SceneGame.h"
-#include "Camera.h"
 #include "Collision.h"
+#include "SceneGame.h"
 
 // 初期化
-void SceneGame::Initialize()
+ SceneGame::SceneGame()
 {
 	ID3D11Device* device = Graphics::Instance().GetDevice();
 	float screenWidth = Graphics::Instance().GetScreenWidth();
 	float screenHeight = Graphics::Instance().GetScreenHeight();
-	//カメラ
+
+	// カメラ設定
 	camera.SetPerspectiveFov(
 		DirectX::XMConvertToRadians(45),	// 画角
 		screenWidth / screenHeight,			// 画面アスペクト比
@@ -24,48 +25,47 @@ void SceneGame::Initialize()
 	);
 	cameraController.SyncCameraToController(camera);
 
-	//ステージ
-	stage.model = std::make_unique<Model>("");
+	// モデル
+	stage.model = std::make_unique<Model>("Data/Model/Greybox/Greybox.mdl");
 
-	//プレイヤー初期化
-	player.position = { 13, 5, 16 };
+	player.position = { 13, 1, 16 };
 	player.scale = { 0.01f, 0.01f, 0.01f };
-
-	player2.position = { 20, 5, 16 };
+	player.model = std::make_unique<Model>("Data/Model/Mr.Incredible/Mr.Incredible.mdl");
+	
+	player2.position = { 11, 3, 16 };
 	player2.scale = { 0.01f, 0.01f, 0.01f };
+	player2.model = std::make_unique<Model>("Data/Model/Mr.Incredible/Mr.Incredible.mdl");
 	
-	player.model = std::make_unique<Model>("");
-	player2.model = std::make_unique<Model>("");
 	
-	cameraController.Update();
-	cameraController.SyncControllerToCamera(camera);
-
 }
 
 // 終了化
-void SceneGame::Finalize()
-{
-	//ゲージ終了化
-	
-	//カメラコントローラー終了化
-	/*if (cameraController != nullptr)
-	{
-		delete cameraController;
-		cameraController = nullptr;
-	}*/
-	//プレイヤー終了化
-	/*if (player != nullptr)
-	{
-		delete player;
-		player = nullptr;
-	}*/
-	//ステージ終了化
-	/*StageManager::Instance().Clear();*/
-}
+//void SceneGame::Finalize()
+//{
+//	//ゲージ終了化
+//	
+//	//カメラコントローラー終了化
+//	/*if (cameraController != nullptr)
+//	{
+//		delete cameraController;
+//		cameraController = nullptr;
+//	}*/
+//	//プレイヤー終了化
+//	/*if (player != nullptr)
+//	{
+//		delete player;
+//		player = nullptr;
+//	}*/
+//	//ステージ終了化
+//	/*StageManager::Instance().Clear();*/
+//}
 
 // 更新処理
 void SceneGame::Update(float elapsedTime)
 {
+	cameraController.Update();
+	cameraController.SyncControllerToCamera(camera);
+
 	// プレイヤー移動処理
 	{
 		// 入力処理
@@ -75,7 +75,14 @@ void SceneGame::Update(float elapsedTime)
 		if (GetAsyncKeyState('S') & 0x8000) axisY -= 1.0f;
 		if (GetAsyncKeyState('D') & 0x8000) axisX += 1.0f;
 		if (GetAsyncKeyState('A') & 0x8000) axisX -= 1.0f;
-		if (GetAsyncKeyState(VK_SPACE) & 0x01) player.velocity.y = jumpSpeed;
+		
+		float axis2X = 0.0f;
+		float axis2Y = 0.0f;
+		if (GetAsyncKeyState('I') & 0x8000) axis2Y += 1.0f;
+		if (GetAsyncKeyState('K') & 0x8000) axis2Y -= 1.0f;
+		if (GetAsyncKeyState('L') & 0x8000) axis2X += 1.0f;
+		if (GetAsyncKeyState('J') & 0x8000) axis2X -= 1.0f;
+
 
 		// カメラの方向
 		const DirectX::XMFLOAT3& cameraFront = camera.GetFront();
@@ -91,6 +98,10 @@ void SceneGame::Update(float elapsedTime)
 		float vecX = cameraFrontX * axisY + cameraRightX * axisX;
 		float vecZ = cameraFrontZ * axisY + cameraRightZ * axisX;
 		float vecLength = sqrtf(vecX * vecX + vecZ * vecZ);
+
+		float vec2X = cameraFrontX * axis2Y + cameraRightX * axis2X;
+		float vec2Z = cameraFrontZ * axis2Y + cameraRightZ * axis2X;
+		float vec2Length = sqrtf(vec2X * vec2X + vec2Z * vec2Z);
 
 		// 横方向移動処理
 		if (vecLength > 0)
@@ -151,23 +162,85 @@ void SceneGame::Update(float elapsedTime)
 			}
 		}
 
+		if (vec2Length > 0)
+		{
+			// 単位ベクトル化
+			vec2X /= vec2Length;
+			vec2Z /= vec2Length;
+
+			// 加速処理
+			float acceleration = this->acceleration * elapsedTime;
+			player2.velocity.x += vec2X * acceleration;
+			player2.velocity.z += vec2Z * acceleration;
+
+			// 最大速度制限
+			float velocityLength = sqrtf(player2.velocity.x * player2.velocity.x + player2.velocity.z * player2.velocity.z);
+			if (velocityLength > moveSpeed)
+			{
+				player2.velocity.x = (player2.velocity.x / velocityLength) * moveSpeed;
+				player2.velocity.z = (player2.velocity.z / velocityLength) * moveSpeed;
+			}
+
+			// 進行方向を向くようにする
+			{
+				// プレイヤーの向いている方向
+				float frontX = sinf(player2.angle.y);
+				float frontZ = cosf(player2.angle.y);
+
+				// 回転量調整
+				float dot = frontX * vec2X + frontZ * vec2Z;
+				float rot = (std::min)(1.0f - dot, turnSpeed * elapsedTime);
+
+				// 左右判定をして回転処理
+				float cross = frontX * vec2Z - frontZ * vec2X;
+				if (cross < 0.0f)
+				{
+					player2.angle.y += rot;
+				}
+				else
+				{
+					player2.angle.y -= rot;
+				}
+			}
+		}
+		else
+		{
+			// 減速処理
+			float deceleration = this->deceleration * elapsedTime;
+			float velocityLength = sqrtf(player2.velocity.x * player2.velocity.x + player2.velocity.z * player2.velocity.z);
+			if (velocityLength > deceleration)
+			{
+				player2.velocity.x -= (player2.velocity.x / velocityLength) * deceleration;
+				player2.velocity.z -= (player2.velocity.z / velocityLength) * deceleration;
+			}
+			else
+			{
+				player2.velocity.x = 0.0f;
+				player2.velocity.z = 0.0f;
+			}
+		}
+
 		// 重力処理
-		player.velocity.y -= gravity * elapsedTime;
+		//player.velocity.y -= gravity * elapsedTime;
 
 		// 移動量
 		float moveX = player.velocity.x * elapsedTime;
 		float moveY = player.velocity.y * elapsedTime;
 		float moveZ = player.velocity.z * elapsedTime;
 
+		float move2X = player2.velocity.x * elapsedTime;
+		float move2Y = player2.velocity.y * elapsedTime;
+		float move2Z = player2.velocity.z * elapsedTime;
+
 		// 接地処理
 		{
-			if (player.position.y < 0.0f)
+			if (player.position.y < 1.0f)
 			{
-				player.position.y = 0;
+				player.position.y = 1;
 			}
-			if (player2.position.y < 0.0f)
+			if (player2.position.y < 1.0f)
 			{
-				player2.position.y = 0;
+				player2.position.y = 1;
 			}
 		}
 
@@ -176,9 +249,12 @@ void SceneGame::Update(float elapsedTime)
 		player.position.y += moveY;
 		player.position.z += moveZ;
 
+		player2.position.x += move2X;
+		player2.position.y += move2Y;
+		player2.position.z += move2Z;
+
 	}
-	////ステージ更新処理
-	//StageManager::Instance().Update(elapsedTime);
+
 	// プレイヤー行列更新処理
 	{
 		DirectX::XMMATRIX S = DirectX::XMMatrixScaling(player.scale.x, player.scale.y, player.scale.z);
@@ -186,8 +262,15 @@ void SceneGame::Update(float elapsedTime)
 		DirectX::XMMATRIX T = DirectX::XMMatrixTranslation(player.position.x, player.position.y, player.position.z);
 		DirectX::XMStoreFloat4x4(&player.transform, S* R* T);
 	}
-	////エフェクト更新処理
-	//EffectManager::Instance().Update(elapsedTime);
+
+	{
+		DirectX::XMMATRIX S = DirectX::XMMatrixScaling(player2.scale.x, player2.scale.y, player2.scale.z);
+		DirectX::XMMATRIX R = DirectX::XMMatrixRotationRollPitchYaw(player2.angle.x, player2.angle.y, player2.angle.z);
+		DirectX::XMMATRIX T = DirectX::XMMatrixTranslation(player2.position.x, player2.position.y, player2.position.z);
+		DirectX::XMStoreFloat4x4(&player2.transform, S* R* T);
+	}
+
+	
 }
 
 // 描画処理
