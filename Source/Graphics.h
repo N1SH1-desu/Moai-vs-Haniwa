@@ -50,6 +50,9 @@ public:
 	// スクリーン高さ取得
 	float GetScreenHeight() const { return screenHeight; }
 
+	// デバッグレンダラ取得
+	//DebugRenderer* GetDebugRenderer() const { return debugRenderer.get(); }
+
 	// レンダーステート取得
 	RenderState* GetRenderState() { return renderState.get(); }
 
@@ -78,4 +81,5 @@ private:
 	std::unique_ptr<PrimitiveRenderer>				primitiveRenderer;
 	std::unique_ptr<ShapeRenderer>					shapeRenderer;
 	std::unique_ptr<ModelRenderer>					modelRenderer;
+	//std::unique_ptr<DebugRenderer>					debugRenderer;
 };

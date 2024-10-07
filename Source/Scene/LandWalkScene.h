@@ -5,6 +5,7 @@
 #include "Camera.h"
 #include "FreeCameraController.h"
 #include "Model.h"
+#include <set>
 
 class LandWalkScene : public Scene
 {
@@ -20,6 +21,12 @@ public:
 
 	// GUI描画処理
 	void DrawGUI() override;
+
+	// エネミー数取得
+	int GetEnemyCount() const { return static_cast<int>(enemies.size()); }
+
+	// エネミー取得
+	LandWalkScene* GetEnemy(int index) { return enemies.at(index); }
 
 private:
 	struct Object
@@ -42,10 +49,14 @@ private:
 		}
 	};
 
+	// プレイヤーとエネミーとの衝突処理
+	//void CollisionPlayerVsEnemies();
+
 	Camera								camera;
 	FreeCameraController				cameraController;
 	Object								player;
 	Object								stage;
+	Object                              enemy;
 	float								gravity = 10.0f;
 	float								acceleration = 30.0f;
 	float								deceleration = 20.0f;
@@ -53,4 +64,13 @@ private:
 	float								turnSpeed = DirectX::XMConvertToRadians(720);
 	float								jumpSpeed = 5.0f;
 	float								downhillOffset = 43.0f;
+	float								characterHitRadius = 0.5f;
+	float								characterHitOffset = 0.5f;
+	float								enemyHitOffset = 1.0f;
+	float								enemyHitRadius = 0.5f;
+
+	std::vector<LandWalkScene*>          enemies;
+	//std::set<LandWalkScene*>             removes;
+
+
 };

@@ -28,9 +28,15 @@ LandWalkScene::LandWalkScene()
 	// モデル
 	stage.model = std::make_unique<Model>("Data/Model/Greybox/Greybox.mdl");
 
+	//プレイヤーモデル
 	player.position = { 13, 5, 16 };
 	player.scale = { 0.01f, 0.01f, 0.01f };
 	player.model = std::make_unique<Model>("Data/Model/Mr.Incredible/Mr.Incredible.mdl");
+
+	//エネミーモデル
+	enemy.position = { 15, 5, 16 };
+	enemy.scale = { 0.01f, 0.01f, 0.01f };
+	enemy.model = std::make_unique<Model>("Data/Model/Slime/Slime.mdl");
 }
 
 // 更新処理
@@ -39,6 +45,32 @@ void LandWalkScene::Update(float elapsedTime)
 	// カメラ更新処理
 	cameraController.Update();
 	cameraController.SyncControllerToCamera(camera);
+
+	//for (LandWalkScene* enemy : enemies)
+	//{
+	//	enemy->Update(elapsedTime);
+	//}
+
+	////破棄処理
+	////enemiesの範囲for文中でerase()すると不具合が発生してしまうため、
+	////更新処理が終わった後に破棄リストに積まれたオブジェクトを削除する。
+	//for (LandWalkScene* enemy : removes)
+	//{
+	//	//std::vectorから要素を削除する場合はイテレーターで削除しなければならない
+	//	std::vector<LandWalkScene*>::iterator it = std::find(enemies.begin(), enemies.end(), enemy);
+	//	if (it != enemies.end())
+	//	{
+	//		enemies.erase(it);
+	//	}
+
+	//	//削除
+	//	delete enemy;
+	//}
+	////破棄リストをクリア
+	//removes.clear();
+
+	//// 敵同士の衝突処理
+	//CollisionPlayerVsEnemies();
 
 	// プレイヤー移動処理
 	{
@@ -49,7 +81,7 @@ void LandWalkScene::Update(float elapsedTime)
 		if (GetAsyncKeyState('S') & 0x8000) axisY -= 1.0f;
 		if (GetAsyncKeyState('D') & 0x8000) axisX += 1.0f;
 		if (GetAsyncKeyState('A') & 0x8000) axisX -= 1.0f;
-		if (GetAsyncKeyState(VK_SPACE) & 0x01) player.velocity.y = jumpSpeed;
+		//if (GetAsyncKeyState(VK_SPACE) & 0x01) player.velocity.y = jumpSpeed;
 
 		// カメラの方向
 		const DirectX::XMFLOAT3& cameraFront = camera.GetFront();
@@ -126,7 +158,7 @@ void LandWalkScene::Update(float elapsedTime)
 		}
 
 		// 重力処理
-		player.velocity.y -= gravity * elapsedTime;
+		//player.velocity.y -= gravity * elapsedTime;
 
 		// 移動量
 		float moveX = player.velocity.x * elapsedTime;
@@ -152,6 +184,156 @@ void LandWalkScene::Update(float elapsedTime)
 		DirectX::XMMATRIX T = DirectX::XMMatrixTranslation(player.position.x, player.position.y, player.position.z);
 		DirectX::XMStoreFloat4x4(&player.transform, S * R * T);
 	}
+
+	// エネミー移動処理
+	{
+		// 入力処理
+		float axisX = 0.0f;
+		float axisY = 0.0f;
+		if (GetAsyncKeyState('I') & 0x8000) axisY += 1.0f;
+		if (GetAsyncKeyState('K') & 0x8000) axisY -= 1.0f;
+		if (GetAsyncKeyState('L') & 0x8000) axisX += 1.0f;
+		if (GetAsyncKeyState('J') & 0x8000) axisX -= 1.0f;
+
+		// カメラの方向
+		const DirectX::XMFLOAT3& cameraFront = camera.GetFront();
+		const DirectX::XMFLOAT3& camemraRight = camera.GetRight();
+		float cameraFrontLengthXZ = sqrtf(cameraFront.x * cameraFront.x + cameraFront.z * cameraFront.z);
+		float cameraRightLengthXZ = sqrtf(camemraRight.x * camemraRight.x + camemraRight.z * camemraRight.z);
+		float cameraFrontX = cameraFront.x / cameraFrontLengthXZ;
+		float cameraFrontZ = cameraFront.z / cameraFrontLengthXZ;
+		float cameraRightX = camemraRight.x / cameraRightLengthXZ;
+		float cameraRightZ = camemraRight.z / cameraRightLengthXZ;
+
+		// 移動ベクトル
+		float vecX = cameraFrontX * axisY + cameraRightX * axisX;
+		float vecZ = cameraFrontZ * axisY + cameraRightZ * axisX;
+		float vecLength = sqrtf(vecX * vecX + vecZ * vecZ);
+
+		// 横方向移動処理
+		if (vecLength > 0)
+		{
+			// 単位ベクトル化
+			vecX /= vecLength;
+			vecZ /= vecLength;
+
+			// 加速処理
+			float acceleration = this->acceleration * elapsedTime;
+			enemy.velocity.x += vecX * acceleration;
+			enemy.velocity.z += vecZ * acceleration;
+
+			// 最大速度制限
+			float velocityLength = sqrtf(enemy.velocity.x * enemy.velocity.x + enemy.velocity.z * enemy.velocity.z);
+			if (velocityLength > moveSpeed)
+			{
+				enemy.velocity.x = (enemy.velocity.x / velocityLength) * moveSpeed;
+				enemy.velocity.z = (enemy.velocity.z / velocityLength) * moveSpeed;
+			}
+
+			// 進行方向を向くようにする
+			{
+				// プレイヤーの向いている方向
+				float frontX = sinf(enemy.angle.y);
+				float frontZ = cosf(enemy.angle.y);
+
+				// 回転量調整
+				float dot = frontX * vecX + frontZ * vecZ;
+				float rot = (std::min)(1.0f - dot, turnSpeed * elapsedTime);
+
+				// 左右判定をして回転処理
+				float cross = frontX * vecZ - frontZ * vecX;
+				if (cross < 0.0f)
+				{
+					enemy.angle.y += rot;
+				}
+				else
+				{
+					enemy.angle.y -= rot;
+				}
+			}
+		}
+		else
+		{
+			// 減速処理
+			float deceleration = this->deceleration * elapsedTime;
+			float velocityLength = sqrtf(enemy.velocity.x * enemy.velocity.x + enemy.velocity.z * enemy.velocity.z);
+			if (velocityLength > deceleration)
+			{
+				enemy.velocity.x -= (enemy.velocity.x / velocityLength) * deceleration;
+				enemy.velocity.z -= (enemy.velocity.z / velocityLength) * deceleration;
+			}
+			else
+			{
+				enemy.velocity.x = 0.0f;
+				enemy.velocity.z = 0.0f;
+			}
+		}
+
+		// 重力処理
+		//player.velocity.y -= gravity * elapsedTime;
+
+		// 移動量
+		float moveX = enemy.velocity.x * elapsedTime;
+		float moveY = enemy.velocity.y * elapsedTime;
+		float moveZ = enemy.velocity.z * elapsedTime;
+
+		// 接地処理
+		{
+
+		}
+
+		// 移動
+		enemy.position.x += moveX;
+		enemy.position.y += moveY;
+		enemy.position.z += moveZ;
+
+	}
+
+	// エネミー行列更新処理
+	{
+		DirectX::XMMATRIX S = DirectX::XMMatrixScaling(enemy.scale.x, enemy.scale.y, enemy.scale.z);
+		DirectX::XMMATRIX R = DirectX::XMMatrixRotationRollPitchYaw(enemy.angle.x, enemy.angle.y, enemy.angle.z);
+		DirectX::XMMATRIX T = DirectX::XMMatrixTranslation(enemy.position.x, enemy.position.y, enemy.position.z);
+		DirectX::XMStoreFloat4x4(&enemy.transform, S* R* T);
+	}
+
+
+	// プレイヤーとエネミーとの衝突処理
+	//void LandWalkScene::CollisionPlayerVsEnemies()
+	//{
+	//	EnemyManager& enemyManager = EnemyManager::Instance();
+
+	//	// 全ての敵と総当たりで衝突処理
+	//	int enemyCount = enemyManager.GetEnemyCount();
+	//	for (int i = 0; i < enemyCount; ++i)
+	//	{
+	//		Enemy* enemy = enemyManager.GetEnemy(i);
+
+	//	// 衝突処理
+	//		DirectX::XMFLOAT3 outPosition;
+	//		if (Collision::IntersectCylinderVsCylinder(
+	//			position,
+	//			radius,
+	//			height,
+	//			enemy->GetPosition(),
+	//			enemy->GetRadius(),
+	//			enemy->GetHeight(),
+	//			outPosition))
+	//		{
+	//			////押し出し後の位置設定
+	//			//enemy->SetPosition(outPosition);
+
+	//			//敵の真上付近に当たったかどうかを判定
+	//			DirectX::XMVECTOR P = DirectX::XMLoadFloat3(&position);
+	//			DirectX::XMVECTOR E = DirectX::XMLoadFloat3(&enemy->GetPosition());
+	//			DirectX::XMVECTOR V = DirectX::XMVectorSubtract(P, E);
+	//			DirectX::XMVECTOR N = DirectX::XMVector3Normalize(V);
+	//			DirectX::XMFLOAT3 normal;
+	//			DirectX::XMStoreFloat3(&normal, N);
+	//			
+	//		}
+	//	}
+	//}
 }
 
 // 描画処理
@@ -160,6 +342,7 @@ void LandWalkScene::Render(float elapsedTime)
 	ID3D11DeviceContext* dc = Graphics::Instance().GetDeviceContext();
 	RenderState* renderState = Graphics::Instance().GetRenderState();
 	ModelRenderer* modelRenderer = Graphics::Instance().GetModelRenderer();
+	ShapeRenderer* shapeRenderer = Graphics::Instance().GetShapeRenderer();
 
 	// モデル描画
 	RenderContext rc;
@@ -168,6 +351,24 @@ void LandWalkScene::Render(float elapsedTime)
 	rc.camera = &camera;
 	modelRenderer->Render(rc, stage.transform, stage.model.get(), ShaderId::Lambert);
 	modelRenderer->Render(rc, player.transform, player.model.get(), ShaderId::Lambert);
+	modelRenderer->Render(rc, enemy.transform, enemy.model.get(), ShaderId::Lambert);
+
+
+	//3Dデバッグ
+	DirectX::XMFLOAT3 p;
+	DirectX::XMFLOAT3 e;
+
+	p.x = player.position.x;
+	p.y = player.position.y + characterHitOffset;
+	p.z = player.position.z;
+	shapeRenderer->DrawSphere(p, characterHitRadius, { 1,1,1,1 });
+	shapeRenderer->Render(dc, camera.GetView(), camera.GetProjection());
+
+	e.x = enemy.position.x;
+	e.y = enemy.position.y + characterHitOffset;
+	e.z = enemy.position.z;
+	shapeRenderer->DrawSphere(e, characterHitRadius, { 1,1,1,1 });
+	shapeRenderer->Render(dc, camera.GetView(), camera.GetProjection());
 }
 
 // GUI描画処理
@@ -186,6 +387,8 @@ void LandWalkScene::DrawGUI()
 		{
 			player.position = { 13, 5, 16 };
 			player.velocity = { 0, 0, 0 };
+			enemy.position = { 13, 5, 16 };
+			enemy.velocity = { 0, 0, 0 };
 		}
 
 		ImGui::DragFloat3("Position", &player.position.x, 0.1f);
@@ -201,3 +404,5 @@ void LandWalkScene::DrawGUI()
 	}
 	ImGui::End();
 }
+
+
