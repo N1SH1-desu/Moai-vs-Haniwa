@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "DoubleCameraController.h"
 #include "Model.h"
+#include "Artifact.h"
 
 class HitStopScene : public Scene
 {
@@ -28,18 +29,20 @@ private:
 	}
 
 private:
-	struct Object
-	{
-		DirectX::XMFLOAT3		position = { 0, 0, 0 };
-		DirectX::XMFLOAT3		angle = { 0, 0, 0 };
-		DirectX::XMFLOAT3		scale = { 1, 1, 1 };
-		DirectX::XMFLOAT4X4		transform = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
-		std::unique_ptr<Model>	model;
-	};
+	//struct Object
+	//{
+	//	DirectX::XMFLOAT3		position = { 0, 0, 0 };
+	//	DirectX::XMFLOAT3		angle = { 0, 0, 0 };
+	//	DirectX::XMFLOAT3		scale = { 1, 1, 1 };
+	//	DirectX::XMFLOAT4X4		transform = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
+	//	std::unique_ptr<Model>	model;
+	//};
 
 	DoubleCameraController				cameraController;
-	Object								character;
-	Object								weapon;
+	//Object								character;
+	//Object								weapon;
+	std::unique_ptr<Characters::Artifact> moai;
+	std::unique_ptr<Characters::Artifact> haniwa;
 	float								characterHitOffset = 1.0f;
 	float								characterHitRadius = 0.5f;
 	float								weaponHitOffset = 1.5f;

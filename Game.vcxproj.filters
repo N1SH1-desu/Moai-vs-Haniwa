@@ -144,9 +144,6 @@
     <ClInclude Include="Source\ResourceManager.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Scene\HitStopScene.h">
-      <Filter>Source\07_ヒットストップ</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Timer.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -154,6 +151,18 @@
       <Filter>Source\02_地上歩行</Filter>
     </ClInclude>
     <ClInclude Include="Source\DoubleCameraController.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene\HitStopScene.h">
+      <Filter>Source\07_ヒットストップ</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Artifact.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Moai.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Haniwa.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
@@ -261,6 +270,9 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\DoubleCameraController.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Artifact.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
