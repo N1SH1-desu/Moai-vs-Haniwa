@@ -8,6 +8,7 @@
 #include "Scene/SlideMoveScene.h"
 #include "Scene/HitStopScene.h"
 #include "SceneGame.h"
+#include <SceneTitle.h>
 // 垂直同期間隔設定
 static const int syncInterval = 1;
 
@@ -23,7 +24,7 @@ Framework::Framework(HWND hWnd)
 
 
 	// シーン初期化
-	scene = std::make_unique<SceneGame>();
+	scene = std::make_unique<SceneTitle>();
 	//scene = std::make_unique<LandWalkScene>();
 	
 }
@@ -41,6 +42,7 @@ void Framework::Update(float elapsedTime)
 	// IMGUIフレーム開始処理	
 	ImGuiRenderer::NewFrame();
 
+	if(GetAsyncKeyState('W') & 0x8000)scene = std::make_unique<SceneGame>();
 	// シーン更新処理
 	scene->Update(elapsedTime);
 }

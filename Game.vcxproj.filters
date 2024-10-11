@@ -156,6 +156,9 @@
     <ClInclude Include="Source\SceneGame.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="Source\SceneTitle.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Framework.cpp">
@@ -261,6 +264,9 @@
       <Filter>Source\02_地上歩行</Filter>
     </ClCompile>
     <ClCompile Include="Source\SceneGame.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneTitle.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

@@ -65,7 +65,7 @@ void SceneGame::Update(float elapsedTime)
 {
 	cameraController.Update();
 	cameraController.SyncControllerToCamera(camera);
-
+	
 	// ƒvƒŒƒCƒ„[ˆÚ“®ˆ—
 	{
 		// “ü—Íˆ—

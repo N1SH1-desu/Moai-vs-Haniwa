@@ -6,8 +6,6 @@ class Scene
 public:
 	Scene() = default;
 	virtual ~Scene() = default;
-	// I—¹‰»
-	virtual void Finalize() {};
 	// XVˆ—
 	virtual void Update(float elapsedTime) {}
 

@@ -14,11 +14,6 @@ public:
 	SceneGame();
 	~SceneGame()override = default;
 
-	// ‰Šú‰»
-	
-	// I—¹‰»
-	//void Finalize() override;
-
 	// XVˆ—
 	void Update(float elapsedTime) override;
 

@@ -139,6 +139,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="Source\SceneTitle.h" />
     <ClInclude Include="Source\Scene\HitStopScene.h" />
     <ClInclude Include="Source\Scene\LandWalkScene.h" />
     <ClInclude Include="Source\ShapeRenderer.h" />
@@ -182,6 +183,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="Source\SceneTitle.cpp" />
     <ClCompile Include="Source\Scene\HitStopScene.cpp" />
     <ClCompile Include="Source\Scene\LandWalkScene.cpp" />
     <ClCompile Include="Source\ShapeRenderer.cpp" />
