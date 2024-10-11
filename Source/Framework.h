@@ -24,7 +24,7 @@ private:
 public:
 	int Run();
 	LRESULT CALLBACK HandleMessage(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-
+	int scene_table;
 private:
 	const HWND				hWnd;
 	HighResolutionTimer		timer;

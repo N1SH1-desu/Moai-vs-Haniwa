@@ -11,7 +11,7 @@
 #include <SceneTitle.h>
 // 垂直同期間隔設定
 static const int syncInterval = 1;
-
+int end;
 // コンストラクタ
 Framework::Framework(HWND hWnd)
 	: hWnd(hWnd)
@@ -26,7 +26,7 @@ Framework::Framework(HWND hWnd)
 	// シーン初期化
 	scene = std::make_unique<SceneTitle>();
 	//scene = std::make_unique<LandWalkScene>();
-	
+	scene_table = 0;
 }
 
 // デストラクタ
@@ -42,7 +42,16 @@ void Framework::Update(float elapsedTime)
 	// IMGUIフレーム開始処理	
 	ImGuiRenderer::NewFrame();
 
-	if(GetAsyncKeyState('W') & 0x8000)scene = std::make_unique<SceneGame>();
+	if (GetAsyncKeyState('B') & 0x8000 && scene_table == 0)
+	{
+		scene = std::make_unique<SceneGame>();
+		scene_table=1;
+	}
+	if (GetAsyncKeyState('T') & 0x8000 && scene_table == 1)
+	{
+		scene = std::make_unique<SceneTitle>();
+		scene_table = 0;
+	}
 	// シーン更新処理
 	scene->Update(elapsedTime);
 }

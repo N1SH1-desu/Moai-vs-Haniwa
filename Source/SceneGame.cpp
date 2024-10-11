@@ -10,7 +10,7 @@
 	ID3D11Device* device = Graphics::Instance().GetDevice();
 	float screenWidth = Graphics::Instance().GetScreenWidth();
 	float screenHeight = Graphics::Instance().GetScreenHeight();
-
+	end = 0;
 	// ÉJÉÅÉâê›íË
 	camera.SetPerspectiveFov(
 		DirectX::XMConvertToRadians(45),	// âÊäp
@@ -269,7 +269,8 @@ void SceneGame::Update(float elapsedTime)
 		DirectX::XMMATRIX T = DirectX::XMMatrixTranslation(player2.position.x, player2.position.y, player2.position.z);
 		DirectX::XMStoreFloat4x4(&player2.transform, S* R* T);
 	}
-
+	if (player.death)end = 1;
+	if (player2.death)end = 2;
 	
 }
 

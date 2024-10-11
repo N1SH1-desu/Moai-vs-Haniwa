@@ -39,6 +39,7 @@ private:
 			DirectX::XMMATRIX WorldTransform = S * R * T;
 			DirectX::XMStoreFloat4x4(&transform, WorldTransform);
 		}
+		bool								death;
 	};
 	Camera								camera;
 	FreeCameraController				cameraController;
@@ -50,4 +51,6 @@ private:
 	float								moveSpeed = 5.0f;
 	float								turnSpeed = DirectX::XMConvertToRadians(720);
 	float								downhillOffset = 43.0f;
+	
 };
+extern int end;
