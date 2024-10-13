@@ -27,12 +27,13 @@ namespace Characters
 		Artifact& operator=(const Artifact&) = delete;
 		Artifact(const std::string modelPath, const DirectX::XMFLOAT3& position = { 0.0f, 0.0f, 0.0f}, const DirectX::XMFLOAT3& scale = { 1, 1, 1});
 		virtual ~Artifact() = default;
-		virtual void Update();
+		virtual void Update(float elapsedTime);
 		virtual void Render(ID3D11DeviceContext* dc, const RenderState* renderState, ModelRenderer* modelRenderer, const Camera* camera);
 
-		virtual void Attack();
-		virtual void Guard();
-		virtual void Push();
+		virtual void Attack(float elapsedTime);
+		virtual void Guard(float elapsedTime);
+		virtual void Push(float elapsedTime);
+		virtual void Stan(float elapsedTime);
 
 		virtual const std::string GetName() = 0;
 	protected:
@@ -50,6 +51,8 @@ namespace Characters
 		{
 			return transform;
 		}
+	private:
+		void GetKeyState();
 	protected:
 		bool					onGround = false;
 		DirectX::XMFLOAT3		velocity = { 0, 0, 0 };

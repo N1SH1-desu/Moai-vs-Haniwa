@@ -11,8 +11,27 @@ namespace Characters
 		this->model = std::make_unique<Model>(modelPath.c_str());
 	}
 
-	void Artifact::Update()
+	void Artifact::Update(float elapsedTime)
 	{
+		switch (state)
+		{
+		case CharacterState::None:
+			GetKeyState();
+			break;
+		case CharacterState::Stan:
+			Stan(elapsedTime);
+			break;
+		case CharacterState::Attack:
+			Attack(elapsedTime);
+			break;
+		case CharacterState::Guard:
+			Guard(elapsedTime);
+			break;
+		case CharacterState::Push:
+			Push(elapsedTime);
+			break;
+		}
+
 		UpdateTransform();
 	}
 
@@ -25,16 +44,25 @@ namespace Characters
 		modelRenderer->Render(rc, transform, model.get(), ShaderId::Lambert);
 	}
 
-	void Artifact::Attack()
+	void Artifact::Attack(float elapsedTime)
 	{
 	}
 
-	void Artifact::Guard()
+	void Artifact::Guard(float elapsedTime)
 	{
 	}
 
-	void Artifact::Push()
+	void Artifact::Push(float elapsedTime)
 	{
+	}
+
+	void Artifact::Stan(float elapsedTime)
+	{
+	}
+
+	void Artifact::GetKeyState()
+	{
+
 	}
 
 }

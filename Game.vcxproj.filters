@@ -28,6 +28,9 @@
     <Filter Include="Source\02_地上歩行">
       <UniqueIdentifier>{5aa72adc-7d83-4b85-8bbe-58e2b60bdbb1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Input">
+      <UniqueIdentifier>{f83f427c-157d-4ad2-91a6-dc4a56f5f78a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Framework.h">
@@ -165,6 +168,15 @@
     <ClInclude Include="Source\Haniwa.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Input\GamePad.h">
+      <Filter>Source\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Input\Input.h">
+      <Filter>Source\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Input\Mouse.h">
+      <Filter>Source\Input</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Framework.cpp">
@@ -274,6 +286,15 @@
     </ClCompile>
     <ClCompile Include="Source\Artifact.cpp">
       <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Input\GamePad.cpp">
+      <Filter>Source\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Input\Input.cpp">
+      <Filter>Source\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Input\Mouse.cpp">
+      <Filter>Source\Input</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

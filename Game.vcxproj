@@ -133,6 +133,9 @@
     <ClInclude Include="Source\Framework.h" />
     <ClInclude Include="Source\FreeCameraController.h" />
     <ClInclude Include="Source\Haniwa.h" />
+    <ClInclude Include="Source\Input\GamePad.h" />
+    <ClInclude Include="Source\Input\Input.h" />
+    <ClInclude Include="Source\Input\Mouse.h" />
     <ClInclude Include="Source\Light.h" />
     <ClInclude Include="Source\Moai.h" />
     <ClInclude Include="Source\ModelRenderer.h" />
@@ -176,6 +179,9 @@
     <ClCompile Include="Source\DoubleCameraController.cpp" />
     <ClCompile Include="Source\Framework.cpp" />
     <ClCompile Include="Source\FreeCameraController.cpp" />
+    <ClCompile Include="Source\Input\GamePad.cpp" />
+    <ClCompile Include="Source\Input\Input.cpp" />
+    <ClCompile Include="Source\Input\Mouse.cpp" />
     <ClCompile Include="Source\ModelRenderer.cpp" />
     <ClCompile Include="Source\LambertShader.cpp" />
     <ClCompile Include="Source\ModelResource.cpp" />
