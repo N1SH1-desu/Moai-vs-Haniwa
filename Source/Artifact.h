@@ -9,6 +9,14 @@
 
 namespace Characters
 {
+	enum  class CharacterState
+	{
+		None,
+		Stan,
+		Attack,
+		Guard,
+		Push,
+	};
 
 	// モアイとハニワの基底クラス
 	class Artifact
@@ -22,7 +30,11 @@ namespace Characters
 		virtual void Update();
 		virtual void Render(ID3D11DeviceContext* dc, const RenderState* renderState, ModelRenderer* modelRenderer, const Camera* camera);
 
-		virtual void Attack() = 0;
+		virtual void Attack();
+		virtual void Guard();
+		virtual void Push();
+
+		virtual const std::string GetName() = 0;
 	protected:
 		const DirectX::XMFLOAT4X4& UpdateTransform()
 		{
@@ -46,6 +58,8 @@ namespace Characters
 		DirectX::XMFLOAT3		scale = { 1, 1, 1 };
 		DirectX::XMFLOAT4X4		transform = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
 		std::unique_ptr<Model>	model;
+
+		CharacterState state;
 	};
 
 }

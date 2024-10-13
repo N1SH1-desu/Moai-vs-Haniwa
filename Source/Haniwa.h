@@ -8,6 +8,6 @@ namespace Characters
 	public:
 		using Artifact::Artifact;
 
-		virtual void Attack() override {};
+		virtual const std::string GetName() override { return "Haniwa"; }
 	};
 }

@@ -3,6 +3,8 @@
 namespace Characters
 {
 	Artifact::Artifact(const std::string modelPath, const DirectX::XMFLOAT3& position, const DirectX::XMFLOAT3& scale)
+		:
+		state(CharacterState::None)
 	{
 		this->position = position;
 		this->scale = scale;
@@ -21,6 +23,18 @@ namespace Characters
 		rc.renderState = renderState;
 		rc.camera = camera;
 		modelRenderer->Render(rc, transform, model.get(), ShaderId::Lambert);
+	}
+
+	void Artifact::Attack()
+	{
+	}
+
+	void Artifact::Guard()
+	{
+	}
+
+	void Artifact::Push()
+	{
 	}
 
 }
