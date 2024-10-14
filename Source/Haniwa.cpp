@@ -1,0 +1,11 @@
+#include "Haniwa.h"
+
+namespace Characters
+{
+	Haniwa::Haniwa(const std::string modelPath, const DirectX::XMFLOAT3& position, const DirectX::XMFLOAT3& scale)
+		:
+		Artifact(modelPath, position, scale)
+	{
+		gamePad.SetSlot(1);
+	}
+}

@@ -62,7 +62,22 @@ namespace Characters
 
 	void Artifact::GetKeyState()
 	{
+		if (gamePad.GetButton() & GamePad::BTN_UP)
+		{
 
+		}
+		if (gamePad.GetButton() & GamePad::BTN_DOWN)
+		{
+
+		}
+		if (gamePad.GetButton() & GamePad::BTN_LEFT)
+		{
+
+		}
+		if (gamePad.GetButton() & GamePad::BTN_RIGHT)
+		{
+
+		}
 	}
 
 }

@@ -6,6 +6,7 @@
 #include "ModelRenderer.h"
 #include "Camera.h"
 #include "RenderState.h"
+#include "Input/GamePad.h"
 
 namespace Characters
 {
@@ -63,6 +64,8 @@ namespace Characters
 		std::unique_ptr<Model>	model;
 
 		CharacterState state;
+
+		GamePad gamePad;
 	};
 
 }

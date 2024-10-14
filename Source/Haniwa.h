@@ -6,7 +6,8 @@ namespace Characters
 	class Haniwa : public Artifact
 	{
 	public:
-		using Artifact::Artifact;
+		Haniwa(const std::string modelPath, const DirectX::XMFLOAT3& position, const DirectX::XMFLOAT3& scale);
+		//using Artifact::Artifact;
 
 		virtual const std::string GetName() override { return "Haniwa"; }
 	};
