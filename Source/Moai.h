@@ -11,6 +11,6 @@ namespace Characters
 		Moai& operator=(const Moai&) = delete;
 		using Artifact::Artifact;
 
-		virtual void Attack() override {};
+		// virtual void Attack(float elapsedTime) override {};
 	};
 }

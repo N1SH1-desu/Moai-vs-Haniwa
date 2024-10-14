@@ -23,10 +23,18 @@ void HitStopScene::Update(float elapsedTime)
 {
 	cameraController.Update();
 
-	float timeScale = 1.0f;
+	
 
-	moai.get()->Update(elapsedTime);
-	haniwa.get()->Update(elapsedTime);
+	moai.get()->Update();
+	haniwa.get()->Update();
+
+	
+	moai.get()->Attack(elapsedTime);
+	haniwa.get()->Attack(elapsedTime);
+
+	moai.get()->Push(elapsedTime);
+	haniwa.get()->Push(elapsedTime);
+
 }
 
 // •`‰æˆ—
