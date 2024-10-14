@@ -19,10 +19,20 @@ namespace Characters
 		Artifact& operator=(const Artifact&) = delete;
 		Artifact(const std::string modelPath, const DirectX::XMFLOAT3& position = { 0.0f, 0.0f, 0.0f}, const DirectX::XMFLOAT3& scale = { 1, 1, 1});
 		virtual ~Artifact() = default;
-		virtual void Update();
+		virtual void Update(float elapsedTime);
 		virtual void Render(ID3D11DeviceContext* dc, const RenderState* renderState, ModelRenderer* modelRenderer, const Camera* camera);
 
 		virtual void Attack() = 0;
+
+	private:
+		float Easing(float x)
+		{
+			return 1 - powf(1 - x, 4);
+		}
+
+		float								CharactersMotionCurrentSeconds = 0.0f;
+		float								CharactersMotionSecondsLength = 1.0f;
+
 	protected:
 		const DirectX::XMFLOAT4X4& UpdateTransform()
 		{
