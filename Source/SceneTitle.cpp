@@ -10,8 +10,25 @@
 // 初期化
 void SceneTitle::Initialize()
 {
-	// スプライト初期化
+	ID3D11Device* device = Graphics::Instance().GetDevice();
+	float screenWidth = Graphics::Instance().GetScreenWidth();
+	float screenHeight = Graphics::Instance().GetScreenHeight();
 	
+	// カメラ設定
+	camera.SetPerspectiveFov(
+		DirectX::XMConvertToRadians(45),    // 画角
+		screenWidth / screenHeight,            // 画面アスペクト比
+		0.1f,                                // ニアクリップ
+		1000.0f                                // ファークリップ
+	);
+	camera.SetLookAt(
+		{ 30, 20, 50 },        // 視点
+		{ 20, 10, 20 },        // 注視点
+		{ 0, 1, 0 }            // 上ベクトル
+	);
+
+	//camera.SetPerspectiveFov(0, 2, 0.1f, 1000);
+	//camera.SetLookAt({0,0,0},{0,0,0},{0,0,0});
 }
 // 終了化
 void SceneTitle::Finalize()
@@ -52,16 +69,24 @@ void SceneTitle::Render()
 	dc->ClearDepthStencilView(dsv, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	dc->OMSetRenderTargets(1, &rtv, dsv);
 	// 2Dスプライト描画
+	//{
+	//	float screenWidth = static_cast<float>(graphics.GetScreenWidth());
+	//	float screenHeight = static_cast<float>(graphics.GetScreenHeight());
+	//	float textureWidth = static_cast<float>(sprite->GetTextureWidth());
+	//	float textureHeight = static_cast<float>(sprite->GetTextureHeight());
+	//	// タイトルスプライト描画 バグったら見る
+	//	sprite->Render(dc,
+	//		0, 0, screenWidth, screenHeight,
+	//		0, 0, textureWidth, textureHeight,
+	//		0,0,
+	//		1, 1, 1, 1);
+	//}
+	
+	// 3D描画
 	{
-		float screenWidth = static_cast<float>(graphics.GetScreenWidth());
-		float screenHeight = static_cast<float>(graphics.GetScreenHeight());
-		float textureWidth = static_cast<float>(sprite->GetTextureWidth());
-		float textureHeight = static_cast<float>(sprite->GetTextureHeight());
-		// タイトルスプライト描画 バグったら見る
-		sprite->Render(dc,
-			0, 0, screenWidth, screenHeight,
-			0, 0, textureWidth, textureHeight,
-			0,0,
-			1, 1, 1, 1);
+		
+
+		
 	}
+
 }

@@ -18,4 +18,5 @@ public:
 private:
 	Sprite* sprite = nullptr;
 	std::unique_ptr<Scene>	scene;
+	Camera					camera;
 };
