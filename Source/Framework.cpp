@@ -42,18 +42,22 @@ void Framework::Update(float elapsedTime)
 	// IMGUIフレーム開始処理	
 	ImGuiRenderer::NewFrame();
 
-	if (GetAsyncKeyState('B') & 0x8000 && scene_table == 0)
+	if (GetAsyncKeyState('B') & 0x8000 && scene_table == 0&& scene_timer>120)
 	{
 		scene = std::make_unique<SceneGame>();
 		scene_table=1;
+		scene_timer = 0;
 	}
-	if (GetAsyncKeyState('T') & 0x8000 && scene_table == 1)
+	if (GetAsyncKeyState('B') & 0x8000 && scene_table == 1&&scene_timer>120)
 	{
 		scene = std::make_unique<SceneTitle>();
 		scene_table = 0;
+		scene_timer = 0;
 	}
 	// シーン更新処理
 	scene->Update(elapsedTime);
+	scene_timer++;
+	if (scene_timer > 60000)scene_timer = 0;
 }
 
 // 描画処理

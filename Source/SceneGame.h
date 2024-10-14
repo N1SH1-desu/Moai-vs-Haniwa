@@ -5,7 +5,7 @@
 #include "Camera.h"
 #include "FreeCameraController.h"
 #include "Model.h"
-
+#include "Effect.h"
 
 // ÉQÅ[ÉÄÉVÅ[Éì
 class SceneGame : public Scene
@@ -51,6 +51,6 @@ private:
 	float								moveSpeed = 5.0f;
 	float								turnSpeed = DirectX::XMConvertToRadians(720);
 	float								downhillOffset = 43.0f;
-	
+	Effect* hitEffect=nullptr;
 };
 extern int end;

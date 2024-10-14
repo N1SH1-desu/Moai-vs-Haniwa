@@ -159,6 +159,12 @@
     <ClInclude Include="Source\SceneTitle.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="Source\EffectManager.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Effect.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Framework.cpp">
@@ -267,6 +273,12 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\SceneTitle.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\EffectManager.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Effect.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

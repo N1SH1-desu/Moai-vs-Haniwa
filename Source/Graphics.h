@@ -7,7 +7,7 @@
 #include "PrimitiveRenderer.h"
 #include "ShapeRenderer.h"
 #include "ModelRenderer.h"
-
+#include <mutex>
 // グラフィックス
 class Graphics
 {
@@ -61,7 +61,8 @@ public:
 
 	// モデルレンダラ取得
 	ModelRenderer* GetModelRenderer() const { return modelRenderer.get(); }
-
+	//ミューテックス取得
+	std::mutex& GetMutex() { return mutex; }
 private:
 	HWND											hWnd = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11Device>			device;
@@ -78,4 +79,5 @@ private:
 	std::unique_ptr<PrimitiveRenderer>				primitiveRenderer;
 	std::unique_ptr<ShapeRenderer>					shapeRenderer;
 	std::unique_ptr<ModelRenderer>					modelRenderer;
+	std::mutex mutex;
 };

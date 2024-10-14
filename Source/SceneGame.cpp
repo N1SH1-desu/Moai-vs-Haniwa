@@ -1,5 +1,6 @@
 #include <imgui.h>
 #include <ImGuizmo.h>
+#include <DirectXMath.h>
 #include "Graphics.h"
 #include "Collision.h"
 #include "SceneGame.h"
@@ -19,46 +20,26 @@
 		1000.0f								// ファークリップ
 	);
 	camera.SetLookAt(
-		{ 13, 10, 27 },		// 視点
-		{ 13, 1, 16 },		// 注視点
+		{ 30, 20, 50 },		// 視点
+		{ 20, 10, 20 },		// 注視点
 		{ 0, 1, 0 }			// 上ベクトル
 	);
 	cameraController.SyncCameraToController(camera);
 
 	// モデル
-	stage.model = std::make_unique<Model>("Data/Model/Greybox/Greybox.mdl");
+	stage.model = std::make_unique<Model>("Data/Model/Stage/stage.mdl");
 
-	player.position = { 13, 1, 16 };
-	player.scale = { 0.01f, 0.01f, 0.01f };
-	player.model = std::make_unique<Model>("Data/Model/Mr.Incredible/Mr.Incredible.mdl");
+	player.position = { 5, 5, 15 };
+	player.scale = { 0.5f, 0.5f, 0.5f };
+	player.model = std::make_unique<Model>("Data/Model/Character/moai.mdl");
 	
-	player2.position = { 11, 3, 16 };
-	player2.scale = { 0.01f, 0.01f, 0.01f };
-	player2.model = std::make_unique<Model>("Data/Model/Mr.Incredible/Mr.Incredible.mdl");
+	player2.position = { 11, 5, 16 };
+	player2.scale = { 0.5f, 0.5f, 0.5f };
+	player2.model = std::make_unique<Model>("Data/Model/Character/haniwa.mdl");
 	
-	
+	//ヒットエフェクト読み込み
+	//hitEffect = new Effect("Data/Effect/dead.efk");
 }
-
-// 終了化
-//void SceneGame::Finalize()
-//{
-//	//ゲージ終了化
-//	
-//	//カメラコントローラー終了化
-//	/*if (cameraController != nullptr)
-//	{
-//		delete cameraController;
-//		cameraController = nullptr;
-//	}*/
-//	//プレイヤー終了化
-//	/*if (player != nullptr)
-//	{
-//		delete player;
-//		player = nullptr;
-//	}*/
-//	//ステージ終了化
-//	/*StageManager::Instance().Clear();*/
-//}
 
 // 更新処理
 void SceneGame::Update(float elapsedTime)
@@ -161,7 +142,7 @@ void SceneGame::Update(float elapsedTime)
 				player.velocity.z = 0.0f;
 			}
 		}
-
+		
 		if (vec2Length > 0)
 		{
 			// 単位ベクトル化
@@ -220,9 +201,6 @@ void SceneGame::Update(float elapsedTime)
 			}
 		}
 
-		// 重力処理
-		//player.velocity.y -= gravity * elapsedTime;
-
 		// 移動量
 		float moveX = player.velocity.x * elapsedTime;
 		float moveY = player.velocity.y * elapsedTime;
@@ -268,6 +246,10 @@ void SceneGame::Update(float elapsedTime)
 		DirectX::XMMATRIX R = DirectX::XMMatrixRotationRollPitchYaw(player2.angle.x, player2.angle.y, player2.angle.z);
 		DirectX::XMMATRIX T = DirectX::XMMatrixTranslation(player2.position.x, player2.position.y, player2.position.z);
 		DirectX::XMStoreFloat4x4(&player2.transform, S* R* T);
+	}
+	if (GetAsyncKeyState('X') & 0x8000)
+	{
+		hitEffect->Play(player.position);
 	}
 	if (player.death)end = 1;
 	if (player2.death)end = 2;
