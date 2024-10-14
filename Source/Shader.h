@@ -14,6 +14,9 @@ public:
 
 	// XVˆ—
 	virtual void Update(const RenderContext& rc, const ModelResource::Material& material) = 0;
+	// •`‰æ
+	virtual void Draw(ID3D11DeviceContext* dc, const Model* model) = 0;
+
 
 	// I—¹ˆ—
 	virtual void End(const RenderContext& rc) = 0;

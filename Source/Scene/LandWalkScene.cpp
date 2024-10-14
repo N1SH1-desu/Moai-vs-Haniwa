@@ -126,7 +126,7 @@ void LandWalkScene::Update(float elapsedTime)
 		}
 
 		// d—Íˆ—
-		player.velocity.y -= gravity * elapsedTime;
+		//player.velocity.y -= gravity * elapsedTime;
 
 		// ˆÚ“®—Ê
 		float moveX = player.velocity.x * elapsedTime;

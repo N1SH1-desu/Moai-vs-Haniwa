@@ -8,6 +8,7 @@
 #include "ShapeRenderer.h"
 #include "ModelRenderer.h"
 
+#include<mutex>
 // グラフィックス
 class Graphics
 {
@@ -62,6 +63,7 @@ public:
 	// モデルレンダラ取得
 	ModelRenderer* GetModelRenderer() const { return modelRenderer.get(); }
 
+	std::mutex& GetMutex() { return mutex; }
 private:
 	HWND											hWnd = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11Device>			device;
@@ -73,6 +75,8 @@ private:
 
 	float	screenWidth = 0;
 	float	screenHeight = 0;
+
+	std::mutex mutex;
 
 	std::unique_ptr<RenderState>					renderState;
 	std::unique_ptr<PrimitiveRenderer>				primitiveRenderer;

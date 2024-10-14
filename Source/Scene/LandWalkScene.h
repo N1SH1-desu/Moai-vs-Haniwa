@@ -53,4 +53,13 @@ private:
 	float								turnSpeed = DirectX::XMConvertToRadians(720);
 	float								jumpSpeed = 5.0f;
 	float								downhillOffset = 43.0f;
+	/*Model* model = nullptr;
+	float				moveSpeed = 5.0f;
+	float				turnSpeed = DirectX::XMConvertToRadians(720);
+	float				jumpSpeed = 20.0f;
+	int					jumpCount = 0;
+	int					jumpLimit = 2;
+	ProjectileManager	projectileManager;
+	Effect* hitEffect = nullptr;
+	bool				visibleDebugPrimitive = true;*/
 };

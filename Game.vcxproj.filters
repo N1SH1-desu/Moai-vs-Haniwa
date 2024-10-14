@@ -28,6 +28,18 @@
     <Filter Include="Source\02_地上歩行">
       <UniqueIdentifier>{5aa72adc-7d83-4b85-8bbe-58e2b60bdbb1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="External\Effekseer">
+      <UniqueIdentifier>{d40880bf-5764-466a-899e-5cb6f9997f9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External\EffekseerRendererDX11">
+      <UniqueIdentifier>{7a0ab82c-996f-492c-8fba-c5b76d48d194}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External\LLGI">
+      <UniqueIdentifier>{343a8f72-3e24-4ce3-90b9-dec034dd18ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Graphics">
+      <UniqueIdentifier>{534fb968-ee06-4605-bac8-cae6aa652901}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Framework.h">
@@ -153,6 +165,51 @@
     <ClInclude Include="Source\Scene\LandWalkScene.h">
       <Filter>Source\02_地上歩行</Filter>
     </ClInclude>
+    <ClInclude Include="Source\EffectManager.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Effekseer170e\include\Effekseer\Effekseer.h">
+      <Filter>External\Effekseer</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Effekseer170e\include\Effekseer\Effekseer.Modules.h">
+      <Filter>External\Effekseer</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Effekseer170e\include\Effekseer\Effekseer.SIMD.h">
+      <Filter>External\Effekseer</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Effekseer170e\include\EffekseerRendererDX11\EffekseerRendererDX11.h">
+      <Filter>External\EffekseerRendererDX11</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Effekseer170e\include\LLGI\LLGI.Base.h">
+      <Filter>External\LLGI</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Effekseer170e\include\LLGI\LLGI.Buffer.h">
+      <Filter>External\LLGI</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Effekseer170e\include\LLGI\LLGI.CommandList.h">
+      <Filter>External\LLGI</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Effekseer170e\include\LLGI\LLGI.Compiler.h">
+      <Filter>External\LLGI</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Effekseer170e\include\LLGI\LLGI.Graphics.h">
+      <Filter>External\LLGI</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Effekseer170e\include\LLGI\LLGI.PipelineState.h">
+      <Filter>External\LLGI</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Effekseer170e\include\LLGI\LLGI.Platform.h">
+      <Filter>External\LLGI</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Effekseer170e\include\LLGI\LLGI.Shader.h">
+      <Filter>External\LLGI</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Effekseer170e\include\LLGI\LLGI.Texture.h">
+      <Filter>External\LLGI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Effect.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Framework.cpp">
@@ -255,6 +312,12 @@
       <Filter>Source\02_地上歩行</Filter>
     </ClCompile>
     <ClCompile Include="Source\BasicShader.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\EffectManager.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Effect.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
