@@ -44,6 +44,18 @@ public:
 	// デバイスコンテキスト取得
 	ID3D11DeviceContext* GetDeviceContext() { return immediateContext.Get(); }
 
+	// スワップチェーン取得
+	IDXGISwapChain* GetSwapChain() const { return swapchain.Get(); }
+
+	// レンダーターゲットビュー取得
+	ID3D11RenderTargetView* GetRenderTargetView() const { return renderTargetView.Get(); }
+
+	// デプスステンシルビュー取得
+	ID3D11DepthStencilView* GetDepthStencilView() const { return depthStencilView.Get(); }
+
+	// シェーダー取得
+	//Shader* GetShader() const { return shader.get(); }
+
 	// スクリーン幅取得
 	float GetScreenWidth() const { return screenWidth; }
 

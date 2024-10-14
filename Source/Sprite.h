@@ -38,6 +38,12 @@ public:
 		float angle,						// 角度
 		float r, float g, float b, float a	// 色
 	) const;
+	// テクスチャ幅取得
+	int GetTextureWidth() const { return textureWidth; }
+
+	// テクスチャ高さ取得
+	int GetTextureHeight() const { return textureHeight; }
+
 
 private:
 	Microsoft::WRL::ComPtr<ID3D11VertexShader>			vertexShader;

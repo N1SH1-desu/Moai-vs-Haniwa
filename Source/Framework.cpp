@@ -8,6 +8,7 @@
 #include "Scene/LandWalkScene.h"
 #include "Scene/SlideMoveScene.h"
 #include "Scene/HitStopScene.h"
+#include <SceneTitle.h>
 
 
 // ‚’¼“¯ŠúŠÔŠuİ’è
@@ -24,6 +25,7 @@ Framework::Framework(HWND hWnd)
 	ImGuiRenderer::Initialize(hWnd, Graphics::Instance().GetDevice(), Graphics::Instance().GetDeviceContext());
 
 	// ƒV[ƒ“‰Šú‰»
+	scene = std::make_unique<SceneTitle>();
 	scene = std::make_unique<LandWalkScene>();
 	//scene = std::make_unique<SlideMoveScene>();
 	//scene = std::make_unique<MoveFloorScene>();
