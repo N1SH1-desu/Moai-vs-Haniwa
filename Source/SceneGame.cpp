@@ -251,9 +251,14 @@ void SceneGame::Update(float elapsedTime)
 	{
 		hitEffect->Play(player.position);
 	}
-	if (player.death)end = 1;
-	if (player2.death)end = 2;
-	
+	if (player.death)
+	{
+		end = 1;
+	}
+	if (player2.death)
+	{
+		end = 2;
+	}
 }
 
 // •`‰æˆ—
