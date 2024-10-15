@@ -6,7 +6,7 @@
 #include "FreeCameraController.h"
 #include "Model.h"
 #include "Effect.h"
-
+#include "Sprite.h"
 // ÉQÅ[ÉÄÉVÅ[Éì
 class SceneGame : public Scene
 {
@@ -46,6 +46,7 @@ private:
 	Object								player;
 	Object								player2;
 	Object								stage;
+	Sprite* sprText = nullptr;
 	float								acceleration = 30.0f;
 	float								deceleration = 20.0f;
 	float								moveSpeed = 5.0f;

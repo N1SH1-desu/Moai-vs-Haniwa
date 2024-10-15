@@ -8,12 +8,22 @@ SceneTitle::SceneTitle()
 	// テクスチャ
 	{
 		sprite = new Sprite(device,"Data/Sprite/Title.png");
+		sprText = new Sprite(device, "Data/Font/font2.png");
 	}
 }
 
 SceneTitle::~SceneTitle()
 {
-	
+	if (sprite != false)
+	{
+		delete sprite;
+		sprite = nullptr;
+	}
+	if (sprText != false)
+	{
+		delete sprText;
+		sprText = nullptr;
+	}
 }
 
 void SceneTitle::Update(float elapsedTime)
@@ -23,32 +33,32 @@ void SceneTitle::Update(float elapsedTime)
 
 void SceneTitle::Render(float elapsedTime)
 {
-	ID3D11DeviceContext* dc = Graphics::Instance().GetDeviceContext();
-	RenderState* renderState = Graphics::Instance().GetRenderState();
-	PrimitiveRenderer* primitiveRenderer = Graphics::Instance().GetPrimitiveRenderer();
-	ShapeRenderer* shapeRenderer = Graphics::Instance().GetShapeRenderer();
+	Graphics& graphics = Graphics::Instance();
+	ID3D11DeviceContext* dc = graphics.GetDeviceContext();
+	ID3D11RenderTargetView* rtv = graphics.GetRenderTargetView();
+	ID3D11DepthStencilView* dsv = graphics.GetDepthStencilView();
 
-	// シェーダー設定
-	dc->VSSetShader(vertexShader.Get(), nullptr, 0);
-	dc->PSSetShader(pixelShader.Get(), nullptr, 0);
+	//画面クリア＆レンダーターゲット設定
+	FLOAT color[] = { 0.0f, 0.0f, 0.5f, 1.0f };
+	dc->ClearRenderTargetView(rtv, color);
+	dc->ClearDepthStencilView(dsv, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+	dc->OMSetRenderTargets(1, &rtv, dsv);
+	//テキスト描画
+	sprText->textout(dc, "PUSH B", 240, 120, 110, 90, 150, 150, 30, 30, 0, 1, 0, 0, 0);
 
-	// レンダーステート設定
-	dc->OMSetBlendState(renderState->GetBlendState(BlendState::Opaque), nullptr, 0xFFFFFFFF);
-	dc->OMSetDepthStencilState(renderState->GetDepthStencilState(DepthState::TestAndWrite), 0);
-	dc->RSSetState(renderState->GetRasterizerState(RasterizerState::SolidCullNone));
+	//2Dスプライト描画
+	{
+		float screenWidth = static_cast<float>(graphics.GetScreenWidth());
+		float screenHeight = static_cast<float>(graphics.GetScreenHeight());
+		float textureWidth = static_cast<float>(sprite->GetTextureWidth());
+		float textureHeight = static_cast<float>(sprite->GetTextureHeight());
+		
 
-	// 頂点バッファ設定
-	UINT stride = sizeof(Vertex);
-	UINT offset = 0;
-	dc->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offset);
-	dc->IASetInputLayout(inputLayout.Get());
-	
-	// 画面サイズ＆テクスチャサイズ取得
-	float screenWidth = Graphics::Instance().GetScreenWidth();
-	float screenHeight = Graphics::Instance().GetScreenHeight();
-	float textureWidth = static_cast<float>(textureDesc.Width);
-	float textureHeight = static_cast<float>(textureDesc.Height);
-
-
-	sprite->Render(dc, 0, 0, 0, screenWidth, screenHeight, textureWidth, 0, 0, textureHeight,0,1,1,1,1);
+		//タイトルスプライト描画
+		sprite->Render(dc,
+			0, 0, screenWidth, screenHeight,
+			0, 0, textureWidth, textureHeight,
+			0,
+			1, 1, 1, 1);
+	}	
 }

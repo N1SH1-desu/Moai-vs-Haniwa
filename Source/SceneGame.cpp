@@ -37,6 +37,7 @@
 	player2.scale = { 0.5f, 0.5f, 0.5f };
 	player2.model = std::make_unique<Model>("Data/Model/Character/haniwa.mdl");
 	
+	sprText = new Sprite(device, "Data/Font/font2.png");
 	//ヒットエフェクト読み込み
 	hitEffect = new Effect("Data/Effect/dead.efk");
 }
@@ -280,4 +281,6 @@ void SceneGame::Render(float elapsedtime)
 	modelRenderer->Render(rc, player2.transform, player2.model.get(), ShaderId::Lambert);
 	
 	EffectManager::Instance().Render(rc.camera->GetView(), rc.camera->GetProjection());
+
+	
 }

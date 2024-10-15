@@ -14,6 +14,9 @@ public:
 	// ï`âÊèàóù
 	void Render(float elapsedTime) override;
 
+	
+
+
 private:
 	struct Vertex
 	{
@@ -22,6 +25,7 @@ private:
 		DirectX::XMFLOAT2	texcoord;
 	};
 	Sprite* sprite = nullptr;
+	Sprite* sprText=nullptr;
 	Microsoft::WRL::ComPtr<ID3D11VertexShader>			vertexShader;
 	Microsoft::WRL::ComPtr<ID3D11PixelShader>			pixelShader;
 	Microsoft::WRL::ComPtr<ID3D11InputLayout>			inputLayout;
@@ -31,5 +35,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11Buffer>				indexBuffer;
 
 	D3D11_TEXTURE2D_DESC	textureDesc;
+
+	
 
 };

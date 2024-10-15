@@ -44,6 +44,12 @@ public:
 	// デバイスコンテキスト取得
 	ID3D11DeviceContext* GetDeviceContext() { return immediateContext.Get(); }
 
+	// レンダーターゲットビュー取得
+	ID3D11RenderTargetView* GetRenderTargetView() const { return renderTargetView.Get(); }
+
+	// デプスステンシルビュー取得
+	ID3D11DepthStencilView* GetDepthStencilView() const { return depthStencilView.Get(); }
+
 	// スクリーン幅取得
 	float GetScreenWidth() const { return screenWidth; }
 
