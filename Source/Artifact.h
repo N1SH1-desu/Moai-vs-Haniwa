@@ -5,6 +5,7 @@
 #include <Model.h>
 #include "ModelRenderer.h"
 #include "Camera.h"
+#include "FreeCameraController.h"
 #include "RenderState.h"
 #include "Input/GamePad.h"
 
@@ -37,6 +38,8 @@ namespace Characters
 		virtual void Stan(float elapsedTime);
 
 		virtual const std::string GetName() = 0;
+
+		const Camera& GetCamera() const { return cameraController.camera; }
 	protected:
 		const DirectX::XMFLOAT4X4& UpdateTransform()
 		{
@@ -55,6 +58,21 @@ namespace Characters
 	private:
 		void GetKeyState();
 	protected:
+		struct CameraPair
+		{
+			Camera camera;
+			FreeCameraController controller;
+
+			void SyncCameraToCon() { controller.SyncCameraToController(camera); }
+			void SyncConToCamera() { controller.SyncControllerToCamera(camera); }
+
+			void Update()
+			{
+				controller.Update();
+				controller.SyncControllerToCamera(camera);
+			}
+		};
+		CameraPair cameraController;
 		bool					onGround = false;
 		DirectX::XMFLOAT3		velocity = { 0, 0, 0 };
 		DirectX::XMFLOAT3		position = { 0, 0, 0 };

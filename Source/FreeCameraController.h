@@ -1,9 +1,10 @@
 #pragma once
 #include "Camera.h"
+#include "Input\GamePad.h"
 
 class FreeCameraController
 {
-public:
+public:	
 	// カメラからコントローラーへパラメータを同期する
 	void SyncCameraToController(const Camera& camera);
 
@@ -13,7 +14,12 @@ public:
 	// 更新処理
 	void Update();
 
+	// ゲームパッドと連動
+	void GetGamePad(GamePad* ref) { gamePad = ref; }
+
 private:
+	GamePad* gamePad = nullptr;
+
 	DirectX::XMFLOAT3		eye;
 	DirectX::XMFLOAT3		focus;
 	DirectX::XMFLOAT3		up;

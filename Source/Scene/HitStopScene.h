@@ -38,7 +38,6 @@ private:
 	//	std::unique_ptr<Model>	model;
 	//};
 
-	DoubleCameraController				cameraController;
 	//Object								character;
 	//Object								weapon;
 	std::unique_ptr<Characters::Artifact> moai;

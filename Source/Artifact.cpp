@@ -9,10 +9,15 @@ namespace Characters
 		this->position = position;
 		this->scale = scale;
 		this->model = std::make_unique<Model>(modelPath.c_str());
+
+		cameraController.controller.GetGamePad(&gamePad);
 	}
 
 	void Artifact::Update(float elapsedTime)
 	{
+		cameraController.Update();
+		cameraController.SyncConToCamera();
+
 		switch (state)
 		{
 		case CharacterState::None:
