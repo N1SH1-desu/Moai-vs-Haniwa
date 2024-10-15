@@ -4,7 +4,7 @@
 #include "Graphics.h"
 #include "Collision.h"
 #include "SceneGame.h"
-
+#include "EffectManager.h"
 // 初期化
  SceneGame::SceneGame()
 {
@@ -38,7 +38,7 @@
 	player2.model = std::make_unique<Model>("Data/Model/Character/haniwa.mdl");
 	
 	//ヒットエフェクト読み込み
-	//hitEffect = new Effect("Data/Effect/dead.efk");
+	hitEffect = new Effect("Data/Effect/dead.efk");
 }
 
 // 更新処理
@@ -47,6 +47,7 @@ void SceneGame::Update(float elapsedTime)
 	cameraController.Update();
 	cameraController.SyncControllerToCamera(camera);
 	
+	EffectManager::Instance().Update(elapsedTime);
 	// プレイヤー移動処理
 	{
 		// 入力処理
@@ -232,6 +233,10 @@ void SceneGame::Update(float elapsedTime)
 		player2.position.z += move2Z;
 
 	}
+	if (GetAsyncKeyState('X') & 0x8000)
+	{
+		hitEffect->Play(player.position);
+	}
 
 	// プレイヤー行列更新処理
 	{
@@ -247,10 +252,7 @@ void SceneGame::Update(float elapsedTime)
 		DirectX::XMMATRIX T = DirectX::XMMatrixTranslation(player2.position.x, player2.position.y, player2.position.z);
 		DirectX::XMStoreFloat4x4(&player2.transform, S* R* T);
 	}
-	if (GetAsyncKeyState('X') & 0x8000)
-	{
-		hitEffect->Play(player.position);
-	}
+	
 	if (player.death)
 	{
 		end = 1;
@@ -277,4 +279,5 @@ void SceneGame::Render(float elapsedtime)
 	modelRenderer->Render(rc, player.transform, player.model.get(), ShaderId::Lambert);
 	modelRenderer->Render(rc, player2.transform, player2.model.get(), ShaderId::Lambert);
 	
+	EffectManager::Instance().Render(rc.camera->GetView(), rc.camera->GetProjection());
 }

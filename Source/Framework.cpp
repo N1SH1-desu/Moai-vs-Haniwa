@@ -9,6 +9,7 @@
 #include "Scene/HitStopScene.h"
 #include "SceneGame.h"
 #include <SceneTitle.h>
+#include "EffectManager.h"
 // 垂直同期間隔設定
 static const int syncInterval = 1;
 int end;
@@ -23,6 +24,8 @@ Framework::Framework(HWND hWnd)
 	ImGuiRenderer::Initialize(hWnd, Graphics::Instance().GetDevice(), Graphics::Instance().GetDeviceContext());
 
 
+	EffectManager::Instance().initialize();
+
 	// シーン初期化
 	scene = std::make_unique<SceneTitle>();
 	//scene = std::make_unique<LandWalkScene>();
@@ -34,6 +37,8 @@ Framework::~Framework()
 {
 	// IMGUI終了化
 	ImGuiRenderer::Finalize();
+
+	EffectManager::Instance().Finalize();
 }
 
 // 更新処理
