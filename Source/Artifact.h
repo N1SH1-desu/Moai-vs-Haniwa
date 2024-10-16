@@ -56,7 +56,9 @@ namespace Characters
 			return transform;
 		}
 	private:
-		void GetKeyState();
+		DirectX::XMFLOAT3 InputHandler();
+		DirectX::XMFLOAT3 GetMoveVec();
+		void Move(float elapsedTime, float vx, float vz);
 	protected:
 		struct CameraPair
 		{
@@ -66,9 +68,9 @@ namespace Characters
 			void SyncCameraToCon() { controller.SyncCameraToController(camera); }
 			void SyncConToCamera() { controller.SyncControllerToCamera(camera); }
 
-			void Update()
+			void Update(float elapsedTime)
 			{
-				controller.Update();
+				controller.Update(elapsedTime);
 				controller.SyncControllerToCamera(camera);
 			}
 		};

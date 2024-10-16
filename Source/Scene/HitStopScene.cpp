@@ -14,8 +14,12 @@ HitStopScene::HitStopScene()
 	float screenWidth = Graphics::Instance().GetScreenWidth();
 	float screenHeight = Graphics::Instance().GetScreenHeight();
 
-	moai = std::make_unique<Characters::Moai>("Data/Model/Mr.Incredible/Mr.Incredible.mdl", DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f), DirectX::XMFLOAT3(0.01, 0.01, 0.01));
-	haniwa = std::make_unique<Characters::Haniwa>("Data/Model/RPG-Character/2Hand-Sword.mdl", DirectX::XMFLOAT3(0, 1, 1.5f), DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f));
+	ring.position = { 0.0f, -5.0f, 0.0f };
+	ring.scale = { 0.1f, 0.1f, 0.1f };
+	ring.model = std::make_unique<Model>("Data/Model/Ring/rinngu.mdl");
+
+	moai = std::make_unique<Characters::Moai>("Data/Model/moai/Moai.mdl", DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f), DirectX::XMFLOAT3(0.1, 0.1, 0.1));
+	haniwa = std::make_unique<Characters::Haniwa>("Data/Model/Haniwa/haniwa.mdl", DirectX::XMFLOAT3(0, 1, 1.5f), DirectX::XMFLOAT3(0.1f, 0.1f, 0.1f));
 }
 
 // XVˆ—
@@ -30,8 +34,6 @@ void HitStopScene::Update(float elapsedTime)
 // •`‰æˆ—
 void HitStopScene::Render(float elapsedTime)
 {
-	using CAMERA_NAME = DoubleCameraController::CAMERA_IDENTIFIER;
-
 	ID3D11DeviceContext* dc = Graphics::Instance().GetDeviceContext();
 	RenderState* renderState = Graphics::Instance().GetRenderState();
 	PrimitiveRenderer* primitiveRenderer = Graphics::Instance().GetPrimitiveRenderer();
@@ -40,12 +42,12 @@ void HitStopScene::Render(float elapsedTime)
 
 	// ƒ‚ƒfƒ‹•`‰æ
 	Graphics::Instance().SetRenderTargets(0);
-	//RenderContext rc;
-	//rc.deviceContext = dc;
-	//rc.renderState = renderState;
-	//rc.camera = &cameraController.GetCamera(CAMERA_NAME::MOAI);
+	RenderContext rc;
+	rc.deviceContext = dc;
+	rc.renderState = renderState;
+	rc.camera = &moai.get()->GetCamera();
 	//modelRenderer->Render(rc, character.transform, character.model.get(), ShaderId::Lambert);
-	//modelRenderer->Render(rc, weapon.transform, weapon.model.get(), ShaderId::Lambert);
+	modelRenderer->Render(rc, ring.transform, ring.model.get(), ShaderId::Lambert);
 	moai.get()->Render(dc, renderState, modelRenderer, &moai.get()->GetCamera());
 	haniwa.get()->Render(dc, renderState, modelRenderer, &moai.get()->GetCamera());
 
@@ -78,11 +80,11 @@ void HitStopScene::Render(float elapsedTime)
 
 
 	Graphics::Instance().SetRenderTargets(1);
+	rc.camera = &haniwa.get()->GetCamera();
+	modelRenderer->Render(rc, ring.transform, ring.model.get(), ShaderId::Lambert);
 	moai.get()->Render(dc, renderState, modelRenderer, &haniwa.get()->GetCamera());
 	haniwa.get()->Render(dc, renderState, modelRenderer, &haniwa.get()->GetCamera());
-	//rc.camera = &cameraController.GetCamera(CAMERA_NAME::HANIWA);
 	//modelRenderer->Render(rc, character.transform, character.model.get(), ShaderId::Lambert);
-	//modelRenderer->Render(rc, weapon.transform, weapon.model.get(), ShaderId::Lambert);
 
 	//shapeRenderer->Render(dc, cameraController.GetCamera(CAMERA_NAME::HANIWA).GetView(), cameraController.GetCamera(CAMERA_NAME::HANIWA).GetProjection());
 

@@ -31,9 +31,6 @@
     <Filter Include="Source\Input">
       <UniqueIdentifier>{f83f427c-157d-4ad2-91a6-dc4a56f5f78a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Characters">
-      <UniqueIdentifier>{71db5649-3952-4031-9f72-14645f24b394}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Framework.h">
@@ -156,11 +153,17 @@
     <ClInclude Include="Source\Scene\LandWalkScene.h">
       <Filter>Source\02_地上歩行</Filter>
     </ClInclude>
-    <ClInclude Include="Source\DoubleCameraController.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Scene\HitStopScene.h">
       <Filter>Source\07_ヒットストップ</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Artifact.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Moai.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Haniwa.h">
+      <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\Input\GamePad.h">
       <Filter>Source\Input</Filter>
@@ -170,15 +173,6 @@
     </ClInclude>
     <ClInclude Include="Source\Input\Mouse.h">
       <Filter>Source\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Artifact.h">
-      <Filter>Source\Characters</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Haniwa.h">
-      <Filter>Source\Characters</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Moai.h">
-      <Filter>Source\Characters</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -284,7 +278,7 @@
     <ClCompile Include="Source\BasicShader.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\DoubleCameraController.cpp">
+    <ClCompile Include="Source\Artifact.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\Input\GamePad.cpp">
@@ -296,14 +290,11 @@
     <ClCompile Include="Source\Input\Mouse.cpp">
       <Filter>Source\Input</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Artifact.cpp">
-      <Filter>Source\Characters</Filter>
+    <ClCompile Include="Source\Moai.cpp">
+      <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\Haniwa.cpp">
-      <Filter>Source\Characters</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Moai.cpp">
-      <Filter>Source\Characters</Filter>
+      <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

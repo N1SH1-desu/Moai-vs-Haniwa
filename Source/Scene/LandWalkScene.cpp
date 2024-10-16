@@ -37,7 +37,7 @@ LandWalkScene::LandWalkScene()
 void LandWalkScene::Update(float elapsedTime)
 {
 	// カメラ更新処理
-	cameraController.Update();
+	cameraController.Update(elapsedTime);
 	cameraController.SyncControllerToCamera(camera);
 
 	// プレイヤー移動処理

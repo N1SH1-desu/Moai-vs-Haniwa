@@ -1,3 +1,4 @@
+#include <optional>
 #include "Artifact.h"
 
 namespace Characters
@@ -15,13 +16,19 @@ namespace Characters
 
 	void Artifact::Update(float elapsedTime)
 	{
-		cameraController.Update();
+		DirectX::XMFLOAT3 target = position;
+		target.y += 0.5f;
+		cameraController.controller.SetFocus(target);
+
+		cameraController.Update(elapsedTime);
 		cameraController.SyncConToCamera();
 
 		switch (state)
 		{
 		case CharacterState::None:
-			GetKeyState();
+			DirectX::XMFLOAT3 moveVec{};
+			moveVec = InputHandler();
+			Move(elapsedTime, moveVec.x, moveVec.z);
 			break;
 		case CharacterState::Stan:
 			Stan(elapsedTime);
@@ -65,24 +72,61 @@ namespace Characters
 	{
 	}
 
-	void Artifact::GetKeyState()
+	DirectX::XMFLOAT3 Artifact::InputHandler()
 	{
-		if (gamePad.GetButton() & GamePad::BTN_UP)
-		{
+		return GetMoveVec();
+	}
 
-		}
-		if (gamePad.GetButton() & GamePad::BTN_DOWN)
-		{
+	DirectX::XMFLOAT3 Artifact::GetMoveVec()
+	{
+		float ax = gamePad.GetAxisLX();
+		float ay = gamePad.GetAxisLY();
 
-		}
-		if (gamePad.GetButton() & GamePad::BTN_LEFT)
-		{
+		// カメラ方向とスティックの入力値によって進行方向を計算する
+		const DirectX::XMFLOAT3& cameraRight = cameraController.camera.GetRight();
+		const DirectX::XMFLOAT3& cameraFront = cameraController.camera.GetFront();
 
-		}
-		if (gamePad.GetButton() & GamePad::BTN_RIGHT)
-		{
+		// 移動ベクトルはXZ平面に水平なベクトルになるようにする
 
+		// カメラ右方向ベクトルをXZ単位ベクトルに変換
+		float cameraRightX = cameraRight.x;
+		float cameraRightZ = cameraRight.z;
+		float cameraRightLength = sqrtf(powf(cameraRightX, 2) + powf(cameraRightZ, 2));
+		if (cameraRightLength > 0.0f)
+		{
+			// 単位ベクトル化
+			cameraRightX /= cameraRightLength;
+			cameraRightZ /= cameraRightLength;
 		}
+
+		// カメラ前方向ベクトルをXZ単位ベクトルに変換
+		float cameraFrontX = cameraFront.x;
+		float cameraFrontZ = cameraFront.z;
+		float cameraFrontLength = sqrtf(powf(cameraFrontX, 2) + powf(cameraFrontZ, 2));
+		if (cameraFrontLength > 0.0f)
+		{
+			// 単位ベクトル化
+			cameraFrontX /= cameraFrontLength;
+			cameraFrontZ /= cameraFrontLength;
+		}
+
+		// スティックの水平入力値をカメラ右方向に反映し、
+		// スティックの垂直入力値をカメラ前方向二反映し、
+		// 進行ベクトルを計算する
+		DirectX::XMFLOAT3 vec;
+		vec.x = (ax * cameraRightX) + (ay * cameraFrontX);
+		vec.z = (ax * cameraRightZ) + (ay * cameraFrontZ);
+		// Y軸方向には移動しない
+		vec.y = 0.0f;
+
+		return vec;
+	}
+
+	void Artifact::Move(float elapsedTime, float vx, float vz)
+	{
+		 float speed = 5.0f * elapsedTime;
+		 position.x += vx * speed;
+		 position.z *= vz * speed;
 	}
 
 }

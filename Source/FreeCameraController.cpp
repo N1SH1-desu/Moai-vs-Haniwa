@@ -45,7 +45,7 @@ void FreeCameraController::SyncControllerToCamera(Camera& camera)
 }
 
 // 更新処理
-void FreeCameraController::Update()
+void FreeCameraController::Update(float elapsedTime)
 {
 	// デバッグウインドウ操作中は処理しない
 	if (ImGui::IsWindowFocused(ImGuiFocusedFlags_AnyWindow))
@@ -61,7 +61,7 @@ void FreeCameraController::Update()
 	float moveY = io.MouseDelta.y * 0.02f;
 
 	// マウス左ボタン押下中
-	if (io.MouseDown[ImGuiMouseButton_Right])
+	if (io.KeysDown[ImGuiKeyModFlags_Alt])
 	{
 		// Y軸回転
 		angleY += moveX * 0.5f;
@@ -113,11 +113,29 @@ void FreeCameraController::Update()
 		distance -= io.MouseWheel * distance * 0.1f;
 	}
 
+	float ax = gamePad->GetAxisRX();
+	float ay = gamePad->GetAxisRY();
+	// カメラの回転速度
+	float speed = rollSpeed * elapsedTime;
+
+	// スティックの入力値に合わせてX軸とY軸を回転
+	angleX += ay * speed;
+	angleY += ax * speed;
+
+	// X軸のカメラの回転を制限
+	if (angleX >= maxAngle) angleX = maxAngle;
+	if (angleX <= minAngle) angleX = minAngle;
+
+	// Y軸の回転値を-3.14~3.14に収まるように
+	if (angleY < -DirectX::XM_PI) angleY += DirectX::XM_2PI;
+	if (angleY > DirectX::XM_PI) angleY -= DirectX::XM_2PI;
+
 	float sx = ::sinf(angleX);
 	float cx = ::cosf(angleX);
 	float sy = ::sinf(angleY);
 	float cy = ::cosf(angleY);
-
+	
+#if 0
 	// カメラの方向を算出
 	DirectX::XMVECTOR Front = DirectX::XMVectorSet(-cx * sy, -sx, -cx * cy, 0.0f);
 	DirectX::XMVECTOR Right = DirectX::XMVectorSet(cy, 0, -sy, 0.0f);
@@ -132,8 +150,19 @@ void FreeCameraController::Update()
 	// ワールド行列から方向を算出
 	Right = DirectX::XMVector3TransformNormal(DirectX::XMVectorSet(1, 0, 0, 0), World);
 	Up = DirectX::XMVector3TransformNormal(DirectX::XMVectorSet(0, 1, 0, 0), World);
-	// 結果を格納
-	DirectX::XMStoreFloat3(&eye, Eye);
-	DirectX::XMStoreFloat3(&up, Up);
-	DirectX::XMStoreFloat3(&right, Right);
+#else
+	// カメラ回転値を回転行列に変換
+	DirectX::XMMATRIX Transform = DirectX::XMMatrixRotationRollPitchYaw(angleX, angleY, 0.0f);
+
+	// 回転行列から前方向ベクトルを取り出す
+	DirectX::XMVECTOR Front = Transform.r[2];
+	DirectX::XMFLOAT3 front;
+	DirectX::XMStoreFloat3(&front, Front);
+
+	// 注視点から後ろベクトル方向に一定距離離れたカメラ視点を求める
+	eye.x = focus.x + -(front.x * 5.0f);
+	eye.y = focus.y + -(front.y * 5.0f);
+	eye.z = focus.z + -(front.z * 5.0f);
+#endif
+
 }

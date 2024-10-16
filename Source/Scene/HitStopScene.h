@@ -2,7 +2,6 @@
 
 #include <memory>
 #include "Scene.h"
-#include "DoubleCameraController.h"
 #include "Model.h"
 #include "Artifact.h"
 
@@ -29,17 +28,16 @@ private:
 	}
 
 private:
-	//struct Object
-	//{
-	//	DirectX::XMFLOAT3		position = { 0, 0, 0 };
-	//	DirectX::XMFLOAT3		angle = { 0, 0, 0 };
-	//	DirectX::XMFLOAT3		scale = { 1, 1, 1 };
-	//	DirectX::XMFLOAT4X4		transform = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
-	//	std::unique_ptr<Model>	model;
-	//};
+	struct Object
+	{
+		DirectX::XMFLOAT3		position = { 0, 0, 0 };
+		DirectX::XMFLOAT3		angle = { 0, 0, 0 };
+		DirectX::XMFLOAT3		scale = { 1, 1, 1 };
+		DirectX::XMFLOAT4X4		transform = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
+		std::unique_ptr<Model>	model;
+	};
 
-	//Object								character;
-	//Object								weapon;
+	Object								  ring;
 	std::unique_ptr<Characters::Artifact> moai;
 	std::unique_ptr<Characters::Artifact> haniwa;
 	float								characterHitOffset = 1.0f;
