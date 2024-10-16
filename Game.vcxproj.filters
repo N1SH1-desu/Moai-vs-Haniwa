@@ -278,9 +278,6 @@
     <ClCompile Include="Source\BasicShader.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Artifact.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Input\GamePad.cpp">
       <Filter>Source\Input</Filter>
     </ClCompile>
@@ -294,6 +291,9 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\Haniwa.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Artifact.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

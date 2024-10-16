@@ -48,6 +48,7 @@ namespace Characters
 			DirectX::XMMATRIX T = DirectX::XMMatrixTranslation(position.x, position.y, position.z);
 			DirectX::XMMATRIX WorldTransform = S * R * T;
 			DirectX::XMStoreFloat4x4(&transform, WorldTransform);
+			model->UpdateTransform();
 
 			return GetTransform();
 		}
@@ -56,9 +57,10 @@ namespace Characters
 			return transform;
 		}
 	private:
-		DirectX::XMFLOAT3 InputHandler();
+		void InputHandler(float elapsedTime);
 		DirectX::XMFLOAT3 GetMoveVec();
-		void Move(float elapsedTime, float vx, float vz);
+		void Move(float x, float z, float elapsedTime);
+		void Turn(float x, float z, float elapsedTime);
 	protected:
 		struct CameraPair
 		{

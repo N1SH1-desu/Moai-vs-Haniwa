@@ -18,8 +18,8 @@ HitStopScene::HitStopScene()
 	ring.scale = { 0.1f, 0.1f, 0.1f };
 	ring.model = std::make_unique<Model>("Data/Model/Ring/rinngu.mdl");
 
-	moai = std::make_unique<Characters::Moai>("Data/Model/moai/Moai.mdl", DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f), DirectX::XMFLOAT3(0.1, 0.1, 0.1));
-	haniwa = std::make_unique<Characters::Haniwa>("Data/Model/Haniwa/haniwa.mdl", DirectX::XMFLOAT3(0, 1, 1.5f), DirectX::XMFLOAT3(0.1f, 0.1f, 0.1f));
+	moai = std::make_unique<Characters::Moai>("Data/Model/moai/Moai.mdl", DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f), DirectX::XMFLOAT3(0.5f, 0.5f, 0.5f));
+	haniwa = std::make_unique<Characters::Haniwa>("Data/Model/Haniwa/haniwa.mdl", DirectX::XMFLOAT3(0.0f, 1.0f, 1.5f), DirectX::XMFLOAT3(0.5f, 0.5f, 0.5f));
 }
 
 // XVˆ—
@@ -28,7 +28,7 @@ void HitStopScene::Update(float elapsedTime)
 	float timeScale = 1.0f;
 
 	moai.get()->Update(elapsedTime);
-	haniwa.get()->Update(elapsedTime);
+	//haniwa.get()->Update(elapsedTime);
 }
 
 // •`‰æˆ—
@@ -49,7 +49,7 @@ void HitStopScene::Render(float elapsedTime)
 	//modelRenderer->Render(rc, character.transform, character.model.get(), ShaderId::Lambert);
 	modelRenderer->Render(rc, ring.transform, ring.model.get(), ShaderId::Lambert);
 	moai.get()->Render(dc, renderState, modelRenderer, &moai.get()->GetCamera());
-	haniwa.get()->Render(dc, renderState, modelRenderer, &moai.get()->GetCamera());
+	//haniwa.get()->Render(dc, renderState, modelRenderer, &moai.get()->GetCamera());
 
 	//DirectX::XMFLOAT3 p;
 	//p.x = weapon.transform._41 + weapon.transform._31 * weaponHitOffset;
@@ -83,7 +83,7 @@ void HitStopScene::Render(float elapsedTime)
 	rc.camera = &haniwa.get()->GetCamera();
 	modelRenderer->Render(rc, ring.transform, ring.model.get(), ShaderId::Lambert);
 	moai.get()->Render(dc, renderState, modelRenderer, &haniwa.get()->GetCamera());
-	haniwa.get()->Render(dc, renderState, modelRenderer, &haniwa.get()->GetCamera());
+	//haniwa.get()->Render(dc, renderState, modelRenderer, &haniwa.get()->GetCamera());
 	//modelRenderer->Render(rc, character.transform, character.model.get(), ShaderId::Lambert);
 
 	//shapeRenderer->Render(dc, cameraController.GetCamera(CAMERA_NAME::HANIWA).GetView(), cameraController.GetCamera(CAMERA_NAME::HANIWA).GetProjection());
