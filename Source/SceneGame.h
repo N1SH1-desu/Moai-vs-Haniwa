@@ -21,6 +21,7 @@ public:
 	void Render(float elapsedTime) override;
 
 private:
+	int	table;
 	struct Object
 	{
 		bool					onGround = false;
@@ -53,5 +54,7 @@ private:
 	float								turnSpeed = DirectX::XMConvertToRadians(720);
 	float								downhillOffset = 43.0f;
 	Effect* hitEffect=nullptr;
+	
 };
 extern int end;
+extern bool player1_death;//ƒvƒŒƒCƒ„[1‚ª€‚ñ‚¾‚çtrue

@@ -1,4 +1,7 @@
 #pragma once
+//オーディオ追加
+#include"Audio.h"
+#include"AudioSource.h"
 
 // シーン基底
 class Scene

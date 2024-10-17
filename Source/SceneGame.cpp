@@ -40,6 +40,7 @@
 	sprText = new Sprite(device, "Data/Font/font2.png");
 	//ヒットエフェクト読み込み
 	hitEffect = new Effect("Data/Effect/dead.efk");
+	player1_death = false;
 }
 
 // 更新処理
@@ -254,12 +255,19 @@ void SceneGame::Update(float elapsedTime)
 		DirectX::XMStoreFloat4x4(&player2.transform, S* R* T);
 	}
 	
+	
 	if (player.death)
 	{
+		player.position.x -= player2.position.x*0.1f;
+		player.position.y +=0.4f;
+		player.angle.z ++;
 		end = 1;
 	}
 	if (player2.death)
 	{
+		player2.position.x -= player.position.x * 0.1f;
+		player2.position.y += 0.4f;
+		player2.angle.z++;
 		end = 2;
 	}
 }
@@ -279,8 +287,5 @@ void SceneGame::Render(float elapsedtime)
 	modelRenderer->Render(rc, stage.transform, stage.model.get(), ShaderId::Lambert);
 	modelRenderer->Render(rc, player.transform, player.model.get(), ShaderId::Lambert);
 	modelRenderer->Render(rc, player2.transform, player2.model.get(), ShaderId::Lambert);
-	
 	EffectManager::Instance().Render(rc.camera->GetView(), rc.camera->GetProjection());
-
-	
 }

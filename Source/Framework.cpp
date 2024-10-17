@@ -10,6 +10,8 @@
 #include "SceneGame.h"
 #include <SceneTitle.h>
 #include "EffectManager.h"
+#include "SceneResult.h"
+#include "Audio.h"
 // ‚’¼“¯ŠúŠÔŠuİ’è
 static const int syncInterval = 1;
 int end;
@@ -26,8 +28,10 @@ Framework::Framework(HWND hWnd)
 
 	EffectManager::Instance().initialize();
 
+	
 	// ƒV[ƒ“‰Šú‰»
 	scene = std::make_unique<SceneTitle>();
+	//scene = std::make_unique<SceneResult>();
 	//scene = std::make_unique<LandWalkScene>();
 	scene_table = 0;
 }

@@ -10,6 +10,9 @@ SceneTitle::SceneTitle()
 		sprite = new Sprite(device,"Data/Sprite/Title.png");
 		sprText = new Sprite(device, "Data/Font/font2.png");
 	}
+	//BGM,SEÝ’è
+	/*bgm = Audio::Instance().LoadAudioSource("Data/BGM/–ì—Ç”L‚Ìƒƒ‹ƒc.wav");
+	bgm->Play(true);*/
 }
 
 SceneTitle::~SceneTitle()
@@ -24,6 +27,8 @@ SceneTitle::~SceneTitle()
 		delete sprText;
 		sprText = nullptr;
 	}
+	//BGM,SEÄ¶I—¹
+	/*bgm->Stop();*/
 }
 
 void SceneTitle::Update(float elapsedTime)

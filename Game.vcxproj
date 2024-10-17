@@ -124,6 +124,9 @@
     <ClInclude Include="External\ImGuizmo\ImGuizmo.h" />
     <ClInclude Include="External\ImGuizmo\ImSequencer.h" />
     <ClInclude Include="External\SphereCast\Include\SphereCast.h" />
+    <ClInclude Include="Source\Audio.h" />
+    <ClInclude Include="Source\AudioResource.h" />
+    <ClInclude Include="Source\AudioSource.h" />
     <ClInclude Include="Source\BasicShader.h" />
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\Collision.h" />
@@ -141,6 +144,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="Source\SceneResult.h" />
     <ClInclude Include="Source\SceneTitle.h" />
     <ClInclude Include="Source\Scene\HitStopScene.h" />
     <ClInclude Include="Source\Scene\LandWalkScene.h" />
@@ -171,6 +175,9 @@
     <ClCompile Include="External\ImGuizmo\ImGradient.cpp" />
     <ClCompile Include="External\ImGuizmo\ImGuizmo.cpp" />
     <ClCompile Include="External\ImGuizmo\ImSequencer.cpp" />
+    <ClCompile Include="Source\Audio.cpp" />
+    <ClCompile Include="Source\AudioResource.cpp" />
+    <ClCompile Include="Source\AudioSource.cpp" />
     <ClCompile Include="Source\BasicShader.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\Collision.cpp" />
@@ -187,6 +194,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="Source\SceneResult.cpp" />
     <ClCompile Include="Source\SceneTitle.cpp" />
     <ClCompile Include="Source\Scene\HitStopScene.cpp" />
     <ClCompile Include="Source\Scene\LandWalkScene.cpp" />
