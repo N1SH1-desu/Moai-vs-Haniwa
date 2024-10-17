@@ -119,7 +119,7 @@ namespace Characters
 
 	void Artifact::Turn(float x, float z, float elapsedTime)
 	{
-		float speed = 8.0f * elapsedTime;
+		float speed = 10.0f * elapsedTime;
 
 		// 進行ベクトルがゼロベクトルの場合は処理する必要なし
 		if (x == 0.0f && z == 0.0f)
