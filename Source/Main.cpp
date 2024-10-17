@@ -5,8 +5,8 @@
 
 #include "Framework.h"
 
-const LONG SCREEN_WIDTH = 1280;
-const LONG SCREEN_HEIGHT = 720;
+const LONG SCREEN_WIDTH = 1920L;
+const LONG SCREEN_HEIGHT = 1080L;
 
 LRESULT CALLBACK fnWndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
@@ -39,6 +39,15 @@ INT WINAPI wWinMain(HINSTANCE instance, HINSTANCE prev_instance, LPWSTR cmd_line
 	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 	HWND hWnd = CreateWindow(_T("Game"), _T(""), WS_OVERLAPPEDWINDOW ^ WS_MAXIMIZEBOX ^ WS_THICKFRAME | WS_VISIBLE, CW_USEDEFAULT, CW_USEDEFAULT, rc.right - rc.left, rc.bottom - rc.top, NULL, NULL, instance, NULL);
 	ShowWindow(hWnd, cmd_show);
+
+	SetMenu(hWnd, NULL);
+	SetWindowLongPtr(hWnd, GWL_STYLE, WS_VISIBLE | WS_POPUP);
+
+	MoveWindow(hWnd,
+		GetSystemMetrics(SM_XVIRTUALSCREEN),
+		GetSystemMetrics(SM_YVIRTUALSCREEN),
+		GetSystemMetrics(SM_CXVIRTUALSCREEN),
+		GetSystemMetrics(SM_CYVIRTUALSCREEN), TRUE);
 
 	Framework f(hWnd);
 	SetWindowLongPtr(hWnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(&f));

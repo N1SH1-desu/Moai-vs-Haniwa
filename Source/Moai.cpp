@@ -10,13 +10,13 @@ namespace Characters
 
 		cameraController.camera.SetPerspectiveFov(
 			DirectX::XMConvertToRadians(45),	// 画角
-			(1280.0f / 2.0f) / 720.0f,					// 画面アスペクト比
+			(1920.0f / 2.0f) / 1080.0f,					// 画面アスペクト比
 			0.1f,								// ニアクリップ
 			1000.0f								// ファークリップ
 		);
 
 		cameraController.camera.SetLookAt(
-			{ 0, 3, -10 },
+			{ 0, 4, -10 },
 			{position.x, position.y + 0.5f, position.z},
 			{ 0, 1, 0 }
 		);
