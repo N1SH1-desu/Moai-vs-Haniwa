@@ -19,7 +19,8 @@ HitStopScene::HitStopScene()
 	ring.model = std::make_unique<Model>("Data/Model/Ring/rinngu.mdl");
 
 	moai = std::make_unique<Characters::Moai>("Data/Model/moai/Moai.mdl", DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f), DirectX::XMFLOAT3(0.5f, 0.5f, 0.5f));
-	haniwa = std::make_unique<Characters::Haniwa>("Data/Model/Haniwa/haniwa.mdl", DirectX::XMFLOAT3(0.0f, 1.0f, 1.5f), DirectX::XMFLOAT3(0.5f, 0.5f, 0.5f));
+	haniwa = std::make_unique<Characters::Haniwa>("Data/Model/Haniwa/haniwa.mdl", DirectX::XMFLOAT3(0.0f, 0.0f, 2.0f), DirectX::XMFLOAT3(0.5f, 0.5f, 0.5f));
+	moai.get()->SetEnemy(haniwa.get());
 }
 
 // çXêVèàóù
@@ -49,35 +50,11 @@ void HitStopScene::Render(float elapsedTime)
 	//modelRenderer->Render(rc, character.transform, character.model.get(), ShaderId::Lambert);
 	modelRenderer->Render(rc, ring.transform, ring.model.get(), ShaderId::Lambert);
 	moai.get()->Render(dc, renderState, modelRenderer, &moai.get()->GetCamera());
-	//haniwa.get()->Render(dc, renderState, modelRenderer, &moai.get()->GetCamera());
+	haniwa.get()->Render(dc, renderState, modelRenderer, &moai.get()->GetCamera());
 
-	//DirectX::XMFLOAT3 p;
-	//p.x = weapon.transform._41 + weapon.transform._31 * weaponHitOffset;
-	//p.y = weapon.transform._42 + weapon.transform._32 * weaponHitOffset;
-	//p.z = weapon.transform._43 + weapon.transform._33 * weaponHitOffset;
-	//shapeRenderer->DrawSphere(p, weaponHitRadius, { 1,1,1,1 });
-
-	//p.x = character.position.x;
-	//p.y = character.position.y + characterHitOffset;
-	//p.z = character.position.z;
-	//shapeRenderer->DrawSphere(p, characterHitRadius, { 1,1,1,1 });
-	//shapeRenderer->Render(dc, cameraController.GetCamera(CAMERA_NAME::MOAI).GetView(), cameraController.GetCamera(CAMERA_NAME::MOAI).GetProjection());
-
-	//// é≤ï`âÊ
-	//dc->OMSetBlendState(renderState->GetBlendState(BlendState::Opaque), nullptr, 0xFFFFFFFF);
-	//dc->OMSetDepthStencilState(renderState->GetDepthStencilState(DepthState::NoTestNoWrite), 0);
-	//dc->RSSetState(renderState->GetRasterizerState(RasterizerState::SolidCullNone));
-	//primitiveRenderer->DrawAxis(weapon.transform, { 1,1,1,1 });
-	//primitiveRenderer->Render(dc, cameraController.GetCamera(CAMERA_NAME::MOAI).GetView(), cameraController.GetCamera(CAMERA_NAME::MOAI).GetProjection(), D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
-
-	//// ÉOÉäÉbÉhï`âÊ
-	//dc->OMSetBlendState(renderState->GetBlendState(BlendState::Opaque), nullptr, 0xFFFFFFFF);
-	//dc->OMSetDepthStencilState(renderState->GetDepthStencilState(DepthState::TestAndWrite), 0);
-	//dc->RSSetState(renderState->GetRasterizerState(RasterizerState::SolidCullNone));
-	//primitiveRenderer->DrawGrid(20, 1);
-	//primitiveRenderer->Render(dc, cameraController.GetCamera(CAMERA_NAME::MOAI).GetView(), cameraController.GetCamera(CAMERA_NAME::MOAI).GetProjection(), D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
-
-
+	moai.get()->DrawDebugPrimitive(shapeRenderer);
+	haniwa.get()->DrawDebugPrimitive(shapeRenderer);
+	shapeRenderer->Render(dc, moai.get()->GetCamera().GetView(), moai.get()->GetCamera().GetProjection());
 
 	Graphics::Instance().SetRenderTargets(2);
 	rc.camera = &haniwa.get()->GetCamera();
@@ -87,20 +64,6 @@ void HitStopScene::Render(float elapsedTime)
 	//modelRenderer->Render(rc, character.transform, character.model.get(), ShaderId::Lambert);
 
 	//shapeRenderer->Render(dc, cameraController.GetCamera(CAMERA_NAME::HANIWA).GetView(), cameraController.GetCamera(CAMERA_NAME::HANIWA).GetProjection());
-
-	//// é≤ï`âÊ
-	//dc->OMSetBlendState(renderState->GetBlendState(BlendState::Opaque), nullptr, 0xFFFFFFFF);
-	//dc->OMSetDepthStencilState(renderState->GetDepthStencilState(DepthState::NoTestNoWrite), 0);
-	//dc->RSSetState(renderState->GetRasterizerState(RasterizerState::SolidCullNone));
-	//primitiveRenderer->DrawAxis(weapon.transform, { 1,1,1,1 });
-	//primitiveRenderer->Render(dc, cameraController.GetCamera(CAMERA_NAME::HANIWA).GetView(), cameraController.GetCamera(CAMERA_NAME::HANIWA).GetProjection(), D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
-
-	//// ÉOÉäÉbÉhï`âÊ
-	//dc->OMSetBlendState(renderState->GetBlendState(BlendState::Opaque), nullptr, 0xFFFFFFFF);
-	//dc->OMSetDepthStencilState(renderState->GetDepthStencilState(DepthState::TestAndWrite), 0);
-	//dc->RSSetState(renderState->GetRasterizerState(RasterizerState::SolidCullNone));
-	//primitiveRenderer->DrawGrid(20, 1);
-	//primitiveRenderer->Render(dc, cameraController.GetCamera(CAMERA_NAME::HANIWA).GetView(), cameraController.GetCamera(CAMERA_NAME::HANIWA).GetProjection(), D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 }
 
 // GUIï`âÊèàóù

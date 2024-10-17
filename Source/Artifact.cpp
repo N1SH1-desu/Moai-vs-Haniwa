@@ -1,11 +1,14 @@
 #include <optional>
 #include "Artifact.h"
+#include "Graphics.h"
+#include "Collision.h"
 
 namespace Characters
 {
-	Artifact::Artifact(const std::string modelPath, const DirectX::XMFLOAT3& position, const DirectX::XMFLOAT3& scale)
+	Artifact::Artifact(const std::string modelPath, const DirectX::XMFLOAT3& position, const DirectX::XMFLOAT3& scale, Artifact* enemey)
 		:
-		state(CharacterState::None)
+		state(CharacterState::None),
+		enemy(enemey)
 	{
 		this->position = position;
 		this->scale = scale;
@@ -48,6 +51,8 @@ namespace Characters
 			Push(elapsedTime);
 			break;
 		}
+
+		CollisionPlayerVsEnemies();
 
 		UpdateTransform();
 	}
@@ -154,6 +159,29 @@ namespace Characters
 		{
 			angle.y += speed * rot;
 		}
+	}
+
+	void Artifact::CollisionPlayerVsEnemies()
+	{
+		if (enemy == nullptr)
+		{
+			return;
+		}
+
+		DirectX::XMFLOAT3 outPosition{};
+		if (Collision::IntersectCylinderVsCylinder(
+			position, radius, height,
+			enemy->position, enemy->radius, enemy->height,
+			outPosition
+		))
+		{
+			enemy->position = { outPosition.x, outPosition.y, outPosition.z };
+		}
+	}
+
+	void Artifact::DrawDebugPrimitive(ShapeRenderer* shapeRenderer)
+	{
+		shapeRenderer->DrawCapsule(transform, 2.0f, 7.0f, { 1.0f, 1.0f, 1.0f, 1.0f });
 	}
 
 }

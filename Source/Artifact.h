@@ -8,6 +8,7 @@
 #include "FreeCameraController.h"
 #include "RenderState.h"
 #include "Input/GamePad.h"
+#include "ShapeRenderer.h"
 
 namespace Characters
 {
@@ -27,10 +28,13 @@ namespace Characters
 		Artifact() = delete;
 		Artifact(const Artifact&) = delete;
 		Artifact& operator=(const Artifact&) = delete;
-		Artifact(const std::string modelPath, const DirectX::XMFLOAT3& position = { 0.0f, 0.0f, 0.0f}, const DirectX::XMFLOAT3& scale = { 1, 1, 1});
+		Artifact(const std::string modelPath, const DirectX::XMFLOAT3& position = { 0.0f, 0.0f, 0.0f}, const DirectX::XMFLOAT3& scale = { 1, 1, 1}, Artifact* enemy = nullptr);
 		virtual ~Artifact() = default;
 		virtual void Update(float elapsedTime);
 		virtual void Render(ID3D11DeviceContext* dc, const RenderState* renderState, ModelRenderer* modelRenderer, const Camera* camera);
+		void DrawDebugPrimitive(ShapeRenderer* shapeRenderer);
+
+		void SetEnemy(Artifact* enem) { enemy = enem; }
 
 		virtual void Attack(float elapsedTime);
 		virtual void Guard(float elapsedTime);
@@ -40,6 +44,8 @@ namespace Characters
 		virtual const std::string GetName() = 0;
 
 		const Camera& GetCamera() const { return cameraController.camera; }
+
+
 	protected:
 		const DirectX::XMFLOAT4X4& UpdateTransform()
 		{
@@ -61,6 +67,9 @@ namespace Characters
 		DirectX::XMFLOAT3 GetMoveVec();
 		void Move(float x, float z, float elapsedTime);
 		void Turn(float x, float z, float elapsedTime);
+
+		void CollisionPlayerVsEnemies();
+
 	protected:
 		struct CameraPair
 		{
@@ -83,11 +92,14 @@ namespace Characters
 		DirectX::XMFLOAT3		angle = { 0, 0, 0 };
 		DirectX::XMFLOAT3		scale = { 1, 1, 1 };
 		DirectX::XMFLOAT4X4		transform = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
+		float					radius = 2.0f;
+		float					height = 7.0f;
 		std::unique_ptr<Model>	model;
 
 		CharacterState state;
 
 		GamePad gamePad;
+		Artifact* enemy;
 	};
 
 }
