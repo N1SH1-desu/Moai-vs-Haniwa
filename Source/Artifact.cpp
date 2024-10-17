@@ -19,6 +19,12 @@ namespace Characters
 	{
 		DirectX::XMFLOAT3 target = position;
 		target.y += 0.5f;
+		DirectX::XMVECTOR normalRightVec = DirectX::XMVector3Normalize(DirectX::XMLoadFloat3(&cameraController.camera.GetRight()));
+		DirectX::XMFLOAT3 rightVec;
+		DirectX::XMStoreFloat3(&rightVec, normalRightVec);
+		target.x += rightVec.x;
+		target.y += rightVec.y;
+		target.z += rightVec.z;
 		cameraController.controller.SetFocus(target);
 
 		gamePad.Update();
@@ -113,7 +119,7 @@ namespace Characters
 
 	void Artifact::Turn(float x, float z, float elapsedTime)
 	{
-		float speed = 5.0f * elapsedTime;
+		float speed = 8.0f * elapsedTime;
 
 		// 進行ベクトルがゼロベクトルの場合は処理する必要なし
 		if (x == 0.0f && z == 0.0f)
