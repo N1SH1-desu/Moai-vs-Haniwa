@@ -2,6 +2,7 @@
 #include "Artifact.h"
 #include "Graphics.h"
 #include "Collision.h"
+#include "imgui.h"
 
 namespace Characters
 {
@@ -53,6 +54,7 @@ namespace Characters
 		}
 
 		CollisionPlayerVsEnemies();
+		DrawDebugGUI();
 
 		UpdateTransform();
 	}
@@ -175,13 +177,24 @@ namespace Characters
 			outPosition
 		))
 		{
+
 			enemy->position = { outPosition.x, outPosition.y, outPosition.z };
+
 		}
 	}
 
 	void Artifact::DrawDebugPrimitive(ShapeRenderer* shapeRenderer)
 	{
-		shapeRenderer->DrawCapsule(transform, 2.0f, 7.0f, { 1.0f, 1.0f, 1.0f, 1.0f });
+		shapeRenderer->DrawCapsule(transform, 1.5f, 7.0f, { 1.0f, 1.0f, 1.0f, 1.0f });
+	}
+
+	void Artifact::DrawDebugGUI()
+	{
+		if (ImGui::Begin(u8"アーティファクト", nullptr))
+		{
+			ImGui::DragFloat3("CharacterPosition", &position.x, 0.01f);
+		}
+		ImGui::End();
 	}
 
 }

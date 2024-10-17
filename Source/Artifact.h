@@ -69,6 +69,7 @@ namespace Characters
 		void Turn(float x, float z, float elapsedTime);
 
 		void CollisionPlayerVsEnemies();
+		void DrawDebugGUI();
 
 	protected:
 		struct CameraPair
@@ -92,8 +93,8 @@ namespace Characters
 		DirectX::XMFLOAT3		angle = { 0, 0, 0 };
 		DirectX::XMFLOAT3		scale = { 1, 1, 1 };
 		DirectX::XMFLOAT4X4		transform = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
-		float					radius = 2.0f;
-		float					height = 7.0f;
+		float					radius = 1.5f;
+		float					height = 10.0f;
 		std::unique_ptr<Model>	model;
 
 		CharacterState state;

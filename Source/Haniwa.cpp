@@ -16,7 +16,7 @@ namespace Characters
 		);
 
 		cameraController.camera.SetLookAt(
-			{ 0, 4, 10 },
+			{ 0, 4, 5 },
 			{ position.x, position.y + 0.5f, position.z },
 			{ 0, 1, 0 }
 		);

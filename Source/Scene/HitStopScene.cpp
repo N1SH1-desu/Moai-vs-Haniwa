@@ -19,8 +19,9 @@ HitStopScene::HitStopScene()
 	ring.model = std::make_unique<Model>("Data/Model/Ring/rinngu.mdl");
 
 	moai = std::make_unique<Characters::Moai>("Data/Model/moai/Moai.mdl", DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f), DirectX::XMFLOAT3(0.5f, 0.5f, 0.5f));
-	haniwa = std::make_unique<Characters::Haniwa>("Data/Model/Haniwa/haniwa.mdl", DirectX::XMFLOAT3(0.0f, 0.0f, 2.0f), DirectX::XMFLOAT3(0.5f, 0.5f, 0.5f));
+	haniwa = std::make_unique<Characters::Haniwa>("Data/Model/Haniwa/haniwa.mdl", DirectX::XMFLOAT3(4.0f, 0.0f, 10.0f), DirectX::XMFLOAT3(0.5f, 0.5f, 0.5f));
 	moai.get()->SetEnemy(haniwa.get());
+	haniwa.get()->SetEnemy(moai.get());
 }
 
 // XVˆ—
@@ -29,7 +30,7 @@ void HitStopScene::Update(float elapsedTime)
 	float timeScale = 1.0f;
 
 	moai.get()->Update(elapsedTime);
-	//haniwa.get()->Update(elapsedTime);
+	haniwa.get()->Update(elapsedTime);
 }
 
 // •`‰æˆ—
@@ -47,7 +48,6 @@ void HitStopScene::Render(float elapsedTime)
 	rc.deviceContext = dc;
 	rc.renderState = renderState;
 	rc.camera = &moai.get()->GetCamera();
-	//modelRenderer->Render(rc, character.transform, character.model.get(), ShaderId::Lambert);
 	modelRenderer->Render(rc, ring.transform, ring.model.get(), ShaderId::Lambert);
 	moai.get()->Render(dc, renderState, modelRenderer, &moai.get()->GetCamera());
 	haniwa.get()->Render(dc, renderState, modelRenderer, &moai.get()->GetCamera());
