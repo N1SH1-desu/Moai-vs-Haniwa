@@ -41,7 +41,7 @@ void HitStopScene::Render(float elapsedTime)
 	ModelRenderer* modelRenderer = Graphics::Instance().GetModelRenderer();
 
 	// ƒ‚ƒfƒ‹•`‰æ
-	Graphics::Instance().SetRenderTargets(0);
+	Graphics::Instance().SetRenderTargets(1);
 	RenderContext rc;
 	rc.deviceContext = dc;
 	rc.renderState = renderState;
@@ -79,7 +79,7 @@ void HitStopScene::Render(float elapsedTime)
 
 
 
-	Graphics::Instance().SetRenderTargets(1);
+	Graphics::Instance().SetRenderTargets(2);
 	rc.camera = &haniwa.get()->GetCamera();
 	modelRenderer->Render(rc, ring.transform, ring.model.get(), ShaderId::Lambert);
 	moai.get()->Render(dc, renderState, modelRenderer, &haniwa.get()->GetCamera());

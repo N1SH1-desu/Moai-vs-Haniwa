@@ -69,6 +69,7 @@ private:
 	Microsoft::WRL::ComPtr<IDXGISwapChain>			swapchain;
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView>	renderTargetView;
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilView>	depthStencilView;
+	D3D11_VIEWPORT									viewportNormal;
 	D3D11_VIEWPORT									viewportLeft;
 	D3D11_VIEWPORT									viewportRight;
 

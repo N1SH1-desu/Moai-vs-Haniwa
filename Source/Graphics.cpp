@@ -114,6 +114,13 @@ void Graphics::Initialize(HWND hWnd)
 
 	// ビューポート
 	{
+		viewportNormal.Width = static_cast<float>(screenWidth);
+		viewportNormal.Height = static_cast<float>(screenHeight);
+		viewportNormal.MinDepth = 0.0f;
+		viewportNormal.MaxDepth = 1.0f;
+		viewportNormal.TopLeftX = 0.0f;
+		viewportNormal.TopLeftY = 0.0f;
+
 		viewportLeft.Width = static_cast<float>(screenWidth) / 2.0f;
 		viewportLeft.Height = static_cast<float>(screenHeight);
 		viewportLeft.MinDepth = 0.0f;
@@ -153,9 +160,12 @@ void Graphics::SetRenderTargets(UINT viewportIndex)
 	switch (viewportIndex)
 	{
 	case 0:
-		immediateContext->RSSetViewports(1, &viewportLeft);
+		immediateContext->RSSetViewports(1, &viewportNormal);
 		break;
 	case 1:
+		immediateContext->RSSetViewports(1, &viewportLeft);
+		break;
+	case 2:
 		immediateContext->RSSetViewports(1, &viewportRight);
 		break;
 	default:
