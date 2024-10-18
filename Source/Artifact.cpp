@@ -70,6 +70,7 @@ namespace Characters
 
 	void Artifact::Attack(float elapsedTime)
 	{
+		
 	}
 
 	void Artifact::Guard(float elapsedTime)
@@ -89,6 +90,8 @@ namespace Characters
 		DirectX::XMFLOAT3 moveVec =  GetMoveVec();
 		Move(moveVec.x, moveVec.z, elapsedTime);
 		Turn(moveVec.x, moveVec.z, elapsedTime);
+
+		GetAction();
 	}
 
 	DirectX::XMFLOAT3 Artifact::GetMoveVec()
@@ -126,6 +129,7 @@ namespace Characters
 
 	void Artifact::Turn(float x, float z, float elapsedTime)
 	{
+#if 0
 		float speed = 10.0f * elapsedTime;
 
 		// 進行ベクトルがゼロベクトルの場合は処理する必要なし
@@ -160,6 +164,27 @@ namespace Characters
 		else
 		{
 			angle.y += speed * rot;
+		}
+#else
+		DirectX::XMVECTOR camFront = DirectX::XMVector3Normalize(
+			DirectX::XMVectorSet(cameraController.camera.GetFront().x, 0.0f, cameraController.camera.GetFront().z, 0.0f));
+		DirectX::XMVECTOR Front = DirectX::XMLoadFloat3(&front);
+
+		float dot = DirectX::XMVectorGetX(DirectX::XMVector3Dot(camFront, Front));
+
+		float angle = acosf(dot);
+
+		DirectX::XMVECTOR cross = DirectX::XMVector3Cross(camFront, Front);
+	
+		quaternion = DirectX::XMQuaternionRotationAxis(cross, -angle);
+#endif
+	}
+
+	void Artifact::GetAction()
+	{
+		if (gamePad.GetButtonDown() & GamePad::BTN_A)
+		{
+			state = CharacterState::Attack;
 		}
 	}
 

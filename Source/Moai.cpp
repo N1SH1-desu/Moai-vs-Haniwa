@@ -9,7 +9,7 @@ namespace Characters
 		gamePad.SetSlot(0);
 
 		cameraController.camera.SetPerspectiveFov(
-			DirectX::XMConvertToRadians(45),	// 画角
+			DirectX::XMConvertToRadians(70),	// 画角
 			(1920.0f / 2.0f) / 1080.0f,					// 画面アスペクト比
 			0.1f,								// ニアクリップ
 			1000.0f								// ファークリップ

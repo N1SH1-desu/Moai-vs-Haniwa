@@ -50,7 +50,8 @@ namespace Characters
 		const DirectX::XMFLOAT4X4& UpdateTransform()
 		{
 			DirectX::XMMATRIX S = DirectX::XMMatrixScaling(scale.x, scale.y, scale.z);
-			DirectX::XMMATRIX R = DirectX::XMMatrixRotationRollPitchYaw(angle.x, angle.y, angle.z);
+			//DirectX::XMMATRIX R = DirectX::XMMatrixRotationRollPitchYaw(angle.x, angle.y, angle.z);
+			DirectX::XMMATRIX R = DirectX::XMMatrixRotationQuaternion(quaternion);
 			DirectX::XMMATRIX T = DirectX::XMMatrixTranslation(position.x, position.y, position.z);
 			DirectX::XMMATRIX WorldTransform = S * R * T;
 			DirectX::XMStoreFloat4x4(&transform, WorldTransform);
@@ -67,6 +68,8 @@ namespace Characters
 		DirectX::XMFLOAT3 GetMoveVec();
 		void Move(float x, float z, float elapsedTime);
 		void Turn(float x, float z, float elapsedTime);
+
+		void GetAction();
 
 		void CollisionPlayerVsEnemies();
 		void DrawDebugGUI();
@@ -93,6 +96,10 @@ namespace Characters
 		DirectX::XMFLOAT3		angle = { 0, 0, 0 };
 		DirectX::XMFLOAT3		scale = { 1, 1, 1 };
 		DirectX::XMFLOAT4X4		transform = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
+
+		DirectX::XMFLOAT3       front = { 0, 0, 1 };
+		DirectX::XMVECTOR       quaternion;
+		
 		float					radius = 1.5f;
 		float					height = 10.0f;
 		std::unique_ptr<Model>	model;
@@ -101,6 +108,8 @@ namespace Characters
 
 		GamePad gamePad;
 		Artifact* enemy;
+		
+		float attackMotionCurrentSeconds = 0.0f;
 	};
 
 }

@@ -53,64 +53,95 @@ void FreeCameraController::Update(float elapsedTime)
 		return;
 	}
 
-	// IMGUIのマウス入力値を使ってカメラ操作する
-	ImGuiIO io = ImGui::GetIO();
+	//// IMGUIのマウス入力値を使ってカメラ操作する
+	//ImGuiIO io = ImGui::GetIO();
 
-	// マウスカーソルの移動量を求める
-	float moveX = io.MouseDelta.x * 0.02f;
-	float moveY = io.MouseDelta.y * 0.02f;
+	//// マウスカーソルの移動量を求める
+	//float moveX = io.MouseDelta.x * 0.02f;
+	//float moveY = io.MouseDelta.y * 0.02f;
 
-	// マウス左ボタン押下中
-	if (io.MouseDown[ImGuiMouseButton_Right])
+	//// マウス左ボタン押下中
+	//if (io.MouseDown[ImGuiMouseButton_Right])
+	//{
+	//	// Y軸回転
+	//	angleY += moveX * 0.5f;
+	//	if (angleY > DirectX::XM_PI)
+	//	{
+	//		angleY -= DirectX::XM_2PI;
+	//	}
+	//	else if (angleY < -DirectX::XM_PI)
+	//	{
+	//		angleY += DirectX::XM_2PI;
+	//	}
+	//	// X軸回転
+	//	angleX += moveY * 0.5f;
+	//	if (angleX > DirectX::XM_PI)
+	//	{
+	//		angleX -= DirectX::XM_2PI;
+	//	}
+	//	else if (angleX < -DirectX::XM_PI)
+	//	{
+	//		angleX += DirectX::XM_2PI;
+	//	}
+	//}
+	//// マウス中ボタン押下中
+	//else if (io.MouseDown[ImGuiMouseButton_Middle])
+	//{
+	//	// 平行移動
+	//	float s = distance * 0.035f;
+	//	float x = moveX * s;
+	//	float y = moveY * s;
+
+	//	focus.x -= right.x * x;
+	//	focus.y -= right.y * x;
+	//	focus.z -= right.z * x;
+
+	//	focus.x += up.x * y;
+	//	focus.y += up.y * y;
+	//	focus.z += up.z * y;
+	//}
+	//// マウス右ボタン押下中
+	//else if (io.MouseDown[ImGuiMouseButton_Left] && io.MouseDown[ImGuiMouseButton_Right])
+	//{
+	//	// ズーム
+	//	distance += (-moveY - moveX) * distance * 0.1f;
+	//}
+	//// マウスホイール
+	//else if (io.MouseWheel != 0)
+	//{
+	//	// ズーム
+	//	distance -= io.MouseWheel * distance * 0.1f;
+	//}
+
+	float ax = gamePad->GetAxisRX();
+	float ay = gamePad->GetAxisRY();
+	// カメラの回転速度
+	float speed = rollSpeed * elapsedTime;
+
+	// スティックの入力値に合わせてX軸とY軸を回転
+	angleX += ay * speed;
+	// X軸のカメラの回転を制限
+	if (angleX >= maxAngle) angleX = maxAngle;
+	if (angleX <= minAngle) angleX = minAngle;
+
+	if (angleX > DirectX::XM_PI)
 	{
-		// Y軸回転
-		angleY += moveX * 0.5f;
-		if (angleY > DirectX::XM_PI)
-		{
-			angleY -= DirectX::XM_2PI;
-		}
-		else if (angleY < -DirectX::XM_PI)
-		{
-			angleY += DirectX::XM_2PI;
-		}
-		// X軸回転
-		angleX += moveY * 0.5f;
-		if (angleX > DirectX::XM_PI)
-		{
-			angleX -= DirectX::XM_2PI;
-		}
-		else if (angleX < -DirectX::XM_PI)
-		{
-			angleX += DirectX::XM_2PI;
-		}
+		angleX -= DirectX::XM_2PI;
 	}
-	// マウス中ボタン押下中
-	else if (io.MouseDown[ImGuiMouseButton_Middle])
+	else if (angleX < -DirectX::XM_PI)
 	{
-		// 平行移動
-		float s = distance * 0.035f;
-		float x = moveX * s;
-		float y = moveY * s;
-
-		focus.x -= right.x * x;
-		focus.y -= right.y * x;
-		focus.z -= right.z * x;
-
-		focus.x += up.x * y;
-		focus.y += up.y * y;
-		focus.z += up.z * y;
+		angleX += DirectX::XM_2PI;
 	}
-	// マウス右ボタン押下中
-	else if (io.MouseDown[ImGuiMouseButton_Left] && io.MouseDown[ImGuiMouseButton_Right])
+
+
+	angleY += ax * speed;
+	if (angleY > DirectX::XM_PI)
 	{
-		// ズーム
-		distance += (-moveY - moveX) * distance * 0.1f;
+		angleY -= DirectX::XM_2PI;
 	}
-	// マウスホイール
-	else if (io.MouseWheel != 0)
+	else if (angleY < -DirectX::XM_PI)
 	{
-		// ズーム
-		distance -= io.MouseWheel * distance * 0.1f;
+		angleY += DirectX::XM_2PI;
 	}
 
 	float sx = ::sinf(angleX);
