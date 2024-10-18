@@ -22,11 +22,8 @@
     <Filter Include="External\SphereCast">
       <UniqueIdentifier>{abff1748-b50f-4e2e-b82c-9beee41e0b48}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\07_ヒットストップ">
-      <UniqueIdentifier>{dbc5131a-4742-4901-a1fc-5613aabcadbc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\02_地上歩行">
-      <UniqueIdentifier>{5aa72adc-7d83-4b85-8bbe-58e2b60bdbb1}</UniqueIdentifier>
+    <Filter Include="Source\Input">
+      <UniqueIdentifier>{c6bd4243-f647-4ca7-b00e-5f037b85d471}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -144,14 +141,8 @@
     <ClInclude Include="Source\ResourceManager.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Scene\HitStopScene.h">
-      <Filter>Source\07_ヒットストップ</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Timer.h">
       <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scene\LandWalkScene.h">
-      <Filter>Source\02_地上歩行</Filter>
     </ClInclude>
     <ClInclude Include="Source\SceneGame.h">
       <Filter>Source</Filter>
@@ -175,6 +166,18 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\AudioSource.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Input\GamePad.h">
+      <Filter>Source\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Artifact.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Haniwa.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Moai.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
@@ -272,14 +275,8 @@
     <ClCompile Include="Source\ResourceManager.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Scene\HitStopScene.cpp">
-      <Filter>Source\07_ヒットストップ</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Timer.cpp">
       <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Scene\LandWalkScene.cpp">
-      <Filter>Source\02_地上歩行</Filter>
     </ClCompile>
     <ClCompile Include="Source\SceneGame.cpp">
       <Filter>Source</Filter>
@@ -303,6 +300,18 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\AudioSource.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Input\GamePad.cpp">
+      <Filter>Source\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Artifact.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Haniwa.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Moai.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

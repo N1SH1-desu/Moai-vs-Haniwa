@@ -4,9 +4,6 @@
 #include "Framework.h"
 #include "Graphics.h"
 #include "ImGuiRenderer.h"
-#include "Scene/LandWalkScene.h"
-#include "Scene/SlideMoveScene.h"
-#include "Scene/HitStopScene.h"
 #include "SceneGame.h"
 #include <SceneTitle.h>
 #include "EffectManager.h"
@@ -117,19 +114,19 @@ void Framework::ChangeSceneButtonGUI(const char* name)
 // シーン切り替えGUI
 void Framework::SceneSelectGUI()
 {
-	ImVec2 displaySize = ImGui::GetIO().DisplaySize;
-	ImVec2 pos = ImGui::GetMainViewport()->GetWorkPos();
-	float width = 210;
-	float height = 460;
-	ImGui::SetNextWindowPos(ImVec2(pos.x + displaySize.x - width - 10, pos.y + 10), ImGuiCond_Once);
-	ImGui::SetNextWindowSize(ImVec2(width, height), ImGuiCond_Once);
+	//ImVec2 displaySize = ImGui::GetIO().DisplaySize;
+	//ImVec2 pos = ImGui::GetMainViewport()->GetWorkPos();
+	//float width = 210;
+	//float height = 460;
+	//ImGui::SetNextWindowPos(ImVec2(pos.x + displaySize.x - width - 10, pos.y + 10), ImGuiCond_Once);
+	//ImGui::SetNextWindowSize(ImVec2(width, height), ImGuiCond_Once);
 
-	if (ImGui::Begin("Scene"))
-	{
-		ChangeSceneButtonGUI<LandWalkScene>(u8"02.地上歩行");
-		ChangeSceneButtonGUI<HitStopScene>(u8"07.ヒットストップ");
-	}
-	ImGui::End();
+	///*if (ImGui::Begin("Scene"))
+	//{
+	//	ChangeSceneButtonGUI<LandWalkScene>(u8"02.地上歩行");
+	//	ChangeSceneButtonGUI<HitStopScene>(u8"07.ヒットストップ");
+	//}*/
+	//ImGui::End();
 }
 
 // フレームレート計算

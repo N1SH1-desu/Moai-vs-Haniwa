@@ -5,6 +5,8 @@
 #include "Collision.h"
 #include "SceneGame.h"
 #include "EffectManager.h"
+#include "Moai.h"
+#include "Haniwa.h"
 // 初期化
  SceneGame::SceneGame()
 {
@@ -13,31 +15,13 @@
 	float screenHeight = Graphics::Instance().GetScreenHeight();
 	end = 0;
 	GameTimer = 0;
-	// カメラ設定
-	camera.SetPerspectiveFov(
-		DirectX::XMConvertToRadians(45),	// 画角
-		screenWidth / screenHeight,			// 画面アスペクト比
-		0.1f,								// ニアクリップ
-		1000.0f								// ファークリップ
-	);
-	camera.SetLookAt(
-		{ 30, 20, 50 },		// 視点
-		{ 20, 10, 20 },		// 注視点
-		{ 0, 1, 0 }			// 上ベクトル
-	);
-	cameraController.SyncCameraToController(camera);
-
-	// モデル
-	stage.model = std::make_unique<Model>("Data/Model/Stage/stage.mdl");
-
-	player.position = { 5, 5, 15 };
-	player.scale = { 0.5f, 0.5f, 0.5f };
-	player.model = std::make_unique<Model>("Data/Model/Character/moai.mdl");
-	
-	player2.position = { 11, 5, 16 };
-	player2.scale = { 0.5f, 0.5f, 0.5f };
-	player2.model = std::make_unique<Model>("Data/Model/Character/haniwa.mdl");
-	
+	ring.position = { 0.0f, -5.0f, 0.0f };
+	ring.scale = { 0.1f, 0.1f, 0.1f };
+	ring.model = std::make_unique<Model>("Data/Model/Stage/stage.mdl");
+	moai = std::make_unique<Characters::Moai>("Data/Model/Character/Moai.mdl", DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f), DirectX::XMFLOAT3(0.5f, 0.5f, 0.5f));
+	haniwa = std::make_unique<Characters::Haniwa>("Data/Model/Character/haniwa.mdl", DirectX::XMFLOAT3(4.0f, 0.0f, 10.0f), DirectX::XMFLOAT3(0.5f, 0.5f, 0.5f));
+	moai.get()->SetEnemy(haniwa.get());
+	haniwa.get()->SetEnemy(moai.get());
 	sprText = new Sprite(device, "Data/Font/font2.png");
 	//ヒットエフェクト読み込み
 	hitEffect = new Effect("Data/Effect/dead.efk");
@@ -47,226 +31,14 @@
 // 更新処理
 void SceneGame::Update(float elapsedTime)
 {
-	cameraController.Update();
-	cameraController.SyncControllerToCamera(camera);
-	
+	float timeScale = 1.0f;
+
+	moai.get()->Update(elapsedTime);
+	haniwa.get()->Update(elapsedTime);
 	EffectManager::Instance().Update(elapsedTime);
-	// プレイヤー移動処理
-	{
-		// 入力処理
-		float axisX = 0.0f;
-		float axisY = 0.0f;
-		if (GetAsyncKeyState('W') & 0x8000) axisY += 1.0f;
-		if (GetAsyncKeyState('S') & 0x8000) axisY -= 1.0f;
-		if (GetAsyncKeyState('D') & 0x8000) axisX += 1.0f;
-		if (GetAsyncKeyState('A') & 0x8000) axisX -= 1.0f;
-		
-		float axis2X = 0.0f;
-		float axis2Y = 0.0f;
-		if (GetAsyncKeyState('I') & 0x8000) axis2Y += 1.0f;
-		if (GetAsyncKeyState('K') & 0x8000) axis2Y -= 1.0f;
-		if (GetAsyncKeyState('L') & 0x8000) axis2X += 1.0f;
-		if (GetAsyncKeyState('J') & 0x8000) axis2X -= 1.0f;
 
-
-		// カメラの方向
-		const DirectX::XMFLOAT3& cameraFront = camera.GetFront();
-		const DirectX::XMFLOAT3& camemraRight = camera.GetRight();
-		float cameraFrontLengthXZ = sqrtf(cameraFront.x * cameraFront.x + cameraFront.z * cameraFront.z);
-		float cameraRightLengthXZ = sqrtf(camemraRight.x * camemraRight.x + camemraRight.z * camemraRight.z);
-		float cameraFrontX = cameraFront.x / cameraFrontLengthXZ;
-		float cameraFrontZ = cameraFront.z / cameraFrontLengthXZ;
-		float cameraRightX = camemraRight.x / cameraRightLengthXZ;
-		float cameraRightZ = camemraRight.z / cameraRightLengthXZ;
-
-		// 移動ベクトル
-		float vecX = cameraFrontX * axisY + cameraRightX * axisX;
-		float vecZ = cameraFrontZ * axisY + cameraRightZ * axisX;
-		float vecLength = sqrtf(vecX * vecX + vecZ * vecZ);
-
-		float vec2X = cameraFrontX * axis2Y + cameraRightX * axis2X;
-		float vec2Z = cameraFrontZ * axis2Y + cameraRightZ * axis2X;
-		float vec2Length = sqrtf(vec2X * vec2X + vec2Z * vec2Z);
-
-		// 横方向移動処理
-		if (vecLength > 0)
-		{
-			// 単位ベクトル化
-			vecX /= vecLength;
-			vecZ /= vecLength;
-
-			// 加速処理
-			float acceleration = this->acceleration * elapsedTime;
-			player.velocity.x += vecX * acceleration;
-			player.velocity.z += vecZ * acceleration;
-
-			// 最大速度制限
-			float velocityLength = sqrtf(player.velocity.x * player.velocity.x + player.velocity.z * player.velocity.z);
-			if (velocityLength > moveSpeed)
-			{
-				player.velocity.x = (player.velocity.x / velocityLength) * moveSpeed;
-				player.velocity.z = (player.velocity.z / velocityLength) * moveSpeed;
-			}
-
-			// 進行方向を向くようにする
-			{
-				// プレイヤーの向いている方向
-				float frontX = sinf(player.angle.y);
-				float frontZ = cosf(player.angle.y);
-
-				// 回転量調整
-				float dot = frontX * vecX + frontZ * vecZ;
-				float rot = (std::min)(1.0f - dot, turnSpeed * elapsedTime);
-
-				// 左右判定をして回転処理
-				float cross = frontX * vecZ - frontZ * vecX;
-				if (cross < 0.0f)
-				{
-					player.angle.y += rot;
-				}
-				else
-				{
-					player.angle.y -= rot;
-				}
-
-				DirectX::XMVECTOR PositionVec, TargetVec, d;
-				PositionVec = DirectX::XMLoadFloat3(&player.position);
-				TargetVec = DirectX::XMLoadFloat3(&player.position);
-
-				d = DirectX::XMVectorSubtract(TargetVec, PositionVec);
-				d=DirectX::XMVector3Normalize(d);
-				
-				DirectX::XMStoreFloat3(&player.angle,d);
-			}
-		}
-		else
-		{
-			// 減速処理
-			float deceleration = this->deceleration * elapsedTime;
-			float velocityLength = sqrtf(player.velocity.x * player.velocity.x + player.velocity.z * player.velocity.z);
-			if (velocityLength > deceleration)
-			{
-				player.velocity.x -= (player.velocity.x / velocityLength) * deceleration;
-				player.velocity.z -= (player.velocity.z / velocityLength) * deceleration;
-			}
-			else
-			{
-				player.velocity.x = 0.0f;
-				player.velocity.z = 0.0f;
-			}
-		}
-		
-		if (vec2Length > 0)
-		{
-			// 単位ベクトル化
-			vec2X /= vec2Length;
-			vec2Z /= vec2Length;
-
-			// 加速処理
-			float acceleration = this->acceleration * elapsedTime;
-			player2.velocity.x += vec2X * acceleration;
-			player2.velocity.z += vec2Z * acceleration;
-
-			// 最大速度制限
-			float velocityLength = sqrtf(player2.velocity.x * player2.velocity.x + player2.velocity.z * player2.velocity.z);
-			if (velocityLength > moveSpeed)
-			{
-				player2.velocity.x = (player2.velocity.x / velocityLength) * moveSpeed;
-				player2.velocity.z = (player2.velocity.z / velocityLength) * moveSpeed;
-			}
-
-			// 進行方向を向くようにする
-			{
-				// プレイヤーの向いている方向
-				float frontX = sinf(player2.angle.y);
-				float frontZ = cosf(player2.angle.y);
-
-				// 回転量調整
-				float dot = frontX * vec2X + frontZ * vec2Z;
-				float rot = (std::min)(1.0f - dot, turnSpeed * elapsedTime);
-
-				// 左右判定をして回転処理
-				float cross = frontX * vec2Z - frontZ * vec2X;
-				if (cross < 0.0f)
-				{
-					player2.angle.y += rot;
-				}
-				else
-				{
-					player2.angle.y -= rot;
-				}
-			}
-		}
-		else
-		{
-			// 減速処理
-			float deceleration = this->deceleration * elapsedTime;
-			float velocityLength = sqrtf(player2.velocity.x * player2.velocity.x + player2.velocity.z * player2.velocity.z);
-			if (velocityLength > deceleration)
-			{
-				player2.velocity.x -= (player2.velocity.x / velocityLength) * deceleration;
-				player2.velocity.z -= (player2.velocity.z / velocityLength) * deceleration;
-			}
-			else
-			{
-				player2.velocity.x = 0.0f;
-				player2.velocity.z = 0.0f;
-			}
-		}
-
-		// 移動量
-		float moveX = player.velocity.x * elapsedTime;
-		float moveY = player.velocity.y * elapsedTime;
-		float moveZ = player.velocity.z * elapsedTime;
-
-		float move2X = player2.velocity.x * elapsedTime;
-		float move2Y = player2.velocity.y * elapsedTime;
-		float move2Z = player2.velocity.z * elapsedTime;
-
-		// 接地処理
-		{
-			if (player.position.y < 1.0f)
-			{
-				player.position.y = 1;
-			}
-			if (player2.position.y < 1.0f)
-			{
-				player2.position.y = 1;
-			}
-		}
-
-		// 移動
-		player.position.x += moveX;
-		player.position.y += moveY;
-		player.position.z += moveZ;
-
-		player2.position.x += move2X;
-		player2.position.y += move2Y;
-		player2.position.z += move2Z;
-
-	}
-	if (GetAsyncKeyState('X') & 0x8000)
-	{
-		hitEffect->Play(player.position);
-	}
-
-	// プレイヤー行列更新処理
-	{
-		DirectX::XMMATRIX S = DirectX::XMMatrixScaling(player.scale.x, player.scale.y, player.scale.z);
-		DirectX::XMMATRIX R = DirectX::XMMatrixRotationRollPitchYaw(player.angle.x, player.angle.y, player.angle.z);
-		DirectX::XMMATRIX T = DirectX::XMMatrixTranslation(player.position.x, player.position.y, player.position.z);
-		DirectX::XMStoreFloat4x4(&player.transform, S* R* T);
-	}
-
-	{
-		DirectX::XMMATRIX S = DirectX::XMMatrixScaling(player2.scale.x, player2.scale.y, player2.scale.z);
-		DirectX::XMMATRIX R = DirectX::XMMatrixRotationRollPitchYaw(player2.angle.x, player2.angle.y, player2.angle.z);
-		DirectX::XMMATRIX T = DirectX::XMMatrixTranslation(player2.position.x, player2.position.y, player2.position.z);
-		DirectX::XMStoreFloat4x4(&player2.transform, S* R* T);
-	}
 	
-	
-	if (player.death)
+	/*if (player.death)
 	{
 		if (endBattle = 0)
 		{
@@ -289,7 +61,7 @@ void SceneGame::Update(float elapsedTime)
 		player2.position.y += 0.4f;
 		player2.angle.z++;
 		if(GameTimer > 180)end = 2;
-	}
+	}*/
 	GameTimer++;
 }
 
@@ -298,15 +70,31 @@ void SceneGame::Render(float elapsedtime)
 {
 	ID3D11DeviceContext* dc = Graphics::Instance().GetDeviceContext();
 	RenderState* renderState = Graphics::Instance().GetRenderState();
+	PrimitiveRenderer* primitiveRenderer = Graphics::Instance().GetPrimitiveRenderer();
+	ShapeRenderer* shapeRenderer = Graphics::Instance().GetShapeRenderer();
 	ModelRenderer* modelRenderer = Graphics::Instance().GetModelRenderer();
 
 	// モデル描画
+	Graphics::Instance().SetRenderTargets(1);
 	RenderContext rc;
 	rc.deviceContext = dc;
 	rc.renderState = renderState;
-	rc.camera = &camera;
-	modelRenderer->Render(rc, stage.transform, stage.model.get(), ShaderId::Lambert);
-	modelRenderer->Render(rc, player.transform, player.model.get(), ShaderId::Lambert);
-	modelRenderer->Render(rc, player2.transform, player2.model.get(), ShaderId::Lambert);
+	rc.camera = &moai.get()->GetCamera();
+	modelRenderer->Render(rc, ring.transform, ring.model.get(), ShaderId::Lambert);
+	moai.get()->Render(dc, renderState, modelRenderer, &moai.get()->GetCamera());
+	haniwa.get()->Render(dc, renderState, modelRenderer, &moai.get()->GetCamera());
+
+	moai.get()->DrawDebugPrimitive(shapeRenderer);
+	haniwa.get()->DrawDebugPrimitive(shapeRenderer);
+	shapeRenderer->Render(dc, moai.get()->GetCamera().GetView(), moai.get()->GetCamera().GetProjection());
+
+	Graphics::Instance().SetRenderTargets(2);
+	rc.camera = &haniwa.get()->GetCamera();
+	modelRenderer->Render(rc, ring.transform, ring.model.get(), ShaderId::Lambert);
+	moai.get()->Render(dc, renderState, modelRenderer, &haniwa.get()->GetCamera());
+	//haniwa.get()->Render(dc, renderState, modelRenderer, &haniwa.get()->GetCamera());
+	//modelRenderer->Render(rc, character.transform, character.model.get(), ShaderId::Lambert);
+
+	//shapeRenderer->Render(dc, cameraController.GetCamera(CAMERA_NAME::HANIWA).GetView(), cameraController.GetCamera(CAMERA_NAME::HANIWA).GetProjection());
 	EffectManager::Instance().Render(rc.camera->GetView(), rc.camera->GetProjection());
 }

@@ -7,6 +7,7 @@
 #include "Model.h"
 #include "Effect.h"
 #include "Sprite.h"
+#include "Artifact.h"
 // ゲームシーン
 class SceneGame : public Scene
 {
@@ -25,6 +26,10 @@ public:
 	bool endBattle;
 
 private:
+	float Easing(float x)
+	{
+		return 1 - powf(1 - x, 4);
+	}
 	int	table;
 	struct Object
 	{
@@ -46,11 +51,13 @@ private:
 		}
 		bool								death;
 	};
-	Camera								camera;
+	/*Camera								camera;
 	FreeCameraController				cameraController;
 	Object								player;
-	Object								player2;
-	Object								stage;
+	Object								player2;*/
+	Object								  ring;
+	std::unique_ptr<Characters::Artifact> moai;
+	std::unique_ptr<Characters::Artifact> haniwa;
 	Sprite* sprText = nullptr;
 	float								acceleration = 30.0f;
 	float								deceleration = 20.0f;
@@ -58,6 +65,10 @@ private:
 	float								turnSpeed = DirectX::XMConvertToRadians(720);
 	float								downhillOffset = 43.0f;
 	Effect* hitEffect=nullptr;
+	// ANS①-①ヒットストップとカメラシェイクに必要な変数
+	float								hitStopLastSeconds = 0.0f;
+	float								hitStopSecondsLength = 0.3f;
+	float								cameraShakeRange = 0.03f;
 	
 };
 extern int end;

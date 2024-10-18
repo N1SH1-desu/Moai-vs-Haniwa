@@ -97,3 +97,100 @@ bool Collision::RayCast(
 	}
 	return hit;
 }
+
+// 球と球の交差判定
+bool Collision::IntersectSphereVsSphere(const DirectX::XMFLOAT3& positionA,
+	float radiusA,
+	const DirectX::XMFLOAT3& positionB,
+	float radiusB,
+	DirectX::XMFLOAT3& outPositionB)
+{
+	// A->Bの単位ベクトルを算出
+	DirectX::XMVECTOR PositionA = DirectX::XMLoadFloat3(&positionA);
+	DirectX::XMVECTOR PositionB = DirectX::XMLoadFloat3(&positionB);
+	DirectX::XMVECTOR Vec = DirectX::XMVectorSubtract(PositionB, PositionA);
+	DirectX::XMVECTOR LengthSq = DirectX::XMVector4LengthSq(Vec);
+	float lengthSq;
+	DirectX::XMStoreFloat(&lengthSq, LengthSq);
+
+	// 距離判定
+	float range = radiusA + radiusB;
+	if (range * range < lengthSq)
+	{
+		return false;
+	}
+
+	// AがBを押し出す
+	DirectX::XMVECTOR range_b = DirectX::XMVectorScale(DirectX::XMVector3Normalize(Vec), range);
+	DirectX::XMVECTOR out = DirectX::XMVectorAdd(DirectX::XMVectorSubtract(range_b, Vec), PositionB);
+	DirectX::XMStoreFloat3(&outPositionB, out);
+
+	return true;
+}
+
+// 円柱と円柱と交差判定
+bool Collision::IntersectCylinderVsCylinder(
+	const DirectX::XMFLOAT3& positionA, float radiusA, float heightA,
+	const DirectX::XMFLOAT3& positionB, float radiusB, float heightB,
+	DirectX::XMFLOAT3& outPositionB)
+{
+	// Aの足元がBの頭より上なら当たってない
+	if (positionA.y > (positionB.y + heightB))
+	{
+		return false;
+	}
+	// Aの頭がBの足元より下なら当たってない
+	if ((positionA.y + heightA) < positionB.y)
+	{
+		return false;
+	}
+	// XZ平面での範囲チェック
+	DirectX::XMVECTOR Vec = DirectX::XMVectorSubtract({ positionB.x, 0.0f, positionB.z }, { positionA.x, 0.0f, positionA.z });
+	DirectX::XMVECTOR norV = DirectX::XMVector3Normalize(Vec);
+	float lengthSq = DirectX::XMVectorGetX(DirectX::XMVector3LengthSq(Vec));
+	if (pow((radiusA + radiusB), 2) < lengthSq)
+	{
+		return false;
+	}
+	// AがBを押し出す
+	DirectX::XMFLOAT3 out;
+	DirectX::XMStoreFloat3(&out, DirectX::XMVectorSubtract(DirectX::XMVectorScale(norV, (radiusA + radiusB)), Vec));
+	outPositionB.x = out.x + positionB.x;
+	outPositionB.y = out.y + positionB.y;
+	outPositionB.z = out.z + positionB.z;
+
+	return true;
+}
+
+bool Collision::IntersectSphereVsCylider(const DirectX::XMFLOAT3& spherePosition, float sphereRadius, const DirectX::XMFLOAT3& cylinderPosition, float cylinderRadius, float cylinderHeight, DirectX::XMFLOAT3& outCylinderPosition)
+{
+	if (spherePosition.y > cylinderPosition.y + cylinderHeight)
+	{
+		return false;
+	}
+	if (spherePosition.y < cylinderPosition.y)
+	{
+		return false;
+	}
+
+	DirectX::XMVECTOR A = DirectX::XMLoadFloat3(&spherePosition);
+	DirectX::XMVECTOR B = DirectX::XMLoadFloat3(&cylinderPosition);
+	DirectX::XMVECTOR Vec = DirectX::XMVectorSubtract(B, A);
+	DirectX::XMVECTOR NorVec = DirectX::XMVector3Normalize(Vec);
+
+	float VecLength = DirectX::XMVectorGetX(DirectX::XMVector3Length(Vec));
+	float range = sphereRadius + cylinderRadius;
+	if (VecLength > range)
+	{
+		return false;
+	}
+
+	DirectX::XMVECTOR rangeVec = DirectX::XMVectorScale(NorVec, range);
+	DirectX::XMFLOAT3 outPutPos;
+	DirectX::XMStoreFloat3(&outPutPos, DirectX::XMVectorSubtract(rangeVec, Vec));
+	outCylinderPosition.x += outPutPos.x;
+	outCylinderPosition.y += outPutPos.y;
+	outCylinderPosition.z += outPutPos.z;
+
+	return true;
+}

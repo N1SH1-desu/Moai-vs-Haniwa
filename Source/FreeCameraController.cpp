@@ -45,7 +45,7 @@ void FreeCameraController::SyncControllerToCamera(Camera& camera)
 }
 
 // 更新処理
-void FreeCameraController::Update()
+void FreeCameraController::Update(float elapsedTime)
 {
 	// デバッグウインドウ操作中は処理しない
 	if (ImGui::IsWindowFocused(ImGuiFocusedFlags_AnyWindow))
@@ -136,4 +136,5 @@ void FreeCameraController::Update()
 	DirectX::XMStoreFloat3(&eye, Eye);
 	DirectX::XMStoreFloat3(&up, Up);
 	DirectX::XMStoreFloat3(&right, Right);
+
 }

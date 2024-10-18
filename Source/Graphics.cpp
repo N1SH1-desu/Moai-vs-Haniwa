@@ -114,12 +114,26 @@ void Graphics::Initialize(HWND hWnd)
 
 	// ビューポート
 	{
-		viewport.Width = static_cast<float>(screenWidth);
-		viewport.Height = static_cast<float>(screenHeight);
-		viewport.MinDepth = 0.0f;
-		viewport.MaxDepth = 1.0f;
-		viewport.TopLeftX = 0.0f;
-		viewport.TopLeftY = 0.0f;
+		viewportNormal.Width = static_cast<float>(screenWidth);
+		viewportNormal.Height = static_cast<float>(screenHeight);
+		viewportNormal.MinDepth = 0.0f;
+		viewportNormal.MaxDepth = 1.0f;
+		viewportNormal.TopLeftX = 0.0f;
+		viewportNormal.TopLeftY = 0.0f;
+
+		viewportLeft.Width = static_cast<float>(screenWidth) / 2.0f;
+		viewportLeft.Height = static_cast<float>(screenHeight);
+		viewportLeft.MinDepth = 0.0f;
+		viewportLeft.MaxDepth = 1.0f;
+		viewportLeft.TopLeftX = 0.0f;
+		viewportLeft.TopLeftY = 0.0f;
+
+		viewportRight.Width = static_cast<float>(screenWidth) / 2.0f;
+		viewportRight.Height = static_cast<float>(screenHeight);
+		viewportRight.MinDepth = 0.0f;
+		viewportRight.MaxDepth = 1.0f;
+		viewportRight.TopLeftX = static_cast<float>(screenWidth) / 2.0f;
+		viewportRight.TopLeftY = 0.0f;
 	}
 
 	// レンダーステート生成
@@ -141,9 +155,23 @@ void Graphics::Clear(float r, float g, float b, float a)
 }
 
 // レンダーターゲット設定
-void Graphics::SetRenderTargets()
+void Graphics::SetRenderTargets(UINT viewportIndex)
 {
-	immediateContext->RSSetViewports(1, &viewport);
+	switch (viewportIndex)
+	{
+	case 0:
+		immediateContext->RSSetViewports(1, &viewportNormal);
+		break;
+	case 1:
+		immediateContext->RSSetViewports(1, &viewportLeft);
+		break;
+	case 2:
+		immediateContext->RSSetViewports(1, &viewportRight);
+		break;
+	default:
+		assert("ViewPort Index is unvaild." && false);
+		break;
+	}
 	immediateContext->OMSetRenderTargets(1, renderTargetView.GetAddressOf(), depthStencilView.Get());
 }
 
