@@ -1,9 +1,18 @@
 #include "Misc.h"
 #include "Graphics.h"
 
+#include "PhongShader.h"
+
+
+Graphics* Graphics::instance = nullptr;
+
 // 初期化
 void Graphics::Initialize(HWND hWnd)
 {
+	// インスタンス設定
+	_ASSERT_EXPR(instance == nullptr, "already instantiated");
+	instance = this;
+
 	this->hWnd = hWnd;
 	// 画面のサイズを取得する。
 	RECT rc;
@@ -121,6 +130,13 @@ void Graphics::Initialize(HWND hWnd)
 		viewport.TopLeftX = 0.0f;
 		viewport.TopLeftY = 0.0f;
 	}
+
+	// モデルシェーダー
+	{
+		//modelShaders[static_cast<int>(ModelShaderId::Default)] = std::make_unique<DefaultModelShader>(device.Get());
+		modelShaders[static_cast<int>(ModelShaderId::Phong)] = std::make_unique<PhongShader>(device.Get());
+	}
+
 
 	// レンダーステート生成
 	renderState = std::make_unique<RenderState>(device.Get());

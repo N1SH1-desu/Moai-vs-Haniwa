@@ -65,6 +65,8 @@ public:
 
 	std::mutex& GetMutex() { return mutex; }
 private:
+	static Graphics* instance;
+
 	HWND											hWnd = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11Device>			device;
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext>		immediateContext;

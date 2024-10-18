@@ -210,6 +210,12 @@
     <ClInclude Include="Source\Effect.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="Source\phongShader.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\LightManager.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Framework.cpp">
@@ -318,6 +324,15 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\Effect.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Light.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\phongShader.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LightManager.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

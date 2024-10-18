@@ -46,7 +46,7 @@ private:
 	FreeCameraController				cameraController;
 	Object								player;
 	Object								stage;
-	float								gravity = 10.0f;
+	float								gravity = 0.0f;
 	float								acceleration = 30.0f;
 	float								deceleration = 20.0f;
 	float								moveSpeed = 5.0f;

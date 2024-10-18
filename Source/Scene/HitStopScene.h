@@ -5,7 +5,7 @@
 #include "Camera.h"
 #include "FreeCameraController.h"
 #include "Model.h"
-
+#include"Light.h"
 class HitStopScene : public Scene
 {
 public:
@@ -37,6 +37,9 @@ private:
 		DirectX::XMFLOAT4X4		transform = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
 		std::unique_ptr<Model>	model;
 	};
+
+	// 平行光源データ
+	std::unique_ptr<Light>		directional_light;
 
 	Camera								camera;
 	FreeCameraController				cameraController;

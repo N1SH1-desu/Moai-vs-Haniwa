@@ -4,7 +4,7 @@
 #include "Graphics.h"
 #include "Collision.h"
 #include "Scene/HitStopScene.h"
-
+#include"LightManager.h"
 // コンストラクタ
 HitStopScene::HitStopScene()
 {
@@ -34,6 +34,38 @@ HitStopScene::HitStopScene()
 	weapon.angle = { 0, 0, 0 };
 	weapon.scale = { 1.0f, 1.0f, 1.0f };
 	weapon.model = std::make_unique<Model>("Data/Model/RPG-Character/2Hand-Sword.mdl");
+
+	// カメラコントローラー初期化
+	//cameraController = new CameraController();
+	// 平行光源を追加
+	LightManager::Instance().Register(new Light(LightType::Directional));
+	// 点光源を追加
+	{
+		Light* light = new Light(LightType::Point);
+		light->SetPosition(DirectX::XMFLOAT3(0, 4, 0));
+		light->SetColor(DirectX::XMFLOAT4(1, 1, 1, 1));
+		light->SetRange(5.0f);
+		LightManager::Instance().Register(light);
+	}
+	// 点光源を追加
+	{
+		Light* light = new Light(LightType::Point);
+		light->SetPosition(DirectX::XMFLOAT3(5, 4, 0));
+		light->SetColor(DirectX::XMFLOAT4(1, 1, 0, 1));
+		light->SetRange(5.0f);
+		LightManager::Instance().Register(light);
+	}
+	// スポットライトを追加
+	{
+		Light* light = new Light(LightType::Spot);
+		light->SetPosition(DirectX::XMFLOAT3(-10, 10, 10));
+		light->SetColor(DirectX::XMFLOAT4(1, 1, 1, 1));
+		light->SetDirection(DirectX::XMFLOAT3(+1, -1, 0));
+
+		light->SetRange(40.0f);
+		LightManager::Instance().Register(light);
+	}
+
 }
 
 // 更新処理
