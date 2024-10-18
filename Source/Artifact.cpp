@@ -3,6 +3,7 @@
 #include "Graphics.h"
 #include "Collision.h"
 #include "imgui.h"
+#include "Easing.h"
 
 namespace Characters
 {
@@ -70,7 +71,25 @@ namespace Characters
 
 	void Artifact::Attack(float elapsedTime)
 	{
-		
+		Turn(0, 0, elapsedTime);
+
+		float timeScale = 1.0f;
+
+		attackMotionCurrentSeconds += elapsedTime * timeScale;
+		if (attackMotionCurrentSeconds > 2.0f)
+		{
+			attackMotionCurrentSeconds = 0.0f;
+			attackMotionAngle = 0.0f;
+			state = CharacterState::None;
+		}
+		attackMotionAngle = AttackEasing(attackMotionCurrentSeconds / 2.0f) * DirectX::XM_2PI;
+
+		DirectX::XMVECTOR base = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+		DirectX::XMVECTOR camFront = DirectX::XMVector3Normalize(DirectX::XMVectorSet(cameraController.camera.GetFront().x, 0.0f, cameraController.camera.GetFront().z, 0.0f));
+
+		DirectX::XMVECTOR rotateVec = DirectX::XMVector3Cross(base, camFront);
+
+		quaternion = DirectX::XMQuaternionSlerp(quaternion, DirectX::XMQuaternionRotationAxis(rotateVec, attackMotionAngle), 0.5f);
 	}
 
 	void Artifact::Guard(float elapsedTime)

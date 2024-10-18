@@ -1,6 +1,11 @@
 #pragma once
 #include <math.h>
 
+float Easing(float x)
+{
+	return 1 - powf(1 - x, 4);
+}
+
 float AttackEasing(float x)
 {
 	const float c1 = 1.70158;

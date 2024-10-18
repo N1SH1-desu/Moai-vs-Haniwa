@@ -110,6 +110,7 @@ namespace Characters
 		Artifact* enemy;
 		
 		float attackMotionCurrentSeconds = 0.0f;
+		float attackMotionAngle = 0.0f;
 	};
 
 }
