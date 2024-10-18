@@ -20,6 +20,10 @@ public:
 	// •`‰æˆ—
 	void Render(float elapsedTime) override;
 
+	int GameTimer;
+
+	bool endBattle;
+
 private:
 	int	table;
 	struct Object

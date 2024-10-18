@@ -3,7 +3,7 @@
 #include <windows.h>
 #include "HighResolutionTimer.h"
 #include "Scene.h"
-
+#include "Audio.h"
 class Framework
 {
 public:
@@ -29,7 +29,7 @@ private:
 	const HWND				hWnd;
 	HighResolutionTimer		timer;
 	std::unique_ptr<Scene>	scene;
-
+	Audio audio;
 	int scene_timer;
 };
 

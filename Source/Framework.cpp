@@ -11,7 +11,7 @@
 #include <SceneTitle.h>
 #include "EffectManager.h"
 #include "SceneResult.h"
-#include "Audio.h"
+
 // ‚’¼“¯ŠúŠÔŠuÝ’è
 static const int syncInterval = 1;
 int end;
@@ -57,7 +57,13 @@ void Framework::Update(float elapsedTime)
 		scene_table=1;
 		scene_timer = 0;
 	}
-	if (GetAsyncKeyState('B') & 0x8000 && scene_table == 1&&scene_timer>120)
+	if (end > 0)
+	{
+		scene = std::make_unique<SceneResult>();
+		scene_table = 2;
+		scene_timer = 0;
+	}
+	if (GetAsyncKeyState('B') & 0x8000 && scene_table == 2&&scene_timer>120)
 	{
 		scene = std::make_unique<SceneTitle>();
 		scene_table = 0;

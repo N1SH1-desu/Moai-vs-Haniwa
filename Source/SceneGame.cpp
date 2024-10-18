@@ -12,6 +12,7 @@
 	float screenWidth = Graphics::Instance().GetScreenWidth();
 	float screenHeight = Graphics::Instance().GetScreenHeight();
 	end = 0;
+	GameTimer = 0;
 	// ƒJƒƒ‰İ’è
 	camera.SetPerspectiveFov(
 		DirectX::XMConvertToRadians(45),	// ‰æŠp
@@ -127,6 +128,15 @@ void SceneGame::Update(float elapsedTime)
 				{
 					player.angle.y -= rot;
 				}
+
+				DirectX::XMVECTOR PositionVec, TargetVec, d;
+				PositionVec = DirectX::XMLoadFloat3(&player.position);
+				TargetVec = DirectX::XMLoadFloat3(&player.position);
+
+				d = DirectX::XMVectorSubtract(TargetVec, PositionVec);
+				d=DirectX::XMVector3Normalize(d);
+				
+				DirectX::XMStoreFloat3(&player.angle,d);
 			}
 		}
 		else
@@ -258,18 +268,29 @@ void SceneGame::Update(float elapsedTime)
 	
 	if (player.death)
 	{
+		if (endBattle = 0)
+		{
+			endBattle = 1;
+			GameTimer = 0;
+		}
 		player.position.x -= player2.position.x*0.1f;
 		player.position.y +=0.4f;
 		player.angle.z ++;
-		end = 1;
+		if(GameTimer>180)end = 1;
 	}
 	if (player2.death)
 	{
+		if (endBattle = 0)
+		{
+			endBattle = 1;
+			GameTimer = 0;
+		}
 		player2.position.x -= player.position.x * 0.1f;
 		player2.position.y += 0.4f;
 		player2.angle.z++;
-		end = 2;
+		if(GameTimer > 180)end = 2;
 	}
+	GameTimer++;
 }
 
 // •`‰æˆ—
