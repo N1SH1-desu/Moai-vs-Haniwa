@@ -102,7 +102,7 @@ namespace Characters
 		GamePad gamePad;
 		Artifact* enemy;
 		Effect* deadEfk = nullptr;
-		Effect* 
+		 
 	};
 
 }
