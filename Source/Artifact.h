@@ -36,17 +36,17 @@ namespace Characters
 
 		void SetEnemy(Artifact* enem) { enemy = enem; }
 
-		virtual void Attack(float elapsedTime);
-		virtual void Guard(float elapsedTime);
-		virtual void Push(float elapsedTime);
-		virtual void Stan(float elapsedTime);
 
 		virtual const std::string GetName() = 0;
 
 		const Camera& GetCamera() const { return cameraController.camera; }
 
-
 	protected:
+		virtual void AttackMotion(float elapsedTime);
+		virtual void GuardMotion(float elapsedTime);
+		virtual void PushMotion(float elapsedTime);
+		virtual void StanMotion(float elapsedTime);
+
 		const DirectX::XMFLOAT4X4& UpdateTransform()
 		{
 			DirectX::XMMATRIX S = DirectX::XMMatrixScaling(scale.x, scale.y, scale.z);
@@ -64,6 +64,11 @@ namespace Characters
 			return transform;
 		}
 	private:
+		void Attack(float elapsedTime);
+		void Guard(float elapsedTime);
+		void Push(float elapsedTime);
+		void Stan(float elapsedTime);
+
 		void InputHandler(float elapsedTime);
 		DirectX::XMFLOAT3 GetMoveVec();
 		void Move(float x, float z, float elapsedTime);
@@ -111,6 +116,11 @@ namespace Characters
 		
 		float attackMotionCurrentSeconds = 0.0f;
 		float attackMotionAngle = 0.0f;
+		float guardMotionCurrentSeconds = 0.0f;
+		float guardMotionAngle = 0.0f;
+		float pushMotionCurrentSeconds = 0.0f;
+		float stanMotionCurrentSeconds = 0.0f;
+		int  stanRotateCount = 0;
 	};
 
 }
