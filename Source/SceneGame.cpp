@@ -23,7 +23,7 @@
 	haniwa = std::make_unique<Characters::Haniwa>("Data/Model/Character/haniwa.mdl", DirectX::XMFLOAT3(-17.0f, 0.0f, -17.0f), DirectX::XMFLOAT3(0.5f, 0.5f, 0.5f));
 	moai.get()->SetEnemy(haniwa.get());
 	haniwa.get()->SetEnemy(moai.get());
-	sprText = new Sprite(device, "Data/Font/font2.png");
+	//sprText = new Sprite(device, "Data/Font/font2.png");
 	player1_death = false;
 	//BGM,SEÝ’è
 	bgm = Audio::Instance().LoadAudioSource("Data/BGM/ƒQ[ƒ€“à‰¹.wav");
@@ -34,6 +34,7 @@
 
  SceneGame::~SceneGame()
  {
+
 	 //BGM,SEÄ¶I—¹
 	 bgm->Stop();
  }
@@ -43,8 +44,8 @@ void SceneGame::Update(float elapsedTime)
 {
 	float timeScale = 1.0f;
 
-	if(moai)moai.get()->Update(elapsedTime);
-	if(haniwa)haniwa.get()->Update(elapsedTime);
+	moai.get()->Update(elapsedTime);
+	haniwa.get()->Update(elapsedTime);
 	EffectManager::Instance().Update(elapsedTime);
 	if (moai.get()->GetHealth() <= 0)
 	{

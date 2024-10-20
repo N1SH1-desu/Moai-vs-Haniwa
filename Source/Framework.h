@@ -32,5 +32,6 @@ private:
 	Audio audio;
 	int scene_timer;
 	int ruleTimer;
+	bool a;
 };
 

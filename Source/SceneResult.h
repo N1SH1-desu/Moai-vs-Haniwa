@@ -8,10 +8,10 @@ public:
 	SceneResult();
 	~SceneResult();
 
-	// XVˆ—
+	
 	void Update(float elapsedTime) override;
 
-	// •`‰æˆ—
+
 	void Render(float elapsedTime) override;
 
 
@@ -24,8 +24,9 @@ private:
 		DirectX::XMFLOAT4	color;
 		DirectX::XMFLOAT2	texcoord;
 	};
-	Sprite* sprite = nullptr;
+	Sprite* moai = nullptr;
 	Sprite* sprText = nullptr;
+	Sprite* haniwa = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11VertexShader>			vertexShader;
 	Microsoft::WRL::ComPtr<ID3D11PixelShader>			pixelShader;
 	Microsoft::WRL::ComPtr<ID3D11InputLayout>			inputLayout;
