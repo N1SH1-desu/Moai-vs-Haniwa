@@ -91,13 +91,29 @@ namespace Characters
 		DirectX::XMVECTOR camFront = DirectX::XMVector3Normalize(DirectX::XMVectorSet(cameraController.camera.GetFront().x, 0.0f, cameraController.camera.GetFront().z, 0.0f));
 
 		DirectX::XMVECTOR rotateVec = DirectX::XMVector3Cross(base, camFront);
+		attackQua = DirectX::XMQuaternionRotationAxis(rotateVec, attackMotionAngle);
 
-		quaternion = DirectX::XMQuaternionMultiply(quaternion, DirectX::XMQuaternionRotationAxis(rotateVec, attackMotionAngle));
+		quaternion = DirectX::XMQuaternionMultiply(quaternion, attackQua);
 	}
 
 	void Artifact::Attack(float elapsedTime)
 	{
 		AttackMotion(elapsedTime);
+
+		DirectX::XMFLOAT3 camFront = { cameraController.camera.GetFront().x, 0.0f, cameraController.camera.GetFront().z };
+		DirectX::XMStoreFloat3(&camFront, DirectX::XMVector3Normalize(DirectX::XMLoadFloat3(&camFront)));
+		DirectX::XMFLOAT3 setPos = { camFront.x * 1.5f, 0.0f, camFront.z * 1.5f };
+		DirectX::XMFLOAT3 attackPosition = { position.x + setPos.x, position.y + 2.0f, position.z + setPos.z };
+
+		DirectX::XMVECTOR vec = DirectX::XMVectorSubtract(DirectX::XMLoadFloat3(&attackPosition), DirectX::XMLoadFloat3(&position));
+		vec = DirectX::XMVector3Rotate(vec, attackQua);
+		DirectX::XMFLOAT3 rotateVec;
+		DirectX::XMStoreFloat3(&rotateVec, vec);
+
+		attackPosition = { position.x + rotateVec.x, position.y + rotateVec.y, position.z + rotateVec.z };
+
+		CollisionAttack(attackPosition);
+		DrawAttackPrimitive(attackPosition);
 	}
 
 	void Artifact::GuardMotion(float elapsedTime)
@@ -262,6 +278,23 @@ namespace Characters
 		position.x += x * speed;
 		position.z += z * speed;
 
+		if (position.x >= 18.0f)
+		{
+			position.x = 18.0f;
+		}
+		if (position.x <= -18.0f)
+		{
+			position.x = -18.0f;
+		}
+
+		if (position.z >= 18.0f)
+		{
+			position.z = 18.0f;
+		}
+		if (position.z <= -18.0f)
+		{
+			position.z = -18.0f;
+		}
 	}
 
 	void Artifact::Turn(float x, float z, float elapsedTime)
@@ -357,6 +390,28 @@ namespace Characters
 		}
 	}
 
+	void Artifact::CollisionAttack(DirectX::XMFLOAT3 attackPosition)
+	{
+		if (enemy == nullptr)
+		{
+			return;
+		}
+
+		DirectX::XMFLOAT3 outPosition{};
+		if (Collision::IntersectSphereVsCylider(
+			attackPosition, 1.0f,
+			enemy->position, enemy->radius, enemy->height,
+			outPosition
+		))
+		{
+
+		}
+	}
+
+	void Artifact::CollisionPush()
+	{
+	}
+
 	void Artifact::DrawDebugPrimitive(ShapeRenderer* shapeRenderer)
 	{
 		shapeRenderer->DrawCapsule(transform, 1.5f, 7.0f, { 1.0f, 1.0f, 1.0f, 1.0f });
@@ -369,6 +424,13 @@ namespace Characters
 			ImGui::DragFloat3("CharacterPosition", &position.x, 0.01f);
 		}
 		ImGui::End();
+	}
+
+	void Artifact::DrawAttackPrimitive(DirectX::XMFLOAT3 attackPosition)
+	{
+		ShapeRenderer* shapeRenderer = Graphics::Instance().GetShapeRenderer();
+
+		shapeRenderer->DrawSphere(attackPosition, 1.0f, { 1.0f, 0.0f, 0.0f, 1.0f });
 	}
 
 }

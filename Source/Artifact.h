@@ -77,7 +77,11 @@ namespace Characters
 		void GetAction();
 
 		void CollisionPlayerVsEnemies();
+		void CollisionAttack(DirectX::XMFLOAT3 attackPosition);
+		void CollisionPush();
+
 		void DrawDebugGUI();
+		void DrawAttackPrimitive(DirectX::XMFLOAT3 attackPosition);
 
 	protected:
 		struct CameraPair
@@ -116,6 +120,7 @@ namespace Characters
 		
 		float attackMotionCurrentSeconds = 0.0f;
 		float attackMotionAngle = 0.0f;
+		DirectX::XMVECTOR attackQua;
 		float guardMotionCurrentSeconds = 0.0f;
 		float guardMotionAngle = 0.0f;
 		float pushMotionCurrentSeconds = 0.0f;

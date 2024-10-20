@@ -18,8 +18,8 @@ HitStopScene::HitStopScene()
 	ring.scale = { 0.1f, 0.1f, 0.1f };
 	ring.model = std::make_unique<Model>("Data/Model/Ring/rinngu.mdl");
 
-	moai = std::make_unique<Characters::Moai>("Data/Model/moai/Moai.mdl", DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f), DirectX::XMFLOAT3(0.5f, 0.5f, 0.5f));
-	haniwa = std::make_unique<Characters::Haniwa>("Data/Model/Haniwa/haniwa.mdl", DirectX::XMFLOAT3(4.0f, 0.0f, 10.0f), DirectX::XMFLOAT3(0.5f, 0.5f, 0.5f));
+	moai = std::make_unique<Characters::Moai>("Data/Model/moai/Moai.mdl", DirectX::XMFLOAT3(17.0f, 0.0f, 17.0f), DirectX::XMFLOAT3(0.5f, 0.5f, 0.5f));
+	haniwa = std::make_unique<Characters::Haniwa>("Data/Model/Haniwa/haniwa.mdl", DirectX::XMFLOAT3(-17.0f, 0.0f, -17.0f), DirectX::XMFLOAT3(0.5f, 0.5f, 0.5f));
 	moai.get()->SetEnemy(haniwa.get());
 	haniwa.get()->SetEnemy(moai.get());
 }
@@ -60,7 +60,7 @@ void HitStopScene::Render(float elapsedTime)
 	rc.camera = &haniwa.get()->GetCamera();
 	modelRenderer->Render(rc, ring.transform, ring.model.get(), ShaderId::Lambert);
 	moai.get()->Render(dc, renderState, modelRenderer, &haniwa.get()->GetCamera());
-	//haniwa.get()->Render(dc, renderState, modelRenderer, &haniwa.get()->GetCamera());
+	haniwa.get()->Render(dc, renderState, modelRenderer, &haniwa.get()->GetCamera());
 	//modelRenderer->Render(rc, character.transform, character.model.get(), ShaderId::Lambert);
 
 	//shapeRenderer->Render(dc, cameraController.GetCamera(CAMERA_NAME::HANIWA).GetView(), cameraController.GetCamera(CAMERA_NAME::HANIWA).GetProjection());
