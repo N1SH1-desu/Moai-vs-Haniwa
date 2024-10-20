@@ -57,9 +57,9 @@ namespace Characters
 			break;
 		}
 
+		lowHp(elapsedTime);
 		if (hp <= 2)timer++;
 		if (hp <= 0)death();
-		lowHp(elapsedTime);
 		CollisionPlayerVsEnemies();
 		DrawDebugGUI();
 		UpdateTransform();

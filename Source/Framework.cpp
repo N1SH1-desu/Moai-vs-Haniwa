@@ -31,6 +31,7 @@ Framework::Framework(HWND hWnd)
 	//scene = std::make_unique<SceneResult>();
 	//scene = std::make_unique<LandWalkScene>();
 	scene_table = 0;
+	ruleTimer = 0;
 }
 
 // デストラクタ
@@ -48,12 +49,19 @@ void Framework::Update(float elapsedTime)
 	// IMGUIフレーム開始処理	
 	ImGuiRenderer::NewFrame();
 
-	if (GetAsyncKeyState('B') & 0x8000 && scene_table == 0&& scene_timer>120)
+	if (GetAsyncKeyState('B') & 0x8000 && scene_table == 0)
 	{
-		scene = std::make_unique<SceneGame>();
+		ruleTimer = 1;
 		scene_table=1;
 		scene_timer = 0;
 	}
+
+	if (ruleTimer > 120)
+	{
+		scene = std::make_unique<SceneGame>();
+		ruleTimer = 0;
+	}
+
 	if (end > 0)
 	{
 		scene = std::make_unique<SceneResult>();
@@ -70,6 +78,7 @@ void Framework::Update(float elapsedTime)
 	scene->Update(elapsedTime);
 	scene_timer++;
 	if (scene_timer > 60000)scene_timer = 0;
+	if (ruleTimer > 0)ruleTimer++;
 }
 
 // 描画処理

@@ -9,10 +9,13 @@ SceneTitle::SceneTitle()
 	{
 		sprite = new Sprite(device,"Data/Sprite/Title.png");
 		sprText = new Sprite(device, "Data/Font/font2.png");
+		rule = new Sprite(device, "Data/Sprite/tutorial.png");
 	}
+	
 	//BGM,SE設定
 	bgm = Audio::Instance().LoadAudioSource("Data/BGM/BGM.wav");
 	bgm->Play(true);
+	ruleSwitch = false;
 }
 
 SceneTitle::~SceneTitle()
@@ -33,7 +36,10 @@ SceneTitle::~SceneTitle()
 
 void SceneTitle::Update(float elapsedTime)
 {
-	
+	if (GetAsyncKeyState('B') & 0x8000)
+	{
+		ruleSwitch = true;
+	}
 }
 
 void SceneTitle::Render(float elapsedTime)
@@ -60,10 +66,22 @@ void SceneTitle::Render(float elapsedTime)
 		
 
 		//タイトルスプライト描画
-		sprite->Render(dc,
-			0, 0, screenWidth, screenHeight,
-			0, 0, textureWidth, textureHeight,
-			0,
-			1, 1, 1, 1);
+		switch (ruleSwitch)
+		{
+		case false:
+			sprite->Render(dc,
+				0, 0, screenWidth, screenHeight,
+				0, 0, textureWidth, textureHeight,
+				0,
+				1, 1, 1, 1);
+			break;
+		case true:
+			rule->Render(dc,
+				0, 0, screenWidth, screenHeight,
+				0, 0, textureWidth, textureHeight,
+				0,
+				1, 1, 1, 1);
+			break;
+		}
 	}	
 }

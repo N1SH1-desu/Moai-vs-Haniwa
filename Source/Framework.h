@@ -31,5 +31,6 @@ private:
 	std::unique_ptr<Scene>	scene;
 	Audio audio;
 	int scene_timer;
+	int ruleTimer;
 };
 
