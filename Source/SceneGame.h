@@ -71,8 +71,7 @@ private:
 	float								cameraShakeRange = 0.03f;
 
 	std::unique_ptr<AudioSource>bgm;
-	std::unique_ptr<AudioSource>PushButtan;
-	std::unique_ptr<AudioSource>MoveCarsol;
+	std::unique_ptr<AudioSource> SEPunch;
 	
 };
 extern int end;

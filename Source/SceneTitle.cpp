@@ -14,7 +14,9 @@ SceneTitle::SceneTitle()
 	
 	//BGM,SE設定
 	bgm = Audio::Instance().LoadAudioSource("Data/BGM/BGM.wav");
-	bgm->Play(true);
+	bgm->Play(true,0.3f);
+	PushButtan = Audio::Instance().LoadAudioSource("Data/BGM/ボタン.wav");
+	
 	ruleSwitch = false;
 }
 
@@ -39,6 +41,7 @@ void SceneTitle::Update(float elapsedTime)
 	if (GetAsyncKeyState('B') & 0x8000)
 	{
 		ruleSwitch = true;
+		PushButtan->Play(false, 1);
 	}
 }
 
@@ -55,7 +58,7 @@ void SceneTitle::Render(float elapsedTime)
 	dc->ClearDepthStencilView(dsv, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	dc->OMSetRenderTargets(1, &rtv, dsv);
 	//テキスト描画
-	sprText->textout(dc, "PUSH B", 240, 120, 110, 90, 150, 150, 30, 30, 0, 1, 0, 0, 0);
+	//sprText->textout(dc, "PUSH B", 240, 120, 110, 90, 150, 150, 30, 30, 0, 1, 0, 0, 0);
 
 	//2Dスプライト描画
 	{

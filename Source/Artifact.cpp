@@ -21,6 +21,10 @@ namespace Characters
 		GuardEfk = new Effect("Data/Effect/guardSuccess.efk");
 		punch = new Effect("Data/Effect/punch.efk");
 		kemuri = new Effect("Data/Effect/kemuri.efk");
+		SEKO=Audio::Instance().LoadAudioSource("Data/BGM/K.O..wav");
+		SEGuard = Audio::Instance().LoadAudioSource("Data/BGM/Žç‚è.wav");
+		SEPush = Audio::Instance().LoadAudioSource("Data/BGM/‰Ÿ‚·.wav");
+		SEPunch = Audio::Instance().LoadAudioSource("Data/BGM/Ž„‚Í‰Ì‚Å‚Ô‚ñ‰£‚éI.wav");
 	}
 
 	void Artifact::Update(float elapsedTime)
@@ -80,7 +84,7 @@ namespace Characters
 		{
 			enemy->hp--;
 			punch->Play(enemy->position);
-
+			SEPunch->Play(false,1);
 		}
 	}
 
@@ -89,11 +93,16 @@ namespace Characters
 		//if (CollisionPlayerVsEnemies())
 		{
 			GuardEfk->Play(position);
+			SEGuard->Play(false,1);
 		}
 	}
 
 	void Artifact::Push(float elapsedTime)
 	{
+		//if (CollisionPlayerVsEnemies())
+		{
+			SEPush->Play(false,1);
+		}
 	}
 
 	void Artifact::Stan(float elapsedTime)
@@ -232,6 +241,7 @@ namespace Characters
 		position.z = -vec.z * speed;
 
 			deadEfk->Play(position);
+			SEKO->Play(false,1);
 	}
 
 }
