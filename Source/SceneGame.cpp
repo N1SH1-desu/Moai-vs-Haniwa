@@ -1,6 +1,7 @@
 #include <imgui.h>
 #include <ImGuizmo.h>
 #include <DirectXMath.h>
+#include <DirectXCollision.h>
 #include "Graphics.h"
 #include "Collision.h"
 #include "SceneGame.h"
@@ -109,6 +110,9 @@ void SceneGame::Render(float elapsedtime)
 	moai.get()->Render(dc, renderState, modelRenderer, &haniwa.get()->GetCamera());
 	//haniwa.get()->Render(dc, renderState, modelRenderer, &haniwa.get()->GetCamera());
 	//modelRenderer->Render(rc, character.transform, character.model.get(), ShaderId::Lambert);
+	moai.get()->Render(dc, renderState, modelRenderer, &haniwa.get()->GetCamera());
+	haniwa.get()->Render(dc, renderState, modelRenderer, &haniwa.get()->GetCamera());
+
 
 	//shapeRenderer->Render(dc, cameraController.GetCamera(CAMERA_NAME::HANIWA).GetView(), cameraController.GetCamera(CAMERA_NAME::HANIWA).GetProjection());
 	EffectManager::Instance().Render(rc.camera->GetView(), rc.camera->GetProjection());

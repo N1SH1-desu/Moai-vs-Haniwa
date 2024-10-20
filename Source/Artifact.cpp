@@ -3,6 +3,7 @@
 #include "Graphics.h"
 #include "Collision.h"
 #include "imgui.h"
+#include "Easing.h"
 
 namespace Characters
 {
@@ -42,6 +43,8 @@ namespace Characters
 		gamePad.Update();
 		cameraController.Update(elapsedTime);
 
+		Turn(0.0f, 0.0f, elapsedTime);
+
 		switch (state)
 		{
 		case CharacterState::None:
@@ -77,9 +80,55 @@ namespace Characters
 		rc.camera = camera;
 		modelRenderer->Render(rc, transform, model.get(), ShaderId::Lambert);
 	}
+	//コメント外す
+	void Artifact::AttackMotion(float elapsedTime)
+	{
+		//Turn(0.0f, 0.0f, elapsedTime);
+
+		float timeScale = 2.0f;
+
+		attackMotionCurrentSeconds += elapsedTime * timeScale;
+		if (attackMotionCurrentSeconds > 2.0f)
+		{
+			attackMotionCurrentSeconds = 0.0f;
+			attackMotionAngle = 0.0f;
+			state = CharacterState::None;
+			return;
+		}
+		attackMotionAngle = AttackEasing(attackMotionCurrentSeconds / 2.0f) * DirectX::XM_2PI;
+
+		DirectX::XMVECTOR base = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+		DirectX::XMVECTOR camFront = DirectX::XMVector3Normalize(DirectX::XMVectorSet(cameraController.camera.GetFront().x, 0.0f, cameraController.camera.GetFront().z, 0.0f));
+
+		DirectX::XMVECTOR rotateVec = DirectX::XMVector3Cross(base, camFront);
+		attackQua = DirectX::XMQuaternionRotationAxis(rotateVec, attackMotionAngle);
+
+		quaternion = DirectX::XMQuaternionMultiply(quaternion, attackQua);
+	}
 
 	void Artifact::Attack(float elapsedTime)
 	{
+		float timeScale = 2.0f;
+		//コメント外す
+		AttackMotion(elapsedTime);
+
+		DirectX::XMFLOAT3 camFront = { cameraController.camera.GetFront().x, 0.0f, cameraController.camera.GetFront().z };
+		DirectX::XMStoreFloat3(&camFront, DirectX::XMVector3Normalize(DirectX::XMLoadFloat3(&camFront)));
+		DirectX::XMFLOAT3 setPos = { camFront.x * 1.5f, 0.0f, camFront.z * 1.5f };
+		DirectX::XMFLOAT3 attackPosition = { position.x + setPos.x, position.y + 2.0f, position.z + setPos.z };
+
+		DirectX::XMVECTOR vec = DirectX::XMVectorSubtract(DirectX::XMLoadFloat3(&attackPosition), DirectX::XMLoadFloat3(&position));
+		vec = DirectX::XMVector3Rotate(vec, attackQua);
+		DirectX::XMFLOAT3 rotateVec;
+		DirectX::XMStoreFloat3(&rotateVec, vec);
+
+		attackPosition = { position.x + rotateVec.x, position.y + rotateVec.y, position.z + rotateVec.z };
+
+		CollisionAttack(attackPosition);
+		DrawAttackPrimitive(attackPosition);
+
+
+
 		//if (CollisionPlayerVsEnemies())
 		{
 			enemy->hp--;
@@ -87,26 +136,136 @@ namespace Characters
 			SEPunch->Play(false,1);
 		}
 	}
+	//コメント外す
+	void Artifact::GuardMotion(float elapsedTime)
+	{
+		//Turn(0.0f, 0.0f, elapsedTime);
+
+		float timeScale = 2.0f;
+
+		guardMotionCurrentSeconds += elapsedTime * timeScale;
+		if (guardMotionCurrentSeconds > 2.0f)
+		{
+			guardMotionCurrentSeconds = 0.0f;
+			guardMotionAngle = 0.0f;
+			state = CharacterState::None;
+			return;
+		}
+		guardMotionAngle = Easing(guardMotionCurrentSeconds / 2.0f) * DirectX::XM_2PI;
+
+		DirectX::XMVECTOR guardQuate = DirectX::XMQuaternionRotationRollPitchYaw(0.0f, guardMotionAngle, 0.0f);
+
+		quaternion = DirectX::XMQuaternionMultiply(quaternion, guardQuate);
+	}
 
 	void Artifact::Guard(float elapsedTime)
 	{
 		//if (CollisionPlayerVsEnemies())
 		{
+			GuardMotion(elapsedTime);//コメント外す
 			GuardEfk->Play(position);
 			SEGuard->Play(false,1);
 		}
 	}
+	//コメント外す
+	void Artifact::PushMotion(float elapsedTime)
+	{
+		Turn(0.0f, 0.0f, elapsedTime);
 
+		float timeScale = 2.0f;
+
+		pushMotionCurrentSeconds += elapsedTime * timeScale;
+		if (pushMotionCurrentSeconds > 1.0f)
+		{
+			pushMotionCurrentSeconds = 0.0f;
+			state = CharacterState::None;
+			return;
+		}
+		float powerScale = PushEasing(pushMotionCurrentSeconds / 1.0f);
+
+		DirectX::XMVECTOR camVec = DirectX::XMVector3Normalize(
+			DirectX::XMVectorSet(cameraController.camera.GetFront().x, 0.0f, cameraController.camera.GetFront().z, 0.0f));
+
+		camVec = DirectX::XMVectorScale(camVec, powerScale);
+		DirectX::XMFLOAT3 vec; DirectX::XMStoreFloat3(&vec, camVec);
+
+		position.x += vec.x * 0.05f;
+		position.z += vec.z * 0.05f;
+	}
 	void Artifact::Push(float elapsedTime)
 	{
 		//if (CollisionPlayerVsEnemies())
 		{
+			PushMotion(elapsedTime); //コメント外す
 			SEPush->Play(false,1);
+		}
+	}
+
+	//コメント外す
+	void Artifact::StanMotion(float elapsedTime)
+	{
+		const float stanMotionAll = 1.0f;
+		const float stanMotionPer = stanMotionAll / 4.0f;
+		stanMotionCurrentSeconds += elapsedTime;
+
+		if (stanRotateCount > 5)
+		{
+			stanMotionCurrentSeconds = 0.0f;
+			stanRotateCount = 0;
+			state = CharacterState::None;
+			return;
+		}
+
+		constexpr float angle = DirectX::XMConvertToRadians(-30);
+		DirectX::XMVECTOR frontDiagonal = DirectX::XMQuaternionRotationAxis
+		(
+			DirectX::XMVector3Normalize(DirectX::XMVectorSet(cameraController.camera.GetRight().x, 0.0f, cameraController.camera.GetRight().z, 0.0f))
+			, angle
+		);
+		DirectX::XMVECTOR rightDiagonal = DirectX::XMQuaternionRotationAxis
+		(
+			DirectX::XMVector3Normalize(DirectX::XMVectorSet(cameraController.camera.GetFront().x, 0.0f, cameraController.camera.GetFront().z, 0.0f)),
+			angle
+		);
+		DirectX::XMVECTOR leftDiagonal = DirectX::XMQuaternionRotationAxis
+		(
+			DirectX::XMVector3Normalize(DirectX::XMVectorSet(cameraController.camera.GetFront().x, 0.0f, cameraController.camera.GetFront().z, 0.0f)),
+			-angle
+		);
+		DirectX::XMVECTOR backDiagonal = DirectX::XMQuaternionRotationAxis
+		(
+			DirectX::XMVector3Normalize(DirectX::XMVectorSet(cameraController.camera.GetRight().x, 0.0f, cameraController.camera.GetRight().z, 0.0f))
+			, -angle
+		);
+
+
+		if (stanMotionCurrentSeconds < stanMotionPer)
+		{
+			quaternion = DirectX::XMQuaternionMultiply(quaternion, DirectX::XMQuaternionSlerp(frontDiagonal, rightDiagonal, stanMotionCurrentSeconds));
+		}
+		else if (stanMotionCurrentSeconds > stanMotionPer && stanMotionCurrentSeconds < (stanMotionPer * 2.0f))
+		{
+			quaternion = DirectX::XMQuaternionMultiply(quaternion, DirectX::XMQuaternionSlerp(rightDiagonal, backDiagonal, stanMotionCurrentSeconds));
+		}
+		else if (stanMotionCurrentSeconds > (stanMotionPer * 2.0f) && stanMotionCurrentSeconds < (stanMotionPer * 3.0f))
+		{
+			quaternion = DirectX::XMQuaternionMultiply(quaternion, DirectX::XMQuaternionSlerp(backDiagonal, leftDiagonal, stanMotionCurrentSeconds));
+		}
+		else if (stanMotionCurrentSeconds > (stanMotionPer * 3.0f) && stanMotionCurrentSeconds < stanMotionAll)
+		{
+			quaternion = DirectX::XMQuaternionMultiply(quaternion, DirectX::XMQuaternionSlerp(leftDiagonal, frontDiagonal, stanMotionCurrentSeconds));
+		}
+
+		if (stanMotionCurrentSeconds >= stanMotionAll)
+		{
+			stanMotionCurrentSeconds = 0.0f;
+			stanRotateCount++;
 		}
 	}
 
 	void Artifact::Stan(float elapsedTime)
 	{
+		StanMotion(elapsedTime);//コメント外す
 	}
 
 	void Artifact::InputHandler(float elapsedTime)
@@ -114,6 +273,8 @@ namespace Characters
 		DirectX::XMFLOAT3 moveVec = GetMoveVec();
 		Move(moveVec.x, moveVec.z, elapsedTime);
 		Turn(moveVec.x, moveVec.z, elapsedTime);
+
+		GetAction();//コメント外す
 	}
 
 	DirectX::XMFLOAT3 Artifact::GetMoveVec()
@@ -146,11 +307,28 @@ namespace Characters
 		float speed = 5.0f * elapsedTime;
 		position.x += x * speed;
 		position.z += z * speed;
+		if (position.x >= 18.0f)
+		{
+			position.x = 18.0f;
+		}
+		if (position.x <= -18.0f)
+		{
+			position.x = -18.0f;
+		}
 
+		if (position.z >= 18.0f)
+		{
+			position.z = 18.0f;
+		}
+		if (position.z <= -18.0f)
+		{
+			position.z = -18.0f;
+		}
 	}
 
 	void Artifact::Turn(float x, float z, float elapsedTime)
 	{
+#if 0
 		float speed = 10.0f * elapsedTime;
 
 		// 進行ベクトルがゼロベクトルの場合は処理する必要なし
@@ -186,8 +364,40 @@ namespace Characters
 		{
 			angle.y += speed * rot;
 		}
+#else //コメント外す
+	DirectX::XMVECTOR camFront = DirectX::XMVector3Normalize(
+		DirectX::XMVectorSet(cameraController.camera.GetFront().x, 0.0f, cameraController.camera.GetFront().z, 0.0f));
+	DirectX::XMVECTOR Front = DirectX::XMLoadFloat3(&front);
+
+	float dot = DirectX::XMVectorGetX(DirectX::XMVector3Dot(camFront, Front));
+
+	float angle = acosf(dot);
+
+	DirectX::XMVECTOR cross = DirectX::XMVector3Cross(camFront, Front);
+
+	quaternion = DirectX::XMQuaternionRotationAxis(cross, -angle);
+#endif
 	}
 
+	void Artifact::GetAction()
+	{
+		if (gamePad.GetButtonDown() & GamePad::BTN_A)
+		{
+			state = CharacterState::Attack;
+		}
+		else if (gamePad.GetButtonDown() & GamePad::BTN_B)
+		{
+			state = CharacterState::Guard;
+		}
+		else if (gamePad.GetButtonDown() & GamePad::BTN_X)
+		{
+			state = CharacterState::Push;
+		}
+		else if (gamePad.GetButtonDown() & GamePad::BTN_Y)
+		{
+			state = CharacterState::Stan;
+		}
+	}
 	void Artifact::lowHp(float elapsedTime)
 	{
 		if (hp <= 2&&timer==0)
@@ -215,6 +425,27 @@ namespace Characters
 
 		}
 	}
+	void Artifact::CollisionAttack(DirectX::XMFLOAT3 attackPosition)
+	{
+		if (enemy == nullptr)
+		{
+			return;
+		}
+
+		DirectX::XMFLOAT3 outPosition{};
+		if (Collision::IntersectSphereVsCylider(
+			attackPosition, 1.0f,
+			enemy->position, enemy->radius, enemy->height,
+			outPosition
+		))
+		{
+
+		}
+	}
+
+	void Artifact::CollisionPush()
+	{
+	}
 
 	void Artifact::DrawDebugPrimitive(ShapeRenderer* shapeRenderer)
 	{
@@ -228,6 +459,12 @@ namespace Characters
 			ImGui::DragFloat3("CharacterPosition", &position.x, 0.01f);
 		}
 		ImGui::End();
+	}
+	void Artifact::DrawAttackPrimitive(DirectX::XMFLOAT3 attackPosition)
+	{
+		ShapeRenderer* shapeRenderer = Graphics::Instance().GetShapeRenderer();
+
+		shapeRenderer->DrawSphere(attackPosition, 1.0f, { 1.0f, 0.0f, 0.0f, 1.0f });
 	}
 
 	void Artifact::death()

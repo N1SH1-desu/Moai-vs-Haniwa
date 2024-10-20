@@ -132,6 +132,7 @@
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\Collision.h" />
     <ClInclude Include="Source\Dialog.h" />
+    <ClInclude Include="Source\Easing.h" />
     <ClInclude Include="Source\Effect.h" />
     <ClInclude Include="Source\EffectManager.h" />
     <ClInclude Include="Source\Framework.h" />

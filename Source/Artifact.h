@@ -40,11 +40,7 @@ namespace Characters
 
 		void SetEnemy(Artifact* enem) { enemy = enem; }
 
-		virtual void Attack(float elapsedTime);
-		virtual void Guard(float elapsedTime);
-		virtual void Push(float elapsedTime);
-		virtual void Stan(float elapsedTime);
-
+		
 		virtual const std::string GetName() = 0;
 
 		const Camera& GetCamera() const { return cameraController.camera; }
@@ -52,10 +48,17 @@ namespace Characters
 		const DirectX::XMFLOAT3 GetPos()const { return position; }
 		
 	protected:
+
+		virtual void AttackMotion(float elapsedTime);
+		virtual void GuardMotion(float elapsedTime);
+		virtual void PushMotion(float elapsedTime);
+		virtual void StanMotion(float elapsedTime);
+
 		const DirectX::XMFLOAT4X4& UpdateTransform()
 		{
 			DirectX::XMMATRIX S = DirectX::XMMatrixScaling(scale.x, scale.y, scale.z);
-			DirectX::XMMATRIX R = DirectX::XMMatrixRotationRollPitchYaw(angle.x, angle.y, angle.z);
+			//DirectX::XMMATRIX R = DirectX::XMMatrixRotationRollPitchYaw(angle.x, angle.y, angle.z);
+			DirectX::XMMATRIX R = DirectX::XMMatrixRotationQuaternion(quaternion);
 			DirectX::XMMATRIX T = DirectX::XMMatrixTranslation(position.x, position.y, position.z);
 			DirectX::XMMATRIX WorldTransform = S * R * T;
 			DirectX::XMStoreFloat4x4(&transform, WorldTransform);
@@ -73,9 +76,18 @@ namespace Characters
 		void Move(float x, float z, float elapsedTime);
 		void Turn(float x, float z, float elapsedTime);
 
+		void Attack(float elapsedTime);
+		void Guard(float elapsedTime);
+		void Push(float elapsedTime);
+		void Stan(float elapsedTime);
+		void GetAction();
+
 		void lowHp(float elapsedTime);
 		void CollisionPlayerVsEnemies();
+		void CollisionAttack(DirectX::XMFLOAT3 attackPosition);
+		void CollisionPush();
 		void DrawDebugGUI();
+		void DrawAttackPrimitive(DirectX::XMFLOAT3 attackPosition);
 		void death();
 
 	protected:
@@ -100,12 +112,23 @@ namespace Characters
 		DirectX::XMFLOAT3		angle = { 0, 0, 0 };
 		DirectX::XMFLOAT3		scale = { 1, 1, 1 };
 		DirectX::XMFLOAT4X4		transform = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
+		DirectX::XMFLOAT3       front = { 0, 0, 1 };
+		DirectX::XMVECTOR       quaternion;
 		float					radius = 1.5f;
 		float					height = 10.0f;
 		float					speed = 4.0f;
 		int						hp = 5;
 		int						timer = 0;
 		std::unique_ptr<Model>	model;
+
+		float attackMotionCurrentSeconds = 0.0f;
+		float attackMotionAngle = 0.0f;
+		DirectX::XMVECTOR attackQua;
+		float guardMotionCurrentSeconds = 0.0f;
+		float guardMotionAngle = 0.0f;
+		float pushMotionCurrentSeconds = 0.0f;
+		float stanMotionCurrentSeconds = 0.0f;
+		int  stanRotateCount = 0;
 
 		CharacterState state;
 		GamePad gamePad;

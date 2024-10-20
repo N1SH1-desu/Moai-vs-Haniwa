@@ -180,6 +180,9 @@
     <ClInclude Include="Source\Moai.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Easing.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Framework.cpp">
