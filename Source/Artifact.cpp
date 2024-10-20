@@ -79,7 +79,7 @@ namespace Characters
 		/*if (health <= 2)lowHp(target);*/
 		if (health <= 0)death();
 		CollisionPlayerVsEnemies();
-		DrawDebugGUI();
+		//DrawDebugGUI();
 		UpdateTransform();
 	}
 
@@ -136,7 +136,7 @@ namespace Characters
 		attackPosition = { position.x + rotateVec.x, position.y + rotateVec.y, position.z + rotateVec.z };
 
 		CollisionAttack(attackPosition);
-		DrawAttackPrimitive(attackPosition);
+		//DrawAttackPrimitive(attackPosition);
 		
 		
 	}
@@ -445,11 +445,11 @@ namespace Characters
 			case CharacterState::Attack:
 				enemy->health--;
 				enemy->onHit = true;
-				punch->Play(enemy->position);
+				punch->Play({ enemy->position.x,enemy->position.y+2,enemy->position.z });
 				SEPunch->Play(false, 1);
 				break;
 			case CharacterState::Guard:
-				GuardEfk->Play(position);
+				GuardEfk->Play({ enemy->position.x,enemy->position.y + 2,enemy->position.z });
 				SEGuard->Play(false, 1);
 				health--;
 				enemy->onHit = true;
@@ -508,11 +508,11 @@ namespace Characters
 
 	void Artifact::DrawDebugGUI()
 	{
-		if (ImGui::Begin(u8"アーティファクト", nullptr))
+		/*if (ImGui::Begin(u8"アーティファクト", nullptr))
 		{
 			ImGui::DragFloat3("CharacterPosition", &position.x, 0.01f);
 		}
-		ImGui::End();
+		ImGui::End();*/
 	}
 	void Artifact::DrawAttackPrimitive(DirectX::XMFLOAT3 attackPosition)
 	{

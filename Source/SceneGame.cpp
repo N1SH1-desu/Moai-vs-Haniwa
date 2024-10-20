@@ -80,8 +80,8 @@ void SceneGame::Render(float elapsedtime)
 	moai.get()->Render(dc, renderState, modelRenderer, &moai.get()->GetCamera());
 	haniwa.get()->Render(dc, renderState, modelRenderer, &moai.get()->GetCamera());
 
-	moai.get()->DrawDebugPrimitive(shapeRenderer);
-	haniwa.get()->DrawDebugPrimitive(shapeRenderer);
+	//moai.get()->DrawDebugPrimitive(shapeRenderer);
+	//haniwa.get()->DrawDebugPrimitive(shapeRenderer);
 	shapeRenderer->Render(dc, moai.get()->GetCamera().GetView(), moai.get()->GetCamera().GetProjection());
 
 	EffectManager::Instance().Render(rc.camera->GetView(), rc.camera->GetProjection());

@@ -12,6 +12,7 @@
 // 垂直同期間隔設定
 static const int syncInterval = 1;
 int end;
+bool ruleSwitch;
 // コンストラクタ
 Framework::Framework(HWND hWnd)
 	: hWnd(hWnd)
@@ -77,6 +78,9 @@ void Framework::Update(float elapsedTime)
 			scene = std::make_unique<SceneTitle>();
 			scene_table = 0;
 			scene_timer = 0;
+			ruleTimer = 0;
+			end = 0;
+			ruleSwitch = false;
 		}
 	}
 
@@ -129,19 +133,7 @@ void Framework::ChangeSceneButtonGUI(const char* name)
 // シーン切り替えGUI
 void Framework::SceneSelectGUI()
 {
-	//ImVec2 displaySize = ImGui::GetIO().DisplaySize;
-	//ImVec2 pos = ImGui::GetMainViewport()->GetWorkPos();
-	//float width = 210;
-	//float height = 460;
-	//ImGui::SetNextWindowPos(ImVec2(pos.x + displaySize.x - width - 10, pos.y + 10), ImGuiCond_Once);
-	//ImGui::SetNextWindowSize(ImVec2(width, height), ImGuiCond_Once);
-
-	///*if (ImGui::Begin("Scene"))
-	//{
-	//	ChangeSceneButtonGUI<LandWalkScene>(u8"02.地上歩行");
-	//	ChangeSceneButtonGUI<HitStopScene>(u8"07.ヒットストップ");
-	//}*/
-	//ImGui::End();
+	
 }
 
 // フレームレート計算

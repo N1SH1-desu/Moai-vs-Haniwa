@@ -15,7 +15,7 @@ public:
 	void Render(float elapsedTime) override;
 
 	
-	bool ruleSwitch;
+	
 
 private:
 	struct Vertex
@@ -41,5 +41,6 @@ private:
 	std::unique_ptr<AudioSource>bgm;
 	std::unique_ptr<AudioSource>PushButtan;
 	
-
+	int timer;
 };
+extern bool ruleSwitch;

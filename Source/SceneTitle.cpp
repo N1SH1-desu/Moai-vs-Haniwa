@@ -32,6 +32,7 @@ SceneTitle::~SceneTitle()
 		delete sprText;
 		sprText = nullptr;
 	}
+	ruleSwitch = false;
 	//BGM,SEÄ¶I—¹
 	bgm->Stop();
 }
