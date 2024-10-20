@@ -15,7 +15,7 @@ public:
 	void Render(float elapsedTime) override;
 
 	
-
+	bool ruleSwitch;
 
 private:
 	struct Vertex
@@ -26,6 +26,7 @@ private:
 	};
 	Sprite* sprite = nullptr;
 	Sprite* sprText=nullptr;
+	Sprite* rule = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11VertexShader>			vertexShader;
 	Microsoft::WRL::ComPtr<ID3D11PixelShader>			pixelShader;
 	Microsoft::WRL::ComPtr<ID3D11InputLayout>			inputLayout;
@@ -39,6 +40,6 @@ private:
 	//オーディオリソース
 	std::unique_ptr<AudioSource>bgm;
 	std::unique_ptr<AudioSource>PushButtan;
-	std::unique_ptr<AudioSource>MoveCarsol;
+	
 
 };

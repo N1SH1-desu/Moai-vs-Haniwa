@@ -27,8 +27,8 @@
 	hitEffect = new Effect("Data/Effect/dead.efk");
 	//BGM,SEÝ’è
 	bgm = Audio::Instance().LoadAudioSource("Data/BGM/ƒQ[ƒ€“à‰¹.wav");
-	bgm->Play(true);
-
+	bgm->Play(true,0.3f);
+	SEPunch = Audio::Instance().LoadAudioSource("Data/BGM/Ž„‚Í‰Ì‚Å‚Ô‚ñ‰£‚éI.wav");
 	player1_death = false;
 }
 
@@ -46,10 +46,10 @@ void SceneGame::Update(float elapsedTime)
 	moai.get()->Update(elapsedTime);
 	haniwa.get()->Update(elapsedTime);
 	EffectManager::Instance().Update(elapsedTime);
-	/*if (GetAsyncKeyState('Y') & 0x8000)*/
-	/*{
-		hitEffect->Play({0,0,0});
-	}*/
+	if (GetAsyncKeyState('Y') & 0x8000)
+	{
+		SEPunch->Play(false,1.0f);
+	}
 	
 	/*if (player.death)
 	{

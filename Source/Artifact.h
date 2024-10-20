@@ -11,6 +11,9 @@
 #include "ShapeRenderer.h"
 #include "Effect.h"
 #include<vector>
+#include"Audio.h"
+#include"AudioSource.h"
+
 namespace Characters
 {
 	enum  class CharacterState
@@ -111,6 +114,10 @@ namespace Characters
 		Effect* GuardEfk = nullptr;
 		Effect* punch = nullptr;
 		Effect* kemuri = nullptr;
+		std::unique_ptr<AudioSource> SEKO;
+		std::unique_ptr<AudioSource> SEGuard;
+		std::unique_ptr<AudioSource> SEPush;
+		std::unique_ptr<AudioSource> SEPunch;
 	};
 
 }
