@@ -22,6 +22,16 @@ namespace Characters
 
 	void Artifact::Update(float elapsedTime)
 	{
+		if (onHit)
+		{
+			noHitTimer += elapsedTime;
+		}
+		if (noHitTimer >= 1.0f)
+		{
+			noHitTimer = 0.0f;
+			onHit = false;
+		}
+
 		DirectX::XMFLOAT3 target = position;
 		target.y += 0.5f;
 		DirectX::XMVECTOR normalRightVec = DirectX::XMVector3Normalize(DirectX::XMLoadFloat3(&cameraController.camera.GetRight()));
@@ -170,6 +180,15 @@ namespace Characters
 	void Artifact::Push(float elapsedTime)
 	{
 		PushMotion(elapsedTime);
+
+		DirectX::XMFLOAT3 camFront = { cameraController.camera.GetFront().x, 0.0f, cameraController.camera.GetFront().z };
+		float lenght = sqrtf(camFront.x * camFront.x + camFront.z * camFront.z);
+		camFront.x /= lenght;
+		camFront.z /= lenght;
+
+		DirectX::XMFLOAT3 pushPositon = { position.x + (camFront.x * 1.5f), position.y + 2.0f, position.z + (camFront.z * 1.5f) };
+		CollisionPush(pushPositon);
+		DrawPushPrimitive(pushPositon);
 	}
 
 	void Artifact::StanMotion(float elapsedTime)
@@ -404,12 +423,58 @@ namespace Characters
 			outPosition
 		))
 		{
-
+			switch (enemy->state)
+			{
+			case CharacterState::None:
+			case CharacterState::Attack:
+				enemy->health--;
+				enemy->onHit = true;
+				break;
+			case CharacterState::Guard:
+				health--;
+				state = CharacterState::Stan;
+				break;
+			case CharacterState::Stan:
+				enemy->health--;
+				enemy->state = CharacterState::None;
+				enemy->onHit;
+				break;
+			}
 		}
 	}
 
-	void Artifact::CollisionPush()
+	void Artifact::CollisionPush(DirectX::XMFLOAT3 pushPosition)
 	{
+		if (enemy == nullptr)
+		{
+			return;
+		}
+
+		DirectX::XMFLOAT3 outPosition{};
+		if (Collision::IntersectSphereVsCylider(
+			pushPosition, 1.0f,
+			enemy->position, enemy->radius, enemy->height,
+			outPosition
+		))
+		{
+			enemy->position = outPosition;
+
+			switch (enemy->state)
+			{
+			case CharacterState::None:
+			case CharacterState::Push:
+			case CharacterState::Stan:
+				break;
+			case CharacterState::Attack:
+				health--;
+				state = CharacterState::Stan;
+				break;
+			case CharacterState::Guard:
+				enemy->health--;
+				enemy->state = CharacterState::Stan;
+				break;
+			}
+		}
 	}
 
 	void Artifact::DrawDebugPrimitive(ShapeRenderer* shapeRenderer)
@@ -431,6 +496,13 @@ namespace Characters
 		ShapeRenderer* shapeRenderer = Graphics::Instance().GetShapeRenderer();
 
 		shapeRenderer->DrawSphere(attackPosition, 1.0f, { 1.0f, 0.0f, 0.0f, 1.0f });
+	}
+
+	void Artifact::DrawPushPrimitive(DirectX::XMFLOAT3 pushPosition)
+	{
+		ShapeRenderer* shapeRenderer = Graphics::Instance().GetShapeRenderer();
+
+		shapeRenderer->DrawSphere(pushPosition, 1.0f, { 0.0f, 0.0f, 1.0f, 1.0f });
 	}
 
 }

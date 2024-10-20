@@ -78,10 +78,11 @@ namespace Characters
 
 		void CollisionPlayerVsEnemies();
 		void CollisionAttack(DirectX::XMFLOAT3 attackPosition);
-		void CollisionPush();
+		void CollisionPush(DirectX::XMFLOAT3 pushPosition);
 
 		void DrawDebugGUI();
 		void DrawAttackPrimitive(DirectX::XMFLOAT3 attackPosition);
+		void DrawPushPrimitive(DirectX::XMFLOAT3 pushPosition);
 
 	protected:
 		struct CameraPair
@@ -126,6 +127,10 @@ namespace Characters
 		float pushMotionCurrentSeconds = 0.0f;
 		float stanMotionCurrentSeconds = 0.0f;
 		int  stanRotateCount = 0;
+
+		int health = 5;
+		bool onHit = false;
+		float noHitTimer = 0.0f;
 	};
 
 }
