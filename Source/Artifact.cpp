@@ -17,6 +17,10 @@ namespace Characters
 
 		cameraController.controller.GetGamePad(&gamePad);
 		cameraController.SyncCameraToCon();
+		deadEfk = new Effect("Data/Effect/dead.efk");
+		GuardEfk = new Effect("Data/Effect/guardSuccess.efk");
+		punch = new Effect("Data/Effect/punch.efk");
+		kemuri = new Effect("Data/Effect/kemuri.efk");
 	}
 
 	void Artifact::Update(float elapsedTime)
@@ -53,9 +57,11 @@ namespace Characters
 			break;
 		}
 
+		if (hp <= 2)timer++;
+		if (hp <= 0)death();
+		lowHp(elapsedTime);
 		CollisionPlayerVsEnemies();
 		DrawDebugGUI();
-
 		UpdateTransform();
 	}
 
@@ -70,11 +76,20 @@ namespace Characters
 
 	void Artifact::Attack(float elapsedTime)
 	{
+		//if (CollisionPlayerVsEnemies())
+		{
+			enemy->hp--;
+			punch->Play(enemy->position);
 
+		}
 	}
 
 	void Artifact::Guard(float elapsedTime)
 	{
+		//if (CollisionPlayerVsEnemies())
+		{
+			GuardEfk->Play(position);
+		}
 	}
 
 	void Artifact::Push(float elapsedTime)
@@ -164,6 +179,14 @@ namespace Characters
 		}
 	}
 
+	void Artifact::lowHp(float elapsedTime)
+	{
+		if (hp <= 2&&timer==0)
+		{
+			kemuri->Play(position);
+		}
+	}
+
 	void Artifact::CollisionPlayerVsEnemies()
 	{
 		if (enemy == nullptr)
@@ -196,6 +219,19 @@ namespace Characters
 			ImGui::DragFloat3("CharacterPosition", &position.x, 0.01f);
 		}
 		ImGui::End();
+	}
+
+	void Artifact::death()
+	{
+		DirectX::XMFLOAT3 vec;
+		vec.x =  enemy->position.x - position.x;
+		vec.z =  enemy->position.z - position.z;
+		DirectX::XMVector3Normalize(DirectX::XMLoadFloat3(&vec));
+		position.x = -vec.x * speed;
+		position.y += 0.4f;
+		position.z = -vec.z * speed;
+
+			deadEfk->Play(position);
 	}
 
 }

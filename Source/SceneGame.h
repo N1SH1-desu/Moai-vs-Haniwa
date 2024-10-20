@@ -13,8 +13,8 @@ class SceneGame : public Scene
 {
 public:
 	SceneGame();
-	~SceneGame()override = default;
-
+	~SceneGame();
+	
 	// XVˆ—
 	void Update(float elapsedTime) override;
 
@@ -69,6 +69,10 @@ private:
 	float								hitStopLastSeconds = 0.0f;
 	float								hitStopSecondsLength = 0.3f;
 	float								cameraShakeRange = 0.03f;
+
+	std::unique_ptr<AudioSource>bgm;
+	std::unique_ptr<AudioSource>PushButtan;
+	std::unique_ptr<AudioSource>MoveCarsol;
 	
 };
 extern int end;

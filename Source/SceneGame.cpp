@@ -25,8 +25,18 @@
 	sprText = new Sprite(device, "Data/Font/font2.png");
 	//ヒットエフェクト読み込み
 	hitEffect = new Effect("Data/Effect/dead.efk");
+	//BGM,SE設定
+	bgm = Audio::Instance().LoadAudioSource("Data/BGM/ゲーム内音.wav");
+	bgm->Play(true);
+
 	player1_death = false;
 }
+
+ SceneGame::~SceneGame()
+ {
+	 //BGM,SE再生終了
+	 bgm->Stop();
+ }
 
 // 更新処理
 void SceneGame::Update(float elapsedTime)
@@ -36,7 +46,10 @@ void SceneGame::Update(float elapsedTime)
 	moai.get()->Update(elapsedTime);
 	haniwa.get()->Update(elapsedTime);
 	EffectManager::Instance().Update(elapsedTime);
-
+	/*if (GetAsyncKeyState('Y') & 0x8000)*/
+	/*{
+		hitEffect->Play({0,0,0});
+	}*/
 	
 	/*if (player.death)
 	{
@@ -87,6 +100,8 @@ void SceneGame::Render(float elapsedtime)
 	moai.get()->DrawDebugPrimitive(shapeRenderer);
 	haniwa.get()->DrawDebugPrimitive(shapeRenderer);
 	shapeRenderer->Render(dc, moai.get()->GetCamera().GetView(), moai.get()->GetCamera().GetProjection());
+
+	EffectManager::Instance().Render(rc.camera->GetView(), rc.camera->GetProjection());
 
 	Graphics::Instance().SetRenderTargets(2);
 	rc.camera = &haniwa.get()->GetCamera();

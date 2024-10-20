@@ -10,6 +10,7 @@
 #include "Input/GamePad.h"
 #include "ShapeRenderer.h"
 #include "Effect.h"
+#include<vector>
 namespace Characters
 {
 	enum  class CharacterState
@@ -69,8 +70,10 @@ namespace Characters
 		void Move(float x, float z, float elapsedTime);
 		void Turn(float x, float z, float elapsedTime);
 
+		void lowHp(float elapsedTime);
 		void CollisionPlayerVsEnemies();
 		void DrawDebugGUI();
+		void death();
 
 	protected:
 		struct CameraPair
@@ -96,13 +99,18 @@ namespace Characters
 		DirectX::XMFLOAT4X4		transform = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
 		float					radius = 1.5f;
 		float					height = 10.0f;
+		float					speed = 4.0f;
+		int						hp = 5;
+		int						timer = 0;
 		std::unique_ptr<Model>	model;
 
 		CharacterState state;
 		GamePad gamePad;
 		Artifact* enemy;
 		Effect* deadEfk = nullptr;
-		 
+		Effect* GuardEfk = nullptr;
+		Effect* punch = nullptr;
+		Effect* kemuri = nullptr;
 	};
 
 }
