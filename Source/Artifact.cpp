@@ -201,7 +201,7 @@ namespace Characters
 
 			DirectX::XMFLOAT3 pushPositon = { position.x + (camFront.x * 1.5f), position.y + 2.0f, position.z + (camFront.z * 1.5f) };
 			CollisionPush(pushPositon);
-			DrawPushPrimitive(pushPositon);
+			//DrawPushPrimitive(pushPositon);
 	}
 
 	//ÉRÉÅÉìÉgäOÇ∑
