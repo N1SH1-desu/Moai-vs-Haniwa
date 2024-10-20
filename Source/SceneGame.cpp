@@ -14,23 +14,22 @@
 	ID3D11Device* device = Graphics::Instance().GetDevice();
 	float screenWidth = Graphics::Instance().GetScreenWidth();
 	float screenHeight = Graphics::Instance().GetScreenHeight();
-	end = 0;
+	
 	GameTimer = 0;
 	ring.position = { 0.0f, -5.0f, 0.0f };
 	ring.scale = { 0.1f, 0.1f, 0.1f };
-	ring.model = std::make_unique<Model>("Data/Model/Stage/stage.mdl");
+	ring.model = std::make_unique<Model>("Data/Model/Stage/ring.mdl");
 	moai = std::make_unique<Characters::Moai>("Data/Model/Character/Moai.mdl", DirectX::XMFLOAT3(17.0f, 0.0f, 17.0f), DirectX::XMFLOAT3(0.5f, 0.5f, 0.5f));
 	haniwa = std::make_unique<Characters::Haniwa>("Data/Model/Character/haniwa.mdl", DirectX::XMFLOAT3(-17.0f, 0.0f, -17.0f), DirectX::XMFLOAT3(0.5f, 0.5f, 0.5f));
 	moai.get()->SetEnemy(haniwa.get());
 	haniwa.get()->SetEnemy(moai.get());
 	sprText = new Sprite(device, "Data/Font/font2.png");
-	//ヒットエフェクト読み込み
-	hitEffect = new Effect("Data/Effect/dead.efk");
+	
 	//BGM,SE設定
 	bgm = Audio::Instance().LoadAudioSource("Data/BGM/ゲーム内音.wav");
 	bgm->Play(true,0.3f);
-	SEPunch = Audio::Instance().LoadAudioSource("Data/BGM/私は歌でぶん殴る！.wav");
-	player1_death = false;
+	
+	
 }
 
  SceneGame::~SceneGame()
@@ -47,30 +46,7 @@ void SceneGame::Update(float elapsedTime)
 	moai.get()->Update(elapsedTime);
 	haniwa.get()->Update(elapsedTime);
 	EffectManager::Instance().Update(elapsedTime);
-	/*if (player.death)
-	{
-		if (endBattle = 0)
-		{
-			endBattle = 1;
-			GameTimer = 0;
-		}
-		player.position.x -= player2.position.x*0.1f;
-		player.position.y +=0.4f;
-		player.angle.z ++;
-		if(GameTimer>180)end = 1;
-	}
-	if (player2.death)
-	{
-		if (endBattle = 0)
-		{
-			endBattle = 1;
-			GameTimer = 0;
-		}
-		player2.position.x -= player.position.x * 0.1f;
-		player2.position.y += 0.4f;
-		player2.angle.z++;
-		if(GameTimer > 180)end = 2;
-	}*/
+	
 	GameTimer++;
 }
 

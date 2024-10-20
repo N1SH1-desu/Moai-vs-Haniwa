@@ -15,7 +15,8 @@ namespace Characters
 		this->position = position;
 		this->scale = scale;
 		this->model = std::make_unique<Model>(modelPath.c_str());
-
+		player1_death = false;
+		end = 0;
 		cameraController.controller.GetGamePad(&gamePad);
 		cameraController.SyncCameraToCon();
 		deadEfk = new Effect("Data/Effect/dead.efk");
@@ -30,14 +31,14 @@ namespace Characters
 
 	void Artifact::Update(float elapsedTime)
 	{
-		if (onHit)
+		if (enemy->onHit)
 		{
 			noHitTimer++;
 		}
 		if (noHitTimer >120)
 		{
 			noHitTimer = 0.0f;
-			onHit = false;
+			enemy->onHit = false;
 		}
 		DirectX::XMFLOAT3 target = position;
 		target.y += 0.5f;
@@ -74,7 +75,7 @@ namespace Characters
 		}
 		
 		
-		if (health <= 2)lowHp(position);;
+		if (health <= 2)lowHp(target);
 		if (health <= 0)death();
 		CollisionPlayerVsEnemies();
 		DrawDebugGUI();
@@ -89,7 +90,7 @@ namespace Characters
 		rc.camera = camera;
 		modelRenderer->Render(rc, transform, model.get(), ShaderId::Lambert);
 	}
-	//ƒRƒƒ“ƒgŠO‚·
+	
 	void Artifact::AttackMotion(float elapsedTime)
 	{
 		//Turn(0.0f, 0.0f, elapsedTime);
@@ -399,9 +400,9 @@ namespace Characters
 			state = CharacterState::Stan;
 		}
 	}
-	void Artifact::lowHp(DirectX::XMFLOAT3 position)
+	void Artifact::lowHp(DirectX::XMFLOAT3 tr)
 	{
-			kemuri->Play(position);
+			
 	}
 
 	void Artifact::CollisionPlayerVsEnemies()
@@ -435,7 +436,7 @@ namespace Characters
 			attackPosition, 1.0f,
 			enemy->position, enemy->radius, enemy->height,
 			outPosition
-		)&&!onHit)
+		)&&!enemy->onHit)
 		{
 			switch (enemy->state)
 			{
@@ -450,10 +451,12 @@ namespace Characters
 				GuardEfk->Play(position);
 				SEGuard->Play(false, 1);
 				health--;
+				enemy->onHit = true;
 				state = CharacterState::Stan;
 				break;
 			case CharacterState::Stan:
 				enemy->health--;
+				enemy->onHit = true;
 				SEPush->Play(false, 1);
 				enemy->state = CharacterState::None;
 				enemy->onHit;
@@ -533,7 +536,7 @@ namespace Characters
 		position.y += 0.4f;
 		position.z = -vec.z * speed;
 
-			deadEfk->Play(position);
+			deadEfk->Play(enemy->position);
 			SEKO->Play(false,1);
 	}
 

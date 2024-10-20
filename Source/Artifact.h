@@ -150,3 +150,5 @@ namespace Characters
 	};
 
 }
+extern int end;
+extern bool player1_death;//ƒvƒŒƒCƒ„[1‚ª€‚ñ‚¾‚çtrue

@@ -8,7 +8,7 @@
 #include <SceneTitle.h>
 #include "EffectManager.h"
 #include "SceneResult.h"
-
+#include "Artifact.h"
 // ‚’¼“¯ŠúŠÔŠuİ’è
 static const int syncInterval = 1;
 int end;
