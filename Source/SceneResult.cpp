@@ -9,17 +9,23 @@ SceneResult::SceneResult()
 	ID3D11Device* device = Graphics::Instance().GetDevice();
 	// テクスチャ
 	{
-		sprite = new Sprite(device, "Data/Sprite/Title.png");
+		moai = new Sprite(device, "Data/Sprite/moai_lose.png");
+		haniwa = new Sprite(device, "Data/Sprite/haniwa_lose.png");
 		sprText = new Sprite(device, "Data/Font/font2.png");
 	}
 }
 
 SceneResult::~SceneResult()
 {
-	if (sprite != false)
+	if (moai != false)
 	{
-		delete sprite;
-		sprite = nullptr;
+		delete moai;
+		moai = nullptr;
+	}
+	if (haniwa != false)
+	{
+		delete haniwa;
+		haniwa = nullptr;
 	}
 	if (sprText != false)
 	{
@@ -39,6 +45,13 @@ void SceneResult::Render(float elapsedTime)
 	ID3D11RenderTargetView* rtv = graphics.GetRenderTargetView();
 	ID3D11DepthStencilView* dsv = graphics.GetDepthStencilView();
 
+	float screenWidth = static_cast<float>(graphics.GetScreenWidth());
+	float screenHeight = static_cast<float>(graphics.GetScreenHeight());
+	float textureWidth = static_cast<float>(moai->GetTextureWidth());
+	float textureHeight = static_cast<float>(moai->GetTextureHeight());
+	float textureWidth2 = static_cast<float>(haniwa->GetTextureWidth());
+	float textureHeight2 = static_cast<float>(haniwa->GetTextureHeight());
+
 	//画面クリア＆レンダーターゲット設定
 	FLOAT color[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 	dc->ClearRenderTargetView(rtv, color);
@@ -47,12 +60,23 @@ void SceneResult::Render(float elapsedTime)
 	sprText->textout(dc, "PUSH B", 240, 600, 110, 90, 150, 150, 30, 30, 0, 1, 0, 0, 0);
 	if (player1_death)//プレイヤー1が死んだとき
 	{
-		sprText->textout(dc, "Player2", 240, 120, 110, 90, 150, 150, 30, 30, 0, 1, 0, 0, 0);
+		sprText->textout(dc, "Haniwa", 240, 120, 110, 90, 150, 150, 30, 30, 0, 1, 0, 0, 0);
 		sprText->textout(dc, "Win", 240, 300, 110, 90, 150, 150, 30, 30, 0, 1, 0, 0, 0);
+		haniwa->Render(dc,
+			0, 0, screenWidth, screenHeight,
+			0, 0, textureWidth2, textureHeight2,
+			0,
+			1, 1, 1, 1);
 	}
 	if (!player1_death)
 	{
-		sprText->textout(dc, "Player1", 240, 120, 110, 90, 150, 150, 30, 30, 0, 1, 0, 0, 0);
+		
+		sprText->textout(dc, "Moai", 240, 120, 110, 90, 150, 150, 30, 30, 0, 1, 0, 0, 0);
 		sprText->textout(dc, "Win", 240, 300, 110, 90, 150, 150, 30, 30, 0, 1, 0, 0, 0);
+		moai->Render(dc,
+			0, 0, screenWidth, screenHeight,
+			0, 0, textureWidth, textureHeight,
+			0,
+			1, 1, 1, 1);
 	}
 }

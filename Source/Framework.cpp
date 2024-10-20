@@ -27,8 +27,8 @@ Framework::Framework(HWND hWnd)
 
 	
 	// ƒV[ƒ“‰Šú‰»
-	scene = std::make_unique<SceneTitle>();
-	//scene = std::make_unique<SceneResult>();
+	//scene = std::make_unique<SceneTitle>();
+	scene = std::make_unique<SceneResult>();
 	//scene = std::make_unique<LandWalkScene>();
 	scene_table = 0;
 	ruleTimer = 0;
