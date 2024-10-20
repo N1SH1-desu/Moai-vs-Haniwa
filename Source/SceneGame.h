@@ -74,5 +74,6 @@ private:
 	std::unique_ptr<AudioSource> SEPunch;
 	
 };
-
+extern bool player1_death;//ƒvƒŒƒCƒ„[1‚ª€‚ñ‚¾‚çtrue
+extern int end;
 

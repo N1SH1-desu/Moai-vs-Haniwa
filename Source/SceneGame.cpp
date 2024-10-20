@@ -14,7 +14,7 @@
 	ID3D11Device* device = Graphics::Instance().GetDevice();
 	float screenWidth = Graphics::Instance().GetScreenWidth();
 	float screenHeight = Graphics::Instance().GetScreenHeight();
-	
+	end = 0;
 	GameTimer = 0;
 	ring.position = { 0.0f, -5.0f, 0.0f };
 	ring.scale = { 0.1f, 0.1f, 0.1f };
@@ -24,7 +24,7 @@
 	moai.get()->SetEnemy(haniwa.get());
 	haniwa.get()->SetEnemy(moai.get());
 	sprText = new Sprite(device, "Data/Font/font2.png");
-	
+	player1_death = false;
 	//BGM,SEÝ’è
 	bgm = Audio::Instance().LoadAudioSource("Data/BGM/ƒQ[ƒ€“à‰¹.wav");
 	bgm->Play(true,0.3f);
@@ -43,11 +43,21 @@ void SceneGame::Update(float elapsedTime)
 {
 	float timeScale = 1.0f;
 
-	moai.get()->Update(elapsedTime);
-	haniwa.get()->Update(elapsedTime);
+	if(moai)moai.get()->Update(elapsedTime);
+	if(haniwa)haniwa.get()->Update(elapsedTime);
 	EffectManager::Instance().Update(elapsedTime);
-	
-	GameTimer++;
+	if (moai.get()->GetHealth() <= 0)
+	{
+		GameTimer++;
+		player1_death = true;
+	}
+	if (haniwa.get()->GetHealth() <= 0)
+	{
+		
+		GameTimer++;
+		player1_death = false;
+	}
+	if (GameTimer > 200)end = 1;
 }
 
 // •`‰æˆ—
@@ -83,7 +93,6 @@ void SceneGame::Render(float elapsedtime)
 	//modelRenderer->Render(rc, character.transform, character.model.get(), ShaderId::Lambert);
 	moai.get()->Render(dc, renderState, modelRenderer, &haniwa.get()->GetCamera());
 	haniwa.get()->Render(dc, renderState, modelRenderer, &haniwa.get()->GetCamera());
-
 
 	//shapeRenderer->Render(dc, cameraController.GetCamera(CAMERA_NAME::HANIWA).GetView(), cameraController.GetCamera(CAMERA_NAME::HANIWA).GetProjection());
 	EffectManager::Instance().Render(rc.camera->GetView(), rc.camera->GetProjection());

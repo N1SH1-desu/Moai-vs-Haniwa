@@ -39,7 +39,7 @@ namespace Characters
 		void DrawDebugPrimitive(ShapeRenderer* shapeRenderer);
 
 		void SetEnemy(Artifact* enem) { enemy = enem; }
-
+		int GetHealth() { return health; }
 		
 		virtual const std::string GetName() = 0;
 
@@ -117,15 +117,17 @@ namespace Characters
 		DirectX::XMVECTOR       quaternion;
 		float					radius = 1.5f;
 		float					height = 10.0f;
-		float					speed = 4.0f;
+		float					speed = 0.7f;
 		int						timer = 0;
+		bool					isDeath=false;
 		std::unique_ptr<Model>	model;
 		int health = 5;
 		bool onHit = false;
 		float noHitTimer = 0.0f;
 		bool hitFlag = false;
-		
+		int endTimer = 0;
 
+		int deadTimer = 0;
 		float attackMotionCurrentSeconds = 0.0f;
 		float attackMotionAngle = 0.0f;
 		DirectX::XMVECTOR attackQua;
@@ -150,5 +152,4 @@ namespace Characters
 	};
 
 }
-extern int end;
-extern bool player1_death;//ƒvƒŒƒCƒ„[1‚ª€‚ñ‚¾‚çtrue
+

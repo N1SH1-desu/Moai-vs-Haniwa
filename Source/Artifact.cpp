@@ -15,8 +15,8 @@ namespace Characters
 		this->position = position;
 		this->scale = scale;
 		this->model = std::make_unique<Model>(modelPath.c_str());
-		player1_death = false;
-		end = 0;
+		deadTimer = 0;
+		endTimer = 0;
 		cameraController.controller.GetGamePad(&gamePad);
 		cameraController.SyncCameraToCon();
 		deadEfk = new Effect("Data/Effect/dead.efk");
@@ -31,6 +31,7 @@ namespace Characters
 
 	void Artifact::Update(float elapsedTime)
 	{
+		
 		if (enemy->onHit)
 		{
 			noHitTimer++;
@@ -53,7 +54,7 @@ namespace Characters
 		gamePad.Update();
 		cameraController.Update(elapsedTime);
 
-		Turn(0.0f, 0.0f, elapsedTime);
+		if(!isDeath)Turn(0.0f, 0.0f, elapsedTime);
 
 		switch (state)
 		{
@@ -75,7 +76,7 @@ namespace Characters
 		}
 		
 		
-		if (health <= 2)lowHp(target);
+		/*if (health <= 2)lowHp(target);*/
 		if (health <= 0)death();
 		CollisionPlayerVsEnemies();
 		DrawDebugGUI();
@@ -402,7 +403,7 @@ namespace Characters
 	}
 	void Artifact::lowHp(DirectX::XMFLOAT3 tr)
 	{
-			
+		kemuri->Play(position);
 	}
 
 	void Artifact::CollisionPlayerVsEnemies()
@@ -533,11 +534,12 @@ namespace Characters
 		vec.z =  enemy->position.z - position.z;
 		DirectX::XMVector3Normalize(DirectX::XMLoadFloat3(&vec));
 		position.x = -vec.x * speed;
-		position.y += 0.4f;
+		position.y += 0.2f;
 		position.z = -vec.z * speed;
-
-			deadEfk->Play(enemy->position);
-			SEKO->Play(false,1);
+			if(deadTimer=2)deadEfk->Play(enemy->position);
+			if (deadTimer = 2)SEKO->Play(false,1);
+			isDeath = true;
+			state = CharacterState::None;
 	}
 
 }
