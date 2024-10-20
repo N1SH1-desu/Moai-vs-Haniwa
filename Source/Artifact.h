@@ -82,13 +82,14 @@ namespace Characters
 		void Stan(float elapsedTime);
 		void GetAction();
 
-		void lowHp(float elapsedTime);
+		void lowHp(DirectX::XMFLOAT3 position);
 		void CollisionPlayerVsEnemies();
 		void CollisionAttack(DirectX::XMFLOAT3 attackPosition);
-		void CollisionPush();
+		void CollisionPush(DirectX::XMFLOAT3 pushPosition);
 		void DrawDebugGUI();
 		void DrawAttackPrimitive(DirectX::XMFLOAT3 attackPosition);
 		void death();
+		void Artifact::DrawPushPrimitive(DirectX::XMFLOAT3 pushPosition);
 
 	protected:
 		struct CameraPair
@@ -117,9 +118,13 @@ namespace Characters
 		float					radius = 1.5f;
 		float					height = 10.0f;
 		float					speed = 4.0f;
-		int						hp = 5;
 		int						timer = 0;
 		std::unique_ptr<Model>	model;
+		int health = 5;
+		bool onHit = false;
+		float noHitTimer = 0.0f;
+		bool hitFlag = false;
+		
 
 		float attackMotionCurrentSeconds = 0.0f;
 		float attackMotionAngle = 0.0f;
@@ -129,6 +134,7 @@ namespace Characters
 		float pushMotionCurrentSeconds = 0.0f;
 		float stanMotionCurrentSeconds = 0.0f;
 		int  stanRotateCount = 0;
+		
 
 		CharacterState state;
 		GamePad gamePad;

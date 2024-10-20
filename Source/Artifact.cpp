@@ -30,6 +30,15 @@ namespace Characters
 
 	void Artifact::Update(float elapsedTime)
 	{
+		if (onHit)
+		{
+			noHitTimer++;
+		}
+		if (noHitTimer >120)
+		{
+			noHitTimer = 0.0f;
+			onHit = false;
+		}
 		DirectX::XMFLOAT3 target = position;
 		target.y += 0.5f;
 		DirectX::XMVECTOR normalRightVec = DirectX::XMVector3Normalize(DirectX::XMLoadFloat3(&cameraController.camera.GetRight()));
@@ -63,10 +72,10 @@ namespace Characters
 			Push(elapsedTime);
 			break;
 		}
-
-		lowHp(elapsedTime);
-		if (hp <= 2)timer++;
-		if (hp <= 0)death();
+		
+		
+		if (health <= 2)lowHp(position);;
+		if (health <= 0)death();
 		CollisionPlayerVsEnemies();
 		DrawDebugGUI();
 		UpdateTransform();
@@ -126,15 +135,8 @@ namespace Characters
 
 		CollisionAttack(attackPosition);
 		DrawAttackPrimitive(attackPosition);
-
-
-
-		//if (CollisionPlayerVsEnemies())
-		{
-			enemy->hp--;
-			punch->Play(enemy->position);
-			SEPunch->Play(false,1);
-		}
+		
+		
 	}
 	//コメント外す
 	void Artifact::GuardMotion(float elapsedTime)
@@ -160,12 +162,7 @@ namespace Characters
 
 	void Artifact::Guard(float elapsedTime)
 	{
-		//if (CollisionPlayerVsEnemies())
-		{
-			GuardMotion(elapsedTime);//コメント外す
-			GuardEfk->Play(position);
-			SEGuard->Play(false,1);
-		}
+		GuardMotion(elapsedTime);
 	}
 	//コメント外す
 	void Artifact::PushMotion(float elapsedTime)
@@ -194,11 +191,15 @@ namespace Characters
 	}
 	void Artifact::Push(float elapsedTime)
 	{
-		//if (CollisionPlayerVsEnemies())
-		{
-			PushMotion(elapsedTime); //コメント外す
-			SEPush->Play(false,1);
-		}
+			PushMotion(elapsedTime); 
+			DirectX::XMFLOAT3 camFront = { cameraController.camera.GetFront().x, 0.0f, cameraController.camera.GetFront().z };
+			float lenght = sqrtf(camFront.x * camFront.x + camFront.z * camFront.z);
+			camFront.x /= lenght;
+			camFront.z /= lenght;
+
+			DirectX::XMFLOAT3 pushPositon = { position.x + (camFront.x * 1.5f), position.y + 2.0f, position.z + (camFront.z * 1.5f) };
+			CollisionPush(pushPositon);
+			DrawPushPrimitive(pushPositon);
 	}
 
 	//コメント外す
@@ -272,7 +273,7 @@ namespace Characters
 	{
 		DirectX::XMFLOAT3 moveVec = GetMoveVec();
 		Move(moveVec.x, moveVec.z, elapsedTime);
-		Turn(moveVec.x, moveVec.z, elapsedTime);
+		//Turn(moveVec.x, moveVec.z, elapsedTime);
 
 		GetAction();//コメント外す
 	}
@@ -398,12 +399,9 @@ namespace Characters
 			state = CharacterState::Stan;
 		}
 	}
-	void Artifact::lowHp(float elapsedTime)
+	void Artifact::lowHp(DirectX::XMFLOAT3 position)
 	{
-		if (hp <= 2&&timer==0)
-		{
 			kemuri->Play(position);
-		}
 	}
 
 	void Artifact::CollisionPlayerVsEnemies()
@@ -437,14 +435,66 @@ namespace Characters
 			attackPosition, 1.0f,
 			enemy->position, enemy->radius, enemy->height,
 			outPosition
-		))
+		)&&!onHit)
 		{
-
+			switch (enemy->state)
+			{
+			case CharacterState::None:
+			case CharacterState::Attack:
+				enemy->health--;
+				enemy->onHit = true;
+				punch->Play(enemy->position);
+				SEPunch->Play(false, 1);
+				break;
+			case CharacterState::Guard:
+				GuardEfk->Play(position);
+				SEGuard->Play(false, 1);
+				health--;
+				state = CharacterState::Stan;
+				break;
+			case CharacterState::Stan:
+				enemy->health--;
+				SEPush->Play(false, 1);
+				enemy->state = CharacterState::None;
+				enemy->onHit;
+				break;
+			}
+		
 		}
 	}
 
-	void Artifact::CollisionPush()
+	void Artifact::CollisionPush(DirectX::XMFLOAT3 pushPosition)
 	{
+		if (enemy == nullptr)
+		{
+			return;
+		}
+
+		DirectX::XMFLOAT3 outPosition{};
+		if (Collision::IntersectSphereVsCylider(
+			pushPosition, 1.0f,
+			enemy->position, enemy->radius, enemy->height,
+			outPosition
+		))
+		{
+			enemy->position = outPosition;
+
+			switch (enemy->state)
+			{
+			case CharacterState::None:
+			case CharacterState::Push:
+			case CharacterState::Stan:
+				break;
+			case CharacterState::Attack:
+				health--;
+				state = CharacterState::Stan;
+				break;
+			case CharacterState::Guard:
+				enemy->health--;
+				enemy->state = CharacterState::Stan;
+				break;
+			}
+		}
 	}
 
 	void Artifact::DrawDebugPrimitive(ShapeRenderer* shapeRenderer)
@@ -465,6 +515,12 @@ namespace Characters
 		ShapeRenderer* shapeRenderer = Graphics::Instance().GetShapeRenderer();
 
 		shapeRenderer->DrawSphere(attackPosition, 1.0f, { 1.0f, 0.0f, 0.0f, 1.0f });
+	}
+	void Artifact::DrawPushPrimitive(DirectX::XMFLOAT3 pushPosition)
+	{
+		ShapeRenderer* shapeRenderer = Graphics::Instance().GetShapeRenderer();
+
+		shapeRenderer->DrawSphere(pushPosition, 1.0f, { 0.0f, 0.0f, 1.0f, 1.0f });
 	}
 
 	void Artifact::death()

@@ -19,8 +19,8 @@
 	ring.position = { 0.0f, -5.0f, 0.0f };
 	ring.scale = { 0.1f, 0.1f, 0.1f };
 	ring.model = std::make_unique<Model>("Data/Model/Stage/stage.mdl");
-	moai = std::make_unique<Characters::Moai>("Data/Model/Character/Moai.mdl", DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f), DirectX::XMFLOAT3(0.5f, 0.5f, 0.5f));
-	haniwa = std::make_unique<Characters::Haniwa>("Data/Model/Character/haniwa.mdl", DirectX::XMFLOAT3(4.0f, 0.0f, 10.0f), DirectX::XMFLOAT3(0.5f, 0.5f, 0.5f));
+	moai = std::make_unique<Characters::Moai>("Data/Model/Character/Moai.mdl", DirectX::XMFLOAT3(17.0f, 0.0f, 17.0f), DirectX::XMFLOAT3(0.5f, 0.5f, 0.5f));
+	haniwa = std::make_unique<Characters::Haniwa>("Data/Model/Character/haniwa.mdl", DirectX::XMFLOAT3(-17.0f, 0.0f, -17.0f), DirectX::XMFLOAT3(0.5f, 0.5f, 0.5f));
 	moai.get()->SetEnemy(haniwa.get());
 	haniwa.get()->SetEnemy(moai.get());
 	sprText = new Sprite(device, "Data/Font/font2.png");
@@ -47,11 +47,6 @@ void SceneGame::Update(float elapsedTime)
 	moai.get()->Update(elapsedTime);
 	haniwa.get()->Update(elapsedTime);
 	EffectManager::Instance().Update(elapsedTime);
-	if (GetAsyncKeyState('Y') & 0x8000)
-	{
-		SEPunch->Play(false,1.0f);
-	}
-	
 	/*if (player.death)
 	{
 		if (endBattle = 0)

@@ -58,7 +58,7 @@ void SceneTitle::Render(float elapsedTime)
 	dc->ClearDepthStencilView(dsv, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	dc->OMSetRenderTargets(1, &rtv, dsv);
 	//テキスト描画
-	//sprText->textout(dc, "PUSH B", 240, 120, 110, 90, 150, 150, 30, 30, 0, 1, 0, 0, 0);
+	sprText->textout(dc, "PUSH B", 240, 120, 110, 90, 150, 150, 30, 30, 0, 1, 0, 0, 0);
 
 	//2Dスプライト描画
 	{
