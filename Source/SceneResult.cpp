@@ -9,8 +9,8 @@ SceneResult::SceneResult()
 	ID3D11Device* device = Graphics::Instance().GetDevice();
 	// テクスチャ
 	{
-		moai = new Sprite(device, "Data/Sprite/moai_lose.png");
-		haniwa = new Sprite(device, "Data/Sprite/haniwa_lose.png");
+		moai = new Sprite(device, "Data/Sprite/moai_win.png");
+		haniwa = new Sprite(device, "Data/Sprite/haniwa_win.png");
 		sprText = new Sprite(device, "Data/Font/font2.png");
 	}
 }
@@ -57,11 +57,11 @@ void SceneResult::Render(float elapsedTime)
 	dc->ClearRenderTargetView(rtv, color);
 	dc->ClearDepthStencilView(dsv, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	dc->OMSetRenderTargets(1, &rtv, dsv);
-	sprText->textout(dc, "PUSH B", 240, 600, 110, 90, 150, 150, 30, 30, 0, 1, 0, 0, 0);
+	sprText->textout(dc, "PUSH B", 420, 650, 110, 90, 150, 150, 30, 30, 0, 1, 0, 0, 0);
 	if (player1_death)//プレイヤー1が死んだとき
 	{
-		sprText->textout(dc, "Haniwa", 240, 120, 110, 90, 150, 150, 30, 30, 0, 1, 0, 0, 0);
-		sprText->textout(dc, "Win", 240, 300, 110, 90, 150, 150, 30, 30, 0, 1, 0, 0, 0);
+		//sprText->textout(dc, "Haniwa", 240, 120, 110, 90, 150, 150, 30, 30, 0, 1, 0, 0, 0);
+		//sprText->textout(dc, "Win", 240, 300, 110, 90, 150, 150, 30, 30, 0, 1, 0, 0, 0);
 		haniwa->Render(dc,
 			0, 0, screenWidth, screenHeight,
 			0, 0, textureWidth2, textureHeight2,
@@ -71,8 +71,8 @@ void SceneResult::Render(float elapsedTime)
 	if (!player1_death)
 	{
 		
-		sprText->textout(dc, "Moai", 240, 120, 110, 90, 150, 150, 30, 30, 0, 1, 0, 0, 0);
-		sprText->textout(dc, "Win", 240, 300, 110, 90, 150, 150, 30, 30, 0, 1, 0, 0, 0);
+		//sprText->textout(dc, "Moai", 240, 120, 110, 90, 150, 150, 30, 30, 0, 1, 0, 0, 0);
+		//sprText->textout(dc, "Win", 240, 300, 110, 90, 150, 150, 30, 30, 0, 1, 0, 0, 0);
 		moai->Render(dc,
 			0, 0, screenWidth, screenHeight,
 			0, 0, textureWidth, textureHeight,
