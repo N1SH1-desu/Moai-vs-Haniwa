@@ -174,13 +174,13 @@ namespace Characters
 		float timeScale = 2.0f;
 
 		pushMotionCurrentSeconds += elapsedTime * timeScale;
-		if (pushMotionCurrentSeconds > 1.0f)
+		if (pushMotionCurrentSeconds > 2.0f)
 		{
 			pushMotionCurrentSeconds = 0.0f;
 			state = CharacterState::None;
 			return;
 		}
-		float powerScale = PushEasing(pushMotionCurrentSeconds / 1.0f);
+		float powerScale = PushEasing(pushMotionCurrentSeconds / 2.0f);
 
 		DirectX::XMVECTOR camVec = DirectX::XMVector3Normalize(
 			DirectX::XMVectorSet(cameraController.camera.GetFront().x, 0.0f, cameraController.camera.GetFront().z, 0.0f));
@@ -481,7 +481,7 @@ namespace Characters
 			outPosition
 		))
 		{
-			enemy->position = outPosition;
+			//enemy->position = outPosition;
 
 			switch (enemy->state)
 			{
